@@ -1,7 +1,9 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HStr;
+use HVal;
 
 /**
  * Translation Notes:
@@ -32,9 +34,7 @@ namespace Cxalloy\HaystackPhp;
  * 24. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use Haystack\Exception;
-use HStr;
-use HVal;
+
 
 class HRef extends HVal
 {

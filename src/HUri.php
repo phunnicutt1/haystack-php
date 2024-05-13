@@ -1,7 +1,9 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HStr;
+use HVal;
 
 
 /**
@@ -31,9 +33,7 @@ namespace Cxalloy\HaystackPhp;
  * 22. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use Haystack\Exception;
-use HStr;
-use HVal;
+
 
 /**
  * HUri wraps a URI tag value.

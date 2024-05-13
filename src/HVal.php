@@ -2,8 +2,6 @@
 namespace Cxalloy\HaystackPhp;
 
 
-
-
 use Haystack\Exception;
 
 /**

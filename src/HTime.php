@@ -1,7 +1,10 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\DateTime;
+use Haystack\Exception;
+use HVal;
+use HZincReader;
 
 
 /**
@@ -31,10 +34,7 @@ namespace Cxalloy\HaystackPhp;
  * 22. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HVal;
-use HZincReader;
+
 
 /**
  * HTime models a time (hour, min, sec, ms) tag value.

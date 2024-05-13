@@ -1,7 +1,10 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\DateTime;
+use Haystack\Exception;
+use HDateTime;
+use HVal;
 
 
 /**
@@ -35,10 +38,7 @@ namespace Cxalloy\HaystackPhp;
  * 26. Replaced JavaScript's `Array.prototype.push()` method with PHP's `array_push()` function.
  */
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HDateTime;
-use HVal;
+
 
 /**
  * HTimeZone handles the mapping between Haystack timezone

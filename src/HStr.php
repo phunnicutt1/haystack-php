@@ -1,7 +1,7 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use HVal;
 
 
 /**
@@ -31,7 +31,7 @@ namespace Cxalloy\HaystackPhp;
  * 22. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use HVal;
+
 
 /**
  * HStr wraps a java.lang.String as a tag value.

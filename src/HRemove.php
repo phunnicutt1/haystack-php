@@ -1,7 +1,7 @@
 <?php
 namespace Cxalloy\HaystackPhp;
 
-
+use HVal;
 
 /**
  * Translation Notes:
@@ -22,7 +22,7 @@ namespace Cxalloy\HaystackPhp;
  * 14. Replaced JavaScript's `arguments.callee` with PHP's `static` keyword for accessing static properties and methods.
  */
 
-use HVal;
+
 
 /**
  * HRemove is the singleton value used to indicate a tag remove.
