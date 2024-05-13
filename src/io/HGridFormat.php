@@ -1,5 +1,5 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
 use HGridReader;
 use HGridWriter;

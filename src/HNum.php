@@ -1,7 +1,8 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HVal;
 
 /**
  * Translation Notes:
@@ -25,8 +26,7 @@ namespace Haystack;
  * 17. Replaced JavaScript's `arguments.callee` with PHP's `static` keyword for accessing static properties and methods.
  */
 
-use Haystack\Exception;
-use HVal;
+
 
 class HNum extends HVal
 {

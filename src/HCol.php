@@ -1,7 +1,8 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use HDict;
+use HStr;
 
 /**
  * Translation Notes:
@@ -18,8 +19,7 @@ namespace Haystack;
  * 10. Replaced JavaScript's string concatenation with PHP's string concatenation operator `.`.
  */
 
-use HDict;
-use HStr;
+
 
 class HCol
 {

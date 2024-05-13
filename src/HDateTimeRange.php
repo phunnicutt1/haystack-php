@@ -1,7 +1,10 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HDate;
+use HDateTime;
+use HTimeZone;
 
 /**
  * Translation Notes:
@@ -21,10 +24,7 @@ namespace Haystack;
  * 13. Replaced JavaScript's `static` keyword with PHP's `static` keyword for static methods.
  */
 
-use Haystack\Exception;
-use HDate;
-use HDateTime;
-use HTimeZone;
+
 
 class HDateTimeRange
 {

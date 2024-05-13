@@ -1,18 +1,5 @@
 <?php
-namespace Haystack;
-
-
-/**
- * Translation Notes:
- *
- * 1. Converted JavaScript code to PHP 8.3 syntax.
- * 2. Preserved class and variable names as much as possible.
- * 3. Replaced JavaScript's `module.exports` with PHP's `class` syntax.
- * 4. Replaced JavaScript's `require` statements with PHP's `use` statements for class imports.
- * 5. Replaced JavaScript's object literal syntax with PHP's class instantiation syntax.
- * 6. Replaced JavaScript's `null` with PHP's `null`.
- * 7. Replaced JavaScript's `undefined` with PHP's `null`.
- */
+namespace Cxalloy\HaystackPhp;
 
 use HBin;
 use HBool;
@@ -45,6 +32,20 @@ use HVal;
 use HWatch;
 use HZincReader;
 use HZincWriter;
+
+/**
+ * Translation Notes:
+ *
+ * 1. Converted JavaScript code to PHP 8.3 syntax.
+ * 2. Preserved class and variable names as much as possible.
+ * 3. Replaced JavaScript's `module.exports` with PHP's `class` syntax.
+ * 4. Replaced JavaScript's `require` statements with PHP's `use` statements for class imports.
+ * 5. Replaced JavaScript's object literal syntax with PHP's class instantiation syntax.
+ * 6. Replaced JavaScript's `null` with PHP's `null`.
+ * 7. Replaced JavaScript's `undefined` with PHP's `null`.
+ */
+
+
 
 //use HCsvWriter;
 //use HOp;

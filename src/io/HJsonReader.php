@@ -1,5 +1,5 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
 use Haystack\src\HVal;
 use HBin;

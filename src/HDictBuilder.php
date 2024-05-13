@@ -1,7 +1,12 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HBool;
+use HDict;
+use HMarker;
+use HNum;
+use HStr;
 
 /**
  * Translation Notes:
@@ -24,12 +29,7 @@ namespace Haystack;
  * 16. Replaced JavaScript's string concatenation with PHP's string concatenation operator `.`.
  */
 
-use Haystack\Exception;
-use HBool;
-use HDict;
-use HMarker;
-use HNum;
-use HStr;
+
 
 class HDictBuilder
 {

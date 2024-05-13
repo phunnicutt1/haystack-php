@@ -1,7 +1,16 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\src\HDictBuilder;
+use Haystack\src\HGrid;
+use Haystack\src\HVal;
+use HBool;
+use HGridWriter;
+use HMarker;
+use HNum;
+use HRef;
+use HStr;
+use Writer;
 
 /**
  * Translation Notes:
@@ -17,16 +26,7 @@ namespace Haystack;
  * 9. Replaced JavaScript `throw` statements with PHP `throw` statements.
  */
 
-use Haystack\src\HDictBuilder;
-use Haystack\src\HGrid;
-use Haystack\src\HVal;
-use HBool;
-use HGridWriter;
-use HMarker;
-use HNum;
-use HRef;
-use HStr;
-use Writer;
+
 
 /**
  * HJsonWriter is used to write grids in JavaScript Object Notation.

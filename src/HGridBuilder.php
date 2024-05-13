@@ -1,7 +1,12 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use Haystack\Exception;
+use HCol;
+use HDict;
+use HDictBuilder;
+use HGrid;
+use HHisItem;
 
 /**
  * Translation Notes:
@@ -28,12 +33,6 @@ namespace Haystack;
  * 20. Replaced JavaScript's `instanceof` operator with PHP's `instanceof` operator.
  */
 
-use Haystack\Exception;
-use HCol;
-use HDict;
-use HDictBuilder;
-use HGrid;
-use HHisItem;
 
 class HGridBuilder
 {

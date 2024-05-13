@@ -1,7 +1,7 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+require_once 'Stream.php';
 /**
  * Translation Notes:
  * - Converted JavaScript code to PHP 8.3
@@ -14,7 +14,7 @@ namespace Haystack;
  * - Replaced JavaScript's `emit` with PHP's custom event handling using `call_user_func_array`
  */
 
-require_once 'Stream.php';
+
 
 class Reader extends ReadableStream
 {

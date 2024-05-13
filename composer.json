@@ -1,18 +1,19 @@
 {
-  "name": "vendor/haystack-php",
-  "description": "Haystack-PHP package",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-	{
-	  "name": "Patrick Hunnicutt",
-	  "email": "patrick@cxalloy.com"
-	}
-  ],
-  "require": {},
-  "autoload": {
-	"psr-4": {
-	  "Haystack\\": "src/"
-	}
-  }
+    "name": "cxalloy/haystack-php",
+    "description": "Project Haystack library written in PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cxalloy\\HaystackPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Patrick Hunnicutt",
+            "email": "patrick@cxalloy.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
 }

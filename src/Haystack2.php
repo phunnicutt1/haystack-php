@@ -1,5 +1,5 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;

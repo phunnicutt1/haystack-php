@@ -1,7 +1,7 @@
 <?php
-namespace Haystack;
+namespace Cxalloy\HaystackPhp;
 
-
+use HVal;
 
 /**
  * Translation Notes:
@@ -22,7 +22,6 @@ namespace Haystack;
  * 14. Replaced JavaScript's `arguments.callee` with PHP's `static` keyword for accessing static properties and methods.
  */
 
-use HVal;
 
 /**
  * HMarker is the singleton value for a marker tag.
