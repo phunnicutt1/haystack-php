@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/HBool.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HCol.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HCoord.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HDate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HDateTime.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HDateTimeRange.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HDict.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HDictBuilder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HFilter.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HGrid.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HGridBuilder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HHisItem.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HMarker.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HNum.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HProj.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HRef.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HRemove.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HRow.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HStr.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HTime.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HTimeZone.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HUri.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HVal.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HWatch.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Hbin.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HGridFormat.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HGridReader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HGridWriter.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HJsonReader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HJsonWriter.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HZincReader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/HZincWriter.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/io/Streams.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodyActiveAccount">
+    <option name="activeAccountId" value="VXNlcjo0MTgzMzg=" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 8.2.0">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2gLQpVEOsE1iu8AQZfQpacBs1pI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.CodyAccountHistoryMigration": "true",
+    "RunOnceActivity.CodyConvertUrlToCodebaseName": "true",
+    "RunOnceActivity.CodyHistoryLlmMigration": "true",
+    "RunOnceActivity.CodyProjectSettingsMigration": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/patrick/Sites/haystack-php",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "advanced.settings"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="" />
+      <created>1715474561640</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715474561640</updated>
+      <workItem from="1715474562695" duration="372000" />
+      <workItem from="1715474942456" duration="855000" />
+      <workItem from="1715534483775" duration="1865000" />
+      <workItem from="1715536370004" duration="4393000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WfRunsListSearchHistory">{
+  &quot;history&quot;: [
+    {
+    },
+    {
+    }
+  ],
+  &quot;lastFilter&quot;: {
+  }
+}</component>
+</project>

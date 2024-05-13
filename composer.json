@@ -1,0 +1,18 @@
+{
+  "name": "vendor/haystack-php",
+  "description": "Haystack-PHP package",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+	{
+	  "name": "Patrick Hunnicutt",
+	  "email": "patrick@cxalloy.com"
+	}
+  ],
+  "require": {},
+  "autoload": {
+	"psr-4": {
+	  "Haystack\\": "src/"
+	}
+  }
+}
