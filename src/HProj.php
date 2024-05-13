@@ -1,8 +1,6 @@
 <?php
 namespace Haystack;
 
-
-
 use Haystack\Exception;
 use Haystack\HDict;
 
@@ -28,7 +26,6 @@ use Haystack\HDict;
  * 17. Replaced JavaScript's `Array.prototype.length` property with PHP's `count()` function.
  * 18. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
-
 
 
 /**

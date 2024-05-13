@@ -5,40 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/HBool.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HCol.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HCoord.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HDate.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HDateTime.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HDateTimeRange.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HDict.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HDictBuilder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HFilter.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HGrid.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HGridBuilder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HHisItem.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HMarker.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HNum.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HProj.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HRef.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HRemove.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HRow.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HStr.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HTime.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HTimeZone.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HUri.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HVal.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HWatch.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Hbin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HGridFormat.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HGridReader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HGridWriter.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HJsonReader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HJsonWriter.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HZincReader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/HZincWriter.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/io/Streams.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HBool.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HBool.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCoord.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDict.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGrid.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HHisItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HHisItem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HProj.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HProj.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRow.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Haystack.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Haystack2.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Haystack2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hbin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HGridFormat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HJsonReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HZincReader.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +69,7 @@
     "RunOnceActivity.CodyProjectSettingsMigration": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "/Users/patrick/Sites/haystack-php",
     "node.js.detected.package.eslint": "true",
@@ -112,7 +97,7 @@
       <workItem from="1715474562695" duration="372000" />
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
-      <workItem from="1715536370004" duration="4393000" />
+      <workItem from="1715536370004" duration="16019000" />
     </task>
     <servers />
   </component>
@@ -130,14 +115,16 @@
       </map>
     </option>
   </component>
-  <component name="WfRunsListSearchHistory">{
-  &quot;history&quot;: [
+  <component name="WfRunsListSearchHistory"><![CDATA[{
+  "history": [
+    {
+    },
     {
     },
     {
     }
   ],
-  &quot;lastFilter&quot;: {
+  "lastFilter": {
   }
-}</component>
+}]]></component>
 </project>

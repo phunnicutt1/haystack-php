@@ -1,21 +1,6 @@
 <?php
 namespace Haystack;
 
-
-/**
- * Translation Notes:
- *
- * 1. Converted JavaScript code to PHP 8.3.
- * 2. Preserved comments, method and variable names, and kept the syntax as similar as possible.
- * 3. Replaced JavaScript module imports with PHP class imports using the `use` statement.
- * 4. Replaced JavaScript module exports with PHP class definition extending HGridReader.
- * 5. Replaced JavaScript object literals with PHP class instances.
- * 6. Replaced JavaScript array literals with PHP arrays.
- * 7. Replaced JavaScript object property access with PHP object property access.
- * 8. Replaced JavaScript function expressions with PHP anonymous functions.
- * 9. Replaced JavaScript `throw` statements with PHP `throw` statements.
- */
-
 use Haystack\src\HVal;
 use HBin;
 use HBool;
@@ -37,6 +22,22 @@ use HTimeZone;
 use HUri;
 
 /**
+ * Translation Notes:
+ *
+ * 1. Converted JavaScript code to PHP 8.3.
+ * 2. Preserved comments, method and variable names, and kept the syntax as similar as possible.
+ * 3. Replaced JavaScript module imports with PHP class imports using the `use` statement.
+ * 4. Replaced JavaScript module exports with PHP class definition extending HGridReader.
+ * 5. Replaced JavaScript object literals with PHP class instances.
+ * 6. Replaced JavaScript array literals with PHP arrays.
+ * 7. Replaced JavaScript object property access with PHP object property access.
+ * 8. Replaced JavaScript function expressions with PHP anonymous functions.
+ * 9. Replaced JavaScript `throw` statements with PHP `throw` statements.
+ */
+
+
+
+/**
  * @memberof HJsonReader
  * @param string $msg
  * @param Exception|null $ex
@@ -44,16 +45,14 @@ use HUri;
  */
 function err(string $msg, ?Exception $ex = null): Exception
 {
-    $exceptionMessage = $msg;
-    $exception = $ex;
-    if ($msg instanceof Exception) {
-        $exception = $msg;
-        $exceptionMessage = $exception->getMessage();
-    } elseif ($exception === null) {
-        $exception = new Exception($exceptionMessage);
+    $exceptionMessage = $ex->getMessage();
+
+    if ( ! empty($exceptionMessage)) {
+        $exception = $exceptionMessage . ' : ' . $msg;
+    } else {
+        $exception = new Exception('Haystack Exception occurred');
     }
 
-    $exception->getMessage() = $exceptionMessage;
     return $exception;
 }
 

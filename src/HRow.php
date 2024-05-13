@@ -1,7 +1,10 @@
 <?php
 namespace Haystack;
 
-
+use Haystack\Exception;
+use HCol;
+use HDict;
+use HGrid;
 
 /**
  * Translation Notes:
@@ -24,11 +27,8 @@ namespace Haystack;
  * 16. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use;
-use Haystack\Exception;
-use HCol;
-use HDict;
-use HGrid;
+
+
 
 /**
  * HRow is a row in a HGrid.  It implements the HDict interface also.

@@ -1,8 +1,7 @@
 <?php
 namespace Haystack;
 
-
-
+use HVal;
 
 /**
  * Translation Notes:
@@ -40,140 +39,102 @@ namespace Haystack;
  * 31. Replaced JavaScript's `console.log()` with PHP's `error_log()` function.
  */
 
-use Haystack\Exception;
-use Haystack\HGridWriter;
-use Haystack\Writer;
-use HBin;
-use HBool;
-use HClient;
-use HCol;
-use HCoord;
-use HCsvWriter;
-use HDate;
-use HDateTime;
-use HDateTimeRange;
-use HDict;
-use HDictBuilder;
-use HFilter;
-use HGrid;
-use HGridBuilder;
-use HGridFormat;
-use HHisItem;
-use HJsonReader;
-use HJsonWriter;
-use HMarker;
-use HNum;
-use HOp;
-use HProj;
-use HRef;
-use HRemove;
-use HRow;
-use HServer;
-use HStdOps;
-use HStr;
-use HTime;
-use HTimeZone;
-use HUri;
-use HVal;
-use HWatch;
-use HZincReader;
-use HZincWriter;
 
-class HJsonWriter extends HGridWriter
-{
-    private $out;
 
-    public function __construct($o)
-    {
-        $this->out = $o;
-    }
+/**
+ * HBin models a binary file with a MIME type.
+ *
+ * @see {@link http://project-haystack.org/doc/TagModel#tagKinds|Project Haystack}
+ */
+class HBin extends HVal {
 
-    private function writeVal($val)
-    {
-        if ($val === null) {
-            $this->out->write("null");
-        } elseif ($val instanceof HBool) {
-            $this->out->write($val->val ? "true" : "false");
-        } else {
-            $this->out->write('"' . $val->toJSON() . '"');
-        }
-    }
+	/**
+	 * @var string MIME type for binary file
+	 */
+	private $mime;
 
-    private function writeDictTags($dict, $first)
-    {
-        $isFirst = $first;
-        foreach ($dict as $entry) {
-            if ($isFirst) {
-                $isFirst = false;
-            } else {
-                $this->out->write(", ");
-            }
-            $name = $entry->getKey();
-            $val = $entry->getValue();
-            $this->out->write(HStr::toCode($name));
-            $this->out->write(":");
-            $this->writeVal($val);
-        }
-    }
+	/**
+	 * @param string $mime MIME type for binary file
+	 */
+	private function __construct(string $mime)
+	{
+		$this->mime = $mime;
+	}
 
-    private function writeDict($dict)
-    {
-        $this->out->write("{");
-        $this->writeDictTags($dict, true);
-        $this->out->write("}");
-    }
+	/**
+	 * Construct for MIME type
+	 *
+	 * @param string $mime
+	 *
+	 * @return HBin
+	 * @throws Exception
+	 */
+	public static function make(string $mime) : HBin
+	{
+		if ($mime === NULL || strlen($mime) === 0 || strpos($mime, '/') === FALSE)
+		{
+			throw new Exception("Invalid mime val: \"" . $mime . "\"");
+		}
 
-    public function writeGrid($grid, $callback)
-    {
-        try {
-            // grid begin
-            $this->out->write("{");
+		return new HBin($mime);
+	}
 
-            // meta
-            $this->out->write("\"meta\": {\"ver\":\"2.0\"");
-            $this->writeDictTags($grid->meta(), false);
-            $this->out->write("},\n");
+	/**
+	 * Encode as "Bin(<mime>)"
+	 *
+	 * @return string
+	 */
+	public function toZinc() : string
+	{
+		$s = 'Bin(';
+		$s .= self::parse($this->mime);
+		$s .= ')';
 
-            // columns
-            $this->out->write("\"cols\":[");
-            for ($i = 0; $i < $grid->numCols(); $i++) {
-                if ($i > 0) {
-                    $this->out->write(", ");
-                }
-                $col = $grid->col($i);
-                $this->out->write("{\"name\":");
-                $this->out->write(HStr::toCode($col->name()));
-                $this->writeDictTags($col->meta(), false);
-                $this->out->write("}");
-            }
-            $this->out->write("],\n");
+		return $s;
+	}
 
-            // rows
-            $this->out->write("\"rows\":[\n");
-            for ($i = 0; $i < $grid->numRows(); $i++) {
-                if ($i > 0) {
-                    $this->out->write(",\n");
-                }
-                $this->writeDict($grid->row($i));
-            }
-            $this->out->write("\n]");
+	/**
+	 * Encode as "b:<mime>"
+	 *
+	 * @return string
+	 */
+	public function toJSON() : string
+	{
+		return 'b:' . self::parse($this->mime);
+	}
 
-            // grid end
-            $this->out->write("}\n");
-            $this->out->end();
-            $callback();
-        } catch (Exception $err) {
-            $this->out->end();
-            $callback($err);
-        }
-    }
+	/**
+	 * @param string $mime
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function parse(string $mime) : string
+	{
+		$s = '';
+		for ($i = 0; $i < strlen($mime); $i++)
+		{
+			$c = $mime[$i];
+			if (ord($c) > 127 || $c === ')')
+			{
+				throw new Exception("Invalid mime, char='" . $c . "'");
+			}
 
-    public static function gridToString($grid, $callback)
-    {
-        $out = new Writer();
-        $writer = new HJsonWriter($out);
-        $writer->writeGrid($grid, function ($err) use ($out, $callback) {
-            $callback($err, $out->toString());
-        });
-    }
+			$s .= $c;
+		}
+
+		return $s;
+	}
+
+	/**
+	 * Equals is based on mime field
+	 *
+	 * @param HBin $that object to be compared to
+	 *
+	 * @return bool
+	 */
+	public function equals(HBin $that) : bool
+	{
+		return $this->mime === $that->mime;
+	}
 }

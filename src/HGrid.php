@@ -1,214 +1,255 @@
 <?php
 namespace Haystack;
 
-
-
-use Haystack\ArrayIterator;
-use Haystack\Exception;
-use Haystack\HDict;
-use Haystack\HZincWriter;
-use Haystack\Iterator;
+use HRow;
+use HCol;
+use HDict;
+use HZincWriter;
 
 /**
  * Translation Notes:
  *
- * 1. Converted the JavaScript code to PHP 8.3.
- * 2. Preserved method and variable names as much as possible.
- * 3. Used PHP's built-in classes and functions where applicable (e.g., `Exception`, `array_keys`, `array_values`).
- * 4. Replaced JavaScript's `module.exports` with PHP's `class` syntax.
- * 5. Replaced JavaScript's `require` statements with PHP's `include` statements.
- * 6. Replaced JavaScript's `function` syntax with PHP's `function` syntax.
- * 7. Replaced JavaScript's `new` keyword with PHP's `new` keyword.
- * 8. Replaced JavaScript's `this` keyword with PHP's `$this` keyword.
- * 9. Replaced JavaScript's `var` keyword with PHP's variable declaration syntax.
- * 10. Replaced JavaScript's `null` with PHP's `null`.
- * 11. Replaced JavaScript's `undefined` with PHP's `null`.
- * 12. Replaced JavaScript's `===` and `!==` operators with PHP's `===` and `!==` operators.
- * 13. Replaced JavaScript's `throw` statements with PHP's `throw` statements.
- * 14. Replaced JavaScript's `console.log` with PHP's `echo`.
- * 15. Replaced JavaScript's `iterator` with PHP's `Iterator` interface.
- * 16. Replaced JavaScript's `Error` with PHP's `Exception`.
+ * 1. In PHP, static properties and methods are defined using the `static` keyword.
+ * 2. JavaScript's `module.exports` is not needed in PHP since classes are natively supported.
+ * 3. JavaScript's `require` statements are replaced with PHP's `use` statements for importing classes.
+ * 4. JavaScript's `function` keyword is replaced with PHP's `function` keyword for defining functions.
+ * 5. JavaScript's `var` keyword is not needed in PHP since variable types are inferred.
+ * 6. JavaScript's `this` keyword is replaced with PHP's `$this` pseudo-variable.
+ * 7. JavaScript's `new` keyword is replaced with PHP's `new` keyword for instantiating objects.
+ * 8. JavaScript's `module.exports` is not needed in PHP since classes are natively supported.
+ * 9. JavaScript's `throw` statements are replaced with PHP's `throw` statements.
+ * 10. JavaScript's `Error` class is replaced with PHP's `Exception` class.
+ * 11. JavaScript's array syntax `[]` is replaced with PHP's array syntax `[]`.
+ * 12. JavaScript's object literal syntax `{}` is replaced with PHP's array syntax `[]`.
  */
 
-include_once 'HRow.php';
+
 
 /**
  * HGrid is an immutable two dimension data structure of cols and rows.
  * Use HGridBuilder to construct a HGrid instance.
+ *
  * @see {@link http://project-haystack.org/doc/Grids|Project Haystack}
  */
-class HGrid
+class HGrid {
+
+	private $dict;
+	private $cols;
+	private $rows;
+	private $colsByName;
+
+	/**
+	 * Empty grid with one column called "empty" and zero rows
+	 */
+	public static $EMPTY;
+
+	/**
+	 * @param HDict  $dict
+	 * @param HCol[] $cols
+	 * @param array  $rowList
+	 */
+	public function __construct(HDict $dict, array $cols, array $rowList)
+	{
+		if ($dict === NULL)
+		{
+			throw new Exception('metadata cannot be null');
+		}
+
+		$this->dict = $dict;
+		$this->cols = $cols;
+
+		$this->rows = [];
+		foreach ($rowList as $cells)
+		{
+			if (count($cols) !== count($cells))
+			{
+				throw new Exception('Row cells size != cols size');
+			}
+			$this->rows[] = new HRow($this, $cells);
+		}
+
+		$this->colsByName = [];
+		foreach ($cols as $col)
+		{
+			$colName = $col->name();
+			if (isset($this->colsByName[$colName]))
+			{
+				throw new Exception('Duplicate col name: ' . $colName);
+			}
+			$this->colsByName[$colName] = $col;
+		}
+	}
+
+	public static function EMPTY()
+	{
+		self::$EMPTY = new self(HDict::$EMPTY, [new HCol(0, 'empty', HDict::$EMPTY)], []);
+	}
+
+//////////////////////////////////////////////////////////////////////////
+// Access
+//////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Return grid level meta
+	 *
+	 * @return HDict
+	 */
+	public function meta() : HDict
+	{
+		return $this->dict;
+	}
+
+	/**
+	 * Error grid have the dict.err marker tag
+	 *
+	 * @return bool
+	 */
+	public function isErr() : bool
+	{
+		return $this->dict->has('err');
+	}
+
+	/**
+	 * Return if number of rows is zero
+	 *
+	 * @return bool
+	 */
+	public function isEmpty() : bool
+	{
+		return $this->numRows() === 0;
+	}
+
+	/**
+	 * Return number of rows
+	 *
+	 * @return int
+	 */
+	public function numRows() : int
+	{
+		return count($this->rows);
+	}
+
+	/**
+	 * Get a row by its zero based index
+	 *
+	 * @param int $row
+	 *
+	 * @return HRow
+	 */
+	public function row(int $row) : HRow
+	{
+		return $this->rows[$row];
+	}
+
+	/**
+	 * Get number of columns
+	 *
+	 * @return int
+	 */
+	public function numCols() : int
+	{
+		return count($this->cols);
+	}
+
+	/**
+	 * Get a column by name.  If not found and checked if false then
+	 * return null, otherwise throw UnknownNameException
+	 *
+	 * @param string|int $name
+	 * @param bool       $checked
+	 *
+	 * @return HCol|null
+	 */
+	public function col(string|int $name, bool $checked = TRUE) : ?HCol
+	{
+		// Get a column by its index
+		if (is_int($name))
+		{
+			return $this->cols[$name];
+		}
+
+		$col = $this->colsByName[$name] ?? NULL;
+		if ($col !== NULL)
+		{
+			return $col;
+		}
+
+		if ($checked)
+		{
+			throw new Exception($name);
+		}
+
+		return NULL;
+	}
+
+	/**
+	 * Create iteratator to walk each row
+	 *
+	 * @return Iterator
+	 */
+	public function getIterator() : Iterator
+	{
+		$pos  = 0;
+		$rows = $this->rows;
+
+		return new class($rows) implements Iterator {
+
+			private $rows;
+			private $pos = 0;
+
+			public function __construct(array $rows)
+			{
+				$this->rows = $rows;
+			}
+
+			public function next() : ?HRow
+			{
+				if ($this->hasNext())
+				{
+					return $this->rows[$this->pos++];
+				}
+				throw new Exception('No Such Element');
+			}
+
+			public function hasNext() : bool
+			{
+				return $this->pos < count($this->rows);
+			}
+
+			public function current() : ?HRow
+			{
+				return $this->rows[$this->pos] ?? NULL;
+			}
+
+			public function key() : int
+			{
+				return $this->pos;
+			}
+
+			public function valid() : bool
+			{
+				return $this->hasNext();
+			}
+
+			public function rewind() : void
+			{
+				$this->pos = 0;
+			}
+		};
+	}
+
+//////////////////////////////////////////////////////////////////////////
+// Debug
+//////////////////////////////////////////////////////////////////////////
+
+/** Debug dump - this is Zinc right now. */
+public
+function dump($out = NULL) : void
 {
-    /**
-     * @var HDict
-     */
-    private $dict;
-
-    /**
-     * @var HCol[]
-     */
-    private $cols;
-
-    /**
-     * @var HRow[]
-     */
-    private $rows;
-
-    /**
-     * @var array
-     */
-    private $colsByName;
-
-    /**
-     * Empty grid with one column called "empty" and zero rows
-     */
-    public static $EMPTY;
-
-    /**
-     * @param HDict $dict
-     * @param HCol[] $cols
-     * @param array $rowList
-     */
-    public function __construct(HDict $dict, array $cols, array $rowList)
-    {
-        $this->dict = $dict;
-        $this->cols = $cols;
-
-        if ($dict === null) {
-            throw new Exception("metadata cannot be null");
-        }
-
-        $this->rows = [];
-        foreach ($rowList as $cells) {
-            if (count($cols) !== count($cells)) {
-                throw new Exception("Row cells size != cols size");
-            }
-            $this->rows[] = new HRow($this, $cells);
-        }
-
-        $this->colsByName = [];
-        foreach ($cols as $col) {
-            $colName = $col->name();
-            if (array_key_exists($colName, $this->colsByName)) {
-                throw new Exception("Duplicate col name: " . $colName);
-            }
-            $this->colsByName[$colName] = $col;
-        }
-    }
-
-    /**
-     * Return grid level meta
-     * @return HDict
-     */
-    public function meta(): HDict
-    {
-        return $this->dict;
-    }
-
-    /**
-     * Error grid have the dict.err marker tag
-     * @return bool
-     */
-    public function isErr(): bool
-    {
-        return $this->dict->has("err");
-    }
-
-    /**
-     * Return if number of rows is zero
-     * @return bool
-     */
-    public function isEmpty(): bool
-    {
-        return $this->numRows() === 0;
-    }
-
-    /**
-     * Return number of rows
-     * @return int
-     */
-    public function numRows(): int
-    {
-        return count($this->rows);
-    }
-
-    /**
-     * Get a row by its zero based index
-     * @param int $row
-     * @return HRow
-     */
-    public function row(int $row): HRow
-    {
-        return $this->rows[$row];
-    }
-
-    /**
-     * Get number of columns
-     * @return int
-     */
-    public function numCols(): int
-    {
-        return count($this->cols);
-    }
-
-    /**
-     * Get a column by name. If not found and checked if false then
-     * return null, otherwise throw UnknownNameException
-     * @param string|int $name
-     * @param bool $checked
-     * @return HCol|null
-     */
-    public function col(string|int $name, bool $checked = true): ?HCol
-    {
-        // Get a column by its index
-        if (is_int($name)) {
-            return $this->cols[$name];
-        }
-
-        $col = $this->colsByName[$name] ?? null;
-        if ($col !== null) {
-            return $col;
-        }
-
-        if ($checked) {
-            throw new Exception($name);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create iteratator to walk each row
-     * @return Iterator
-     */
-    public function getIterator(): Iterator
-    {
-        return new ArrayIterator($this->rows);
-    }
-
-    /**
-     * Debug dump - this is Zinc right now.
-     * @param mixed $out
-     */
-    public function dump($out = null): void
-    {
-        if ($out === null) {
-            $out = STDOUT;
-        }
-
-        $zincWriter = new HZincWriter();
-        $str = $zincWriter->gridToString($this);
-        fwrite($out, $str);
-    }
+	$out = $out ?? STDOUT;
+	HZincWriter::gridToString($this, function($err, $str) use ($out)
+		{
+		fwrite($out, $str . PHP_EOL);
+		});
 }
-
-// Initialize the static property
-HGrid::$EMPTY = new HGrid(
-    HDict::$EMPTY,
-    [new HCol(0, "empty", HDict::$EMPTY)],
-    []
-);
-
-include_once 'HCol.php';
-include_once 'HDict.php';
-include_once 'io/HZincWriter.php';
+}

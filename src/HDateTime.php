@@ -1,7 +1,14 @@
 <?php
 namespace Haystack;
 
-
+use Haystack\DateTime;
+use Haystack\Exception;
+use HDate;
+use HTime;
+use HTimeZone;
+use HVal;
+use io\HZincReader;
+use function Haystack\readScalar;
 
 /**
  * Translation Notes:
@@ -25,14 +32,6 @@ namespace Haystack;
  * 17. Replaced JavaScript's `arguments.callee` with PHP's `static` keyword for accessing static properties and methods.
  */
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HDate;
-use HTime;
-use HTimeZone;
-use HVal;
-use HZincReader;
-use function Haystack\readScalar;
 
 class HDateTime extends HVal
 {
@@ -103,7 +102,7 @@ class HDateTime extends HVal
         return $ts;
     }
 
-    public static function make($arg1, $arg2 = null, $arg3 = null, $arg4 = null)
+    public static function make($arg1, $arg2 = null, $arg3 = null, $arg4 = null) : HDateTime
     {
         if ($arg1 instanceof HDate) {
             /** Make from two timestamps */
@@ -135,10 +134,13 @@ class HDateTime extends HVal
             $start = null;
             $end = null;
             if ($comma === false) {
-                $start = new HZincReader($str)->readScalar();
+                $start = new HZincReader($str);
+				$start->readScalar();
             } else {
-                $start = new HZincReader(substr($str, 0, $comma))->readScalar();
-                $end = new HZincReader(substr($str, $comma + 1))->readScalar();
+                $start = new HZincReader(substr($str, 0, $comma));
+				$start->readScalar();
+                $end = new HZincReader(substr($str, $comma + 1));
+				$end->readScalar();
             }
 
             // figure out what we parsed for start,end

@@ -1,7 +1,8 @@
 <?php
 namespace Haystack;
 
-
+use Haystack\Exception;
+use HVal;
 
 /**
  * Translation Notes:
@@ -26,9 +27,6 @@ namespace Haystack;
  * 18. Replaced JavaScript's `charCodeAt()` method with PHP's `ord()` function.
  * 19. Replaced JavaScript's `static` keyword with PHP's `static` keyword for static methods.
  */
-
-use Haystack\Exception;
-use HVal;
 
 class HCoord extends HVal
 {

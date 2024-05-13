@@ -1,7 +1,13 @@
 <?php
 namespace Haystack;
 
-
+use HGridReader;
+use HGridWriter;
+use HCsvWriter;
+use HJsonReader;
+use HJsonWriter;
+use HZincReader;
+use HZincWriter;
 
 /**
  * Translation Notes:
@@ -18,13 +24,6 @@ namespace Haystack;
  * 10. Replaced JavaScript `console.log` statements with PHP `echo` statements.
  */
 
-use HGridReader;
-use HGridWriter;
-use HCsvWriter;
-use HJsonReader;
-use HJsonWriter;
-use HZincReader;
-use HZincWriter;
 
 /**
  * HGridFormat models a format used to encode/decode HGrid.

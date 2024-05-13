@@ -1,7 +1,8 @@
 <?php
 namespace Haystack;
 
-
+use Haystack\Exception;
+use HVal;
 
 /**
  * Translation Notes:
@@ -21,8 +22,6 @@ namespace Haystack;
  * 13. Replaced JavaScript's string concatenation with PHP's string concatenation operator `.`.
  */
 
-use Haystack\Exception;
-use HVal;
 
 class HBool extends HVal
 {

@@ -1,6 +1,25 @@
 <?php
 namespace Haystack;
 
+use Haystack\HBool;
+use Haystack\HCoord;
+use Haystack\HDate;
+use Haystack\HDateTime;
+use Haystack\HDictBuilder;
+use Haystack\HFilter;
+use Haystack\HGridBuilder;
+use Haystack\HMarker;
+use Haystack\HNum;
+use Haystack\HRef;
+use Haystack\HRemove;
+use Haystack\HStr;
+use Haystack\HTime;
+use Haystack\HTimeZone;
+use Haystack\HUri;
+use Haystack\HVal;
+use Streams\Reader;
+use Haystack\HGridReader;
+use Haystack\HJsonReader;
 
 /**
  * Translation Notes:
@@ -24,27 +43,6 @@ namespace Haystack;
  * - Replaced JavaScript's `emit` with PHP's custom event handling using `call_user_func_array`
  */
 
-require_once 'HGridReader.php';
-require_once 'Streams.php';
-require_once 'HVal.php';
-
-use Haystack\src\HBool;
-use Haystack\src\HCoord;
-use Haystack\src\HDate;
-use Haystack\src\HDateTime;
-use Haystack\src\HDictBuilder;
-use Haystack\src\HFilter;
-use Haystack\src\HGridBuilder;
-use Haystack\src\HMarker;
-use Haystack\src\HNum;
-use Haystack\src\HRef;
-use Haystack\src\HRemove;
-use Haystack\src\HStr;
-use Haystack\src\HTime;
-use Haystack\src\HTimeZone;
-use Haystack\src\HUri;
-use Haystack\src\HVal;
-use Streams\Reader;
 
 /**
  * HZincReader reads grids using the Zinc format.

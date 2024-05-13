@@ -2,10 +2,6 @@
 namespace Haystack;
 
 
-
-
-
-
 /**
  * Translation Notes:
  *

@@ -1,7 +1,9 @@
 <?php
 namespace Haystack;
 
-
+use Haystack\Exception;
+use HDict;
+use HGrid;
 
 /**
  * Translation Notes:
@@ -24,10 +26,7 @@ namespace Haystack;
  * 16. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-use;
-use Haystack\Exception;
-use HDict;
-use HGrid;
+
 
 class HHisItem
 {
