@@ -81,7 +81,7 @@
       <workItem from="1715474562695" duration="372000" />
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
-      <workItem from="1715536370004" duration="19174000" />
+      <workItem from="1715536370004" duration="19835000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -107,7 +107,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715638985249</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Updated composer dependencies">
+      <option name="closed" value="true" />
+      <created>1715639504845</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1715639504845</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,7 +135,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixing translation errors from porting the code" />
     <MESSAGE value="Fixing mis-formatted files &amp; code. Preparing the project to be a composer package." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing mis-formatted files &amp; code. Preparing the project to be a composer package." />
+    <MESSAGE value="Updated composer dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated composer dependencies" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [
