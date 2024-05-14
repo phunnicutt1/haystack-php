@@ -1,10 +1,11 @@
 <?php
 namespace Cxalloy\Haystack;
 
-
 use GuzzleHttp\Psr7\Stream;
 
-class Reader extends Stream
+
+
+class Streams extends Stream
 {
 	public function __construct($init = '')
 	{
@@ -12,13 +13,13 @@ class Reader extends Stream
 		$this->write($init);
 	}
 
-	public function read($length = null) : string
+	public function read($length = null): string
 	{
 		if ($length === null) {
 			return $this->getContents();
 		}
 
-		$data = $this->read($length);
+		$data = parent::read($length);
 		$this->seek($length, SEEK_CUR);
 		return $data;
 	}
@@ -37,34 +38,8 @@ class Reader extends Stream
 		$this->emit('end');
 	}
 
-	public function __toString() : string
+	public function __toString(): string
 	{
 		return $this->getContents();
 	}
 }
-
-class Writer extends Stream
-{
-	public function __construct($options = [])
-	{
-		parent::__construct('php://temp', 'r+');
-	}
-
-	public function write($data) : int
-	{
-		$ret = parent::write($data);
-		if (!$ret) {
-			$this->emit('drain');
-		}
-		return $ret;
-	}
-}
-
-// Usage
-/*$reader = new Reader('Hello, World!');
-echo $reader->read(7); // Output: Hello,
-
-$writer = new Writer();
-$writer->write('Hello, ');
-$writer->write('World!');
-echo $writer; // Output: Hello, World!*/
