@@ -46,12 +46,6 @@ use HZincWriter;
  */
 
 
-
-//use HCsvWriter;
-//use HOp;
-//use HServer;
-//use HStdOps;
-
 class Haystack
 {
     public static $HBin = HBin::class;
@@ -86,7 +80,5 @@ class Haystack
     public static $HJsonWriter = HJsonWriter::class;
     public static $HZincReader = HZincReader::class;
     public static $HZincWriter = HZincWriter::class;
-    //public static $HOp = HOp::class;
-    //public static $HServer = HServer::class;
-    //public static $HStdOps = HStdOps::class;
+
 }
