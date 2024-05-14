@@ -1,5 +1,5 @@
 <?php
-namespace Cxalloy\HaystackPhp\io;
+namespace Cxalloy\Haystack\io;
 
 //require_once 'Stream.php';
 /**

@@ -1,5 +1,5 @@
 <?php
-namespace Cxalloy\HaystackPhp;
+namespace Cxalloy\Haystack;
 
 use Haystack\DateTime;
 use Haystack\Exception;

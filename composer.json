@@ -5,8 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Cxalloy\\HaystackPhp\\": "src/",
-            "Cxalloy\\HaystackPhp\\io\\": "src/io/"
+            "Cxalloy\\Haystack\\": "src/",
+            "Cxalloy\\Haystack\\io\\": "src/io/"
         }
     },
     "authors": [

@@ -1,5 +1,5 @@
 <?php
-namespace Cxalloy\HaystackPhp\io;
+namespace Cxalloy\Haystack\io;
 
 use Haystack\src\HDictBuilder;
 use Haystack\src\HGrid;
