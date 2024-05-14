@@ -81,7 +81,7 @@
       <workItem from="1715474562695" duration="372000" />
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
-      <workItem from="1715536370004" duration="24866000" />
+      <workItem from="1715536370004" duration="26695000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -147,7 +147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715702406388</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Updated namespaces and composer auto loading">
+      <option name="closed" value="true" />
+      <created>1715703062992</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1715703062992</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
