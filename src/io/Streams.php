@@ -1,7 +1,7 @@
 <?php
-namespace Cxalloy\HaystackPhp;
+namespace Cxalloy\HaystackPhp\io;
 
-require_once 'Stream.php';
+//require_once 'Stream.php';
 /**
  * Translation Notes:
  * - Converted JavaScript code to PHP 8.3

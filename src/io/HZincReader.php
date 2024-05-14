@@ -1,5 +1,5 @@
 <?php
-namespace Cxalloy\HaystackPhp;
+namespace Cxalloy\HaystackPhp\io;
 
 use Haystack\HBool;
 use Haystack\HCoord;

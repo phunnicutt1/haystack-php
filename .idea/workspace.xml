@@ -7,6 +7,14 @@
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HGridFormat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HGridReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HGridWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HJsonReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HJsonWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HJsonWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HZincReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/HZincWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/Streams.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/Streams.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +89,7 @@
       <workItem from="1715474562695" duration="372000" />
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
-      <workItem from="1715536370004" duration="19835000" />
+      <workItem from="1715536370004" duration="22222000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -115,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715639504845</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Updated composer dependencies">
+      <option name="closed" value="true" />
+      <created>1715640899743</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1715640899743</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
