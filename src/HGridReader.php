@@ -1,8 +1,8 @@
 <?php
-namespace Cxalloy\Haystack\io;
+namespace Cxalloy\Haystack;
 
 
-use Haystack\src\HGrid;
+use HGrid;
 
 /**
  * Translation Notes:

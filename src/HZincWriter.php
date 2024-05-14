@@ -1,11 +1,11 @@
 <?php
-namespace Cxalloy\Haystack\io;
+namespace Cxalloy\Haystack;
 
 
-use Haystack\src\HCol;
-use Haystack\src\HGrid;
-use Haystack\src\HMarker;
-use Haystack\src\HRow;
+use HCol;
+use HGrid;
+use HMarker;
+use HRow;
 
 /**
  * Translation Notes:

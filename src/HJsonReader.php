@@ -1,7 +1,7 @@
 <?php
-namespace Cxalloy\Haystack\io;
+namespace Cxalloy\Haystack;
 
-use Haystack\src\HVal;
+use HVal;
 use HBin;
 use HBool;
 use HCoord;

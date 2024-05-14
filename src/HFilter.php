@@ -8,7 +8,7 @@ use HNum;
 use HRef;
 use HStr;
 use HVal;
-use io\HZincReader;
+use HZincReader;
 /**
  * This code includes the following classes:
  *

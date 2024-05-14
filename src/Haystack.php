@@ -73,7 +73,7 @@ class Haystack
     public static $HUri = HUri::class;
     public static $HVal = HVal::class;
     public static $HWatch = HWatch::class;
-    //public static $HClient = HClient::class;
+    public static $HClient = HClient::class;
     //public static $HCsvWriter = HCsvWriter::class;
     public static $HGridFormat = HGridFormat::class;
     public static $HJsonReader = HJsonReader::class;

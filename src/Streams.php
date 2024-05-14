@@ -1,5 +1,5 @@
 <?php
-namespace Cxalloy\Haystack\io;
+namespace Cxalloy\Haystack;
 
 
 use GuzzleHttp\Psr7\Stream;

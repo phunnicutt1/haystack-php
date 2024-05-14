@@ -5,8 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Cxalloy\\Haystack\\": "src/",
-            "Cxalloy\\Haystack\\io\\": "src/io/"
+            "Cxalloy\\Haystack\\": "src/"
         }
     },
     "authors": [

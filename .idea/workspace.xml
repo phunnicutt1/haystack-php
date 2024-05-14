@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/Streams.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/Streams.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HProj.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HProj.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Haystack.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridFormat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HGridWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HJsonWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/Streams.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Streams.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +92,7 @@
       <workItem from="1715474562695" duration="372000" />
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
-      <workItem from="1715536370004" duration="26695000" />
+      <workItem from="1715536370004" duration="28182000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -155,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715703062992</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updated namespaces and composer auto loading">
+      <option name="closed" value="true" />
+      <created>1715704905316</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1715704905316</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -7,7 +7,7 @@ use HDate;
 use HTime;
 use HTimeZone;
 use HVal;
-use io\HZincReader;
+use HZincReader;
 use function Haystack\readScalar;
 
 /**

@@ -1,9 +1,9 @@
 <?php
-namespace Cxalloy\Haystack\io;
+namespace Cxalloy\Haystack;
 
-use Haystack\src\HDictBuilder;
-use Haystack\src\HGrid;
-use Haystack\src\HVal;
+use HDictBuilder;
+use HGrid;
+use HVal;
 use HBool;
 use HGridWriter;
 use HMarker;

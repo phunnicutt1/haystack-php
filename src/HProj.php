@@ -2,7 +2,7 @@
 namespace Cxalloy\Haystack;
 
 use Haystack\Exception;
-use Haystack\HDict;
+use HDict;
 
 /**
  * Translation Notes:
