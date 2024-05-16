@@ -33,7 +33,7 @@ use Cxalloy\Haystack\HVal;
 
 class HDict {
 
-	private static $EMPTY;
+	public static $EMPTY;
 
 	public function __construct()
 	{
@@ -81,7 +81,7 @@ class HDict {
 	/**
 	 * Get the "id" tag as HRef.
 	 *
-	 * @return \Haystack\src\HRef
+	 * @return \Cxalloy\Haystack\HRef
 	 */
 	public function id() : HRef
 	{
@@ -98,7 +98,7 @@ class HDict {
 	public function dis() : string
 	{
 		$v = $this->get("dis", FALSE);
-		if ($v instanceof HStr)
+		if ($v instanceof \Cxalloy\Haystack\HStr)
 		{
 			return $v->val;
 		}
@@ -130,7 +130,7 @@ class HDict {
 	 *
 	 * @return \Haystack\src\HVal|null
 	 */
-	public function get(string $name, bool $checked) : ?HVal
+	public function get(string $name, bool $checked) : ?\Cxalloy\Haystack\HVal
 	{
 		throw new Error('must be implemented by subclass!');
 	}
@@ -377,7 +377,7 @@ class HDict {
 				$s .= " ";
 			}
 			$s .= $name;
-			if ($val !== HMarker::VAL)
+			if ($val !== HMarker::$VAL)
 			{
 				$s .= ":" . $val->toZinc();
 			}
@@ -404,15 +404,27 @@ class HDict {
             return count($this->map);
         }
 
-        public function get(string $name, bool $checked): ?HVal
+	    /**
+	     * @param string $name
+	     * @param bool   $checked
+	     *
+	     * @return HVal|null
+	     */
+	    public function get(string $name, bool $checked): ?HVal
         {
+
             $val = $this->map[$name] ?? null;
-            if ($val !== null) {
+
+            if ($val instanceof HVal || $val === NULL)
+            {
                 return $val;
             }
-            if (!$checked) {
-                return null;
-            }
+
+	        if ( ! $checked)
+	        {
+		        return NULL;
+	        }
+
             throw new Error("Unknown name: " . $name);
         }
 
@@ -437,7 +449,7 @@ class HDict {
                     $this->length = $length;
                 }
 
-                public function next(): ?\Haystack\HDict_MapEntry
+                public function next(): ?\Cxalloy\Haystack\HDict_MapEntry
                 {
                     $elem = null;
                     if (!$this->hasNext()) {

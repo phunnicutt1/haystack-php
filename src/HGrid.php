@@ -47,12 +47,14 @@ class HGrid {
 	 * @param HDict  $dict
 	 * @param HCol[] $cols
 	 * @param array  $rowList
+	 *
+	 * @throws \Exception
 	 */
 	public function __construct(HDict $dict, array $cols, array $rowList)
 	{
-		if ($dict === NULL)
+		if ( ! $dict)
 		{
-			throw new Exception('metadata cannot be null');
+			throw new \Exception('metadata cannot be null');
 		}
 
 		$this->dict = $dict;
@@ -63,7 +65,7 @@ class HGrid {
 		{
 			if (count($cols) !== count($cells))
 			{
-				throw new Exception('Row cells size != cols size');
+				throw new \Exception('Row cells size != cols size');
 			}
 			$this->rows[] = new HRow($this, $cells);
 		}

@@ -1,107 +1,140 @@
 <?php
+declare(strict_types=1);
+
 namespace Cxalloy\Haystack;
 
-use \Exception;
 use Cxalloy\Haystack\HVal;
+use \Exception;
 
-/**
- * Translation Notes:
- *
- * 1. Converted JavaScript code to PHP 8.3 syntax.
- * 2. Preserved comments, method, and variable names as much as possible.
- * 3. Replaced JavaScript's `module.exports` with PHP's `class` syntax.
- * 4. Replaced JavaScript's `require` statements with PHP's `use` statements for class imports.
- * 5. Replaced JavaScript's `function` syntax with PHP's `function` syntax for class methods.
- * 6. Replaced JavaScript's `this` keyword with PHP's `$this` for class method access.
- * 7. Replaced JavaScript's `null` with PHP's `null`.
- * 8. Replaced JavaScript's `undefined` with PHP's `null`.
- * 9. Replaced JavaScript's `throw` statement with PHP's `throw` statement.
- * 10. Replaced JavaScript's `Error` class with PHP's `Exception` class.
- * 11. Replaced JavaScript's `instanceof` operator with PHP's `instanceof` operator.
- * 12. Replaced JavaScript's string concatenation with PHP's string concatenation operator `.`.
- * 13. Replaced JavaScript's `parseInt()` function with PHP's `intval()` function.
- * 14. Replaced JavaScript's `parseFloat()` function with PHP's `floatval()` function.
- * 15. Replaced JavaScript's `isNaN()` function with PHP's `is_nan()` function.
- * 16. Replaced JavaScript's `static` keyword with PHP's `static` keyword for static properties and methods.
- * 17. Replaced JavaScript's `arguments.callee` with PHP's `static` keyword for accessing static properties and methods.
- */
+class HNum extends HVal {
+	/** @var float */
+	private $val;
 
+	/** @var string|null */
+	private $unit;
 
+	/** @var HNum */
+	public static $ZERO;
 
-class HNum extends HVal
-{
-    public static $ZERO;
+	/** @var HNum */
+	public static $POS_INF;
 
-    public $val;
-    public $unit;
+	/** @var HNum */
+	public static $NEG_INF;
 
-    public function __construct($val, $unit = null)
-    {
-        // ensure singleton usage for zero
-        if ($val === 0 && $unit === null) {
-            if (static::$_zeroSingletonInstance) {
-                return static::$_zeroSingletonInstance;
-            }
-            static::$_zeroSingletonInstance = $this;
-        }
+	/** @var HNum */
+	public static $NaN;
 
-        $this->val = $val;
-        $this->unit = $unit;
-    }
+	private static $unitChars = [];
 
-    public static function __constructStatic()
-    {
-        static::$ZERO = new static(0);
-    }
+	public static function initStatic(): void {
+		self::$ZERO = new self(0);
+		self::$POS_INF = new self(1);
+		self::$NEG_INF = new self(-1);
+		self::$NaN = new self(NAN);
 
-    public static function make($val, $unit = null)
-    {
-        if (!HVal::typeis($val, 'number', 'int', 'float')) {
-            throw new Exception("Invalid number val: \"" . $val . "\"");
-        }
-        if ($unit !== null && !HVal::typeis($unit, 'string', 'string')) {
-            throw new Exception("Invalid unit: \"" . $unit . "\"");
-        }
+		for ($i = 0; $i < 128; $i++) {
+			self::$unitChars[$i] = false;
+		}
 
-        if ($val === 0 && $unit === null) {
-            return static::$ZERO;
-        }
-        return new static($val, $unit);
-    }
+		foreach (array_merge(range('a', 'z'), range('A', 'Z'), ['_', '`', '%', '/']) as $char) {
+			self::$unitChars[ord($char)] = true;
+		}
+	}
 
-    public function toZinc()
-    {
-        $s = "";
-        if ($this->val < 0) {
-            $s .= "-";
-        }
-        $s .= abs($this->val);
-        if ($this->unit !== null) {
-            $s .= " " . $this->unit;
-        }
-        return $s;
-    }
+	private function __construct($val,  $unit = NULL)
+	{
+		if ( ! self::isUnitName($unit))
+		{
+			throw new Exception("Invalid unit name: $unit");
+		}
 
-    public function toJSON()
-    {
-        $s = "n:" . $this->val;
-        if ($this->unit !== null) {
-            $s .= " " . $this->unit;
-        }
-        return $s;
-    }
+		$this->val  = $val;
+		$this->unit = $unit;
+	}
 
-    public function equals($that)
-    {
-        return $that instanceof HNum && $this->val === $that->val && $this->unit === $that->unit;
-    }
+	public static function isUnitName(?string $unit): bool {
+		if ($unit === null) {
+			return true;
+		}
+		if ($unit === '') {
+			return false;
+		}
+		foreach (str_split($unit) as $char) {
+			if (ord($char) >= 128 || !self::$unitChars[ord($char)]) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public function toString()
-    {
-        return $this->toZinc();
-    }
+	public function compareTo($val): int {
+		if ($this->val < $val->val) {
+			return -1;
+		}
+		if ($this->val === $val->val) {
+			return 0;
+		}
+		return 1;
+	}
 
-    private static $_zeroSingletonInstance;
+	public function toZinc(): string {
+		return $this->parse(false);
+	}
+
+	public function toJSON(): string {
+		return 'n:' . $this->parse(true);
+	}
+
+	private function parse($json): string {
+		if ($this->val === 1) {
+			return 'INF';
+		} elseif ($this->val === -1) {
+			return '-INF';
+		} elseif (is_nan($this->val)) {
+			return '0';
+		} else {
+			$formattedValue = sprintf('%.4f', $this->val);
+			return $formattedValue . ($this->unit !== null ? ($json ? ' ' : '') . $this->unit : '');
+		}
+	}
+
+	public function equals($val): bool {
+		if (!($val instanceof HNum)) {
+			return false;
+		}
+		if (is_nan($this->val) && is_nan($val->val)) {
+			return true;
+		}
+		return $this->val === $val->val && $this->unit === $val->unit;
+	}
+
+	public function millis(): float {
+		$u = $this->unit ?? 'null';
+		switch ($u) {
+			case 'ms':
+			case 'millisecond':
+				return $this->val;
+			case 's':
+			case 'sec':
+			case 'second':
+				return $this->val * 1000.0;
+			case 'min':
+			case 'minute':
+				return $this->val * 1000.0 * 60.0;
+			case 'h':
+			case 'hr':
+			case 'hour':
+				return $this->val * 1000.0 * 60.0 * 60.0;
+			default:
+				throw new Exception("Invalid duration unit: $u");
+		}
+	}
+
+	public static function create($val, $unit = NULL) : HNum
+	{
+		return new self($val, $unit);
+	}
 }
 
-HNum::__constructStatic();
+HNum::initStatic();

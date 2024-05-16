@@ -29,7 +29,9 @@ use Cxalloy\Haystack\HVal;
  */
 class HMarker extends HVal
 {
-    public static $VAL;
+
+
+	public static $VAL;
 
     public function __construct()
     {

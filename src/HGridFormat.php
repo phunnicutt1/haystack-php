@@ -3,7 +3,7 @@ namespace Cxalloy\Haystack;
 
 use Cxalloy\Haystack\HGridReader;
 use Cxalloy\Haystack\HGridWriter;
-use Cxalloy\Haystack\HCsvWriter;
+//use Cxalloy\Haystack\HCsvWriter;
 use Cxalloy\Haystack\HJsonReader;
 use Cxalloy\Haystack\HJsonWriter;
 use Cxalloy\Haystack\HZincReader;
@@ -60,9 +60,13 @@ class HGridFormat
             throw new Exception("mime has semicolon " . $mime);
         }
 
-        $this->mime = $mime;
-        $this->reader = $reader;
-        $this->writer = $writer;
+	    $this->mime = $mime;
+	    $this->reader = $reader;
+	    $this->writer = $writer;
+
+	    $this::register_formats();
+
+
     }
 
     /**
@@ -125,13 +129,13 @@ class HGridFormat
     public function makeReader($input): HGridReader
     {
         if ($this->reader === null) {
-            throw new Exception("Format doesn't support reader: " . $this->mime);
+            throw new \Exception("Format doesn't support reader: " . $this->mime);
         }
         try {
             return new $this->reader($input);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //$e->getMessage() = "Cannot construct: " . $this->reader::class . "(InputStream). " . $e->getMessage();
-	        throw new Exception('Cannot construct: ' . $this->reader::class . '(InputStream). ' . $e->getMessage());
+	        throw new \Exception('Cannot construct: ' . $this->reader::class . '(InputStream). ' . $e->getMessage());
         }
     }
 
@@ -144,24 +148,26 @@ class HGridFormat
     public function makeWriter($out): HGridWriter
     {
         if ($this->writer === null) {
-            throw new Exception("Format doesn't support writer: " . $this->mime);
+            throw new \Exception("Format doesn't support writer: " . $this->mime);
         }
         try {
             return new $this->writer($out);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 	        echo "Cannot construct: " . $this->writer::class . "(OutputStream). " . $e->getMessage();
         }
     }
 
     private static array $registry = [];
 
-    static {
+    private static function register_formats() : void
+    {
         try {
+
             self::register(new HGridFormat("text/plain", HZincReader::class, HZincWriter::class));
             self::register(new HGridFormat("text/zinc", HZincReader::class, HZincWriter::class));
-            self::register(new HGridFormat("text/csv", null, HCsvWriter::class));
+            //self::register(new HGridFormat("text/csv", null, HCsvWriter::class));
             self::register(new HGridFormat("application/json", HJsonReader::class, HJsonWriter::class));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getTraceAsString();
         }
     }

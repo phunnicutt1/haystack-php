@@ -23,7 +23,7 @@ use Cxalloy\Haystack\HStr;
 
 class HCol
 {
-    private $index;
+    public  $index;
     private $uname;
     private $dict;
 

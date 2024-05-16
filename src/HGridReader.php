@@ -30,6 +30,6 @@ abstract class HGridReader
      */
     public function __construct()
     {
-        throw new Exception('must be implemented by subclass!');
+        throw new \Exception('must be implemented by subclass!');
     }
 }

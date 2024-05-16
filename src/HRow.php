@@ -52,12 +52,19 @@ class HRow extends HDict
         return $this->ugrid;
     }
 
-    public function size()
+    public function size() : int
     {
         return count($this->ugrid->cols);
     }
 
-    public function get($col, $checked = true)
+	/**
+	 * @param      $col
+	 * @param bool $checked
+	 *
+	 * @return \Cxalloy\Haystack\HVal|null
+	 * @throws \Exception
+	 */
+	public function get($col, $checked = true) : ?HVal
     {
         if ($col instanceof HCol) {
             $val = $this->cells[$col->index];
@@ -65,7 +72,7 @@ class HRow extends HDict
                 return $val;
             }
             if ($checked) {
-                throw new Exception($col->name());
+                throw new \Exception($col->name());
             }
             return null;
         } else {
@@ -79,13 +86,13 @@ class HRow extends HDict
                 }
             }
             if ($checked) {
-                throw new Exception($name);
+                throw new \Exception($name);
             }
             return null;
         }
     }
 
-    public function iterator()
+    public function iterator() : Iterator
     {
         $col = 0;
         for (; $col < count($this->ugrid->cols); $col++) {

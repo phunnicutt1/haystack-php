@@ -83,10 +83,10 @@ class HZincReader extends HGridReader
      * @memberof HZincReader
      * @return {Error}
      */
-    private function err($msg, $ex = null)
+    private function err($msg, $ex) : Exception
     {
         $errMsg = $msg;
-        $errEx = $ex;
+        $errEx = $ex ?? NULL;
         if ($errMsg instanceof Error) {
             $errEx = $errMsg;
             $errMsg = $errEx->getMessage();
@@ -98,7 +98,7 @@ class HZincReader extends HGridReader
         return $errEx;
     }
 
-    private function consume()
+    private function consume() : void
     {
         try {
             $this->cur = $this->peek;
@@ -111,13 +111,12 @@ class HZincReader extends HGridReader
         }
     }
 
-    private function init()
+    private function init() : void
     {
-        $this->consume();
         $this->consume();
     }
 
-    private function done($c)
+    private function done($c) : bool
     {
         if ($c === null) {
             return true;
@@ -125,7 +124,7 @@ class HZincReader extends HGridReader
         return (is_nan(HVal::cc($c)) || HVal::cc($c) < 0);
     }
 
-    private function notdone($c, $eq)
+    private function notdone($c, $eq) : bool
     {
         if ($c === null) {
             return false;
@@ -140,7 +139,7 @@ class HZincReader extends HGridReader
      * @memberof HZincReader
      * @return {HVal}
      */
-    private function readBinVal()
+    private function readBinVal() : HBin
     {
         if ($this->done($this->cur)) {
             throw $this->err("Expected '(' after Bin");
@@ -203,23 +202,23 @@ class HZincReader extends HGridReader
         // match identifier
         if ($this->isFilter) {
             if ($s === "true") {
-                return HBool::TRUE;
+                return HBool::$TRUE;
             }
             if ($s === "false") {
-                return HBool::FALSE;
+                return HBool::$FALSE;
             }
         } else {
             if ($s === "N") {
                 return null;
             }
             if ($s === "M") {
-                return HMarker::VAL;
+                return HMarker::$VAL;
             }
             if ($s === "R") {
-                return HRemove::VAL;
+                return HRemove::$VAL;
             }
             if ($s === "T") {
-                return HBool::TRUE;
+                return HBool::$TRUE;
             }
             if ($s === "F") {
                 return HBool::FALSE;
@@ -232,7 +231,7 @@ class HZincReader extends HGridReader
             }
         }
         if ($s === "NaN") {
-            return HNum::NaN;
+            return HNum::$ZERO;
         }
         if ($s === "INF") {
             return HNum::POS_INF;

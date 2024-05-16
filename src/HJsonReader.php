@@ -110,9 +110,9 @@ class HJsonReader extends HGridReader
             } elseif ($type === 't:') {
                 return new HDateTime($val);
             } elseif ($type === 'm:') {
-                return HMarker::VAL;
+                return HMarker::$VAL;
             } elseif ($type === 'x:') {
-                return HRemove::VAL;
+                return HRemove::$VAL;
             } elseif ($type === 's:') {
                 return new HStr($val);
             } elseif ($type === 'h:') {
