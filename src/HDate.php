@@ -36,7 +36,7 @@ class HDate extends HVal
     public $month;
     public $day;
 
-    private function __construct($year, $month, $day)
+    public function __construct($year, $month, $day)
     {
         $this->year = $year;
         $this->month = $month;

@@ -33,7 +33,7 @@ class HHisItem
     public $ts;
     public $val;
 
-    private function __construct($ts, $val)
+    public function __construct($ts, $val)
     {
         $this->ts = $ts;
         $this->val = $val;

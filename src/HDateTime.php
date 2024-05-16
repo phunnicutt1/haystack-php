@@ -41,7 +41,7 @@ class HDateTime extends HVal
     public $tzOffset;
     public $mils;
 
-    private function __construct($date, $time, $tz, $tzOffset)
+    public function __construct($date, $time, $tz, $tzOffset)
     {
         $this->date = $date;
         $this->time = $time;

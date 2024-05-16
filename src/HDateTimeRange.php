@@ -31,7 +31,7 @@ class HDateTimeRange
     public $start;
     public $end;
 
-    private function __construct($start, $end)
+    public function __construct($start, $end)
     {
         $this->start = $start;
         $this->end = $end;

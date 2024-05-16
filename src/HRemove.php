@@ -32,7 +32,7 @@ class HRemove extends HVal
 {
     public static $VAL;
 
-    private function __construct()
+    public function __construct()
     {
         // ensure singleton usage
         if (static::$_singletonInstance) {

@@ -51,7 +51,7 @@ class HTime extends HVal
     public $sec;
     public $ms;
 
-    private function __construct($hour, $min, $sec = 0, $ms = 0)
+    public function __construct($hour, $min, $sec = 0, $ms = 0)
     {
         $this->hour = $hour;
         $this->min = $min;

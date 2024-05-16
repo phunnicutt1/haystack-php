@@ -35,7 +35,7 @@ class HNum extends HVal
     public $val;
     public $unit;
 
-    private function __construct($val, $unit = null)
+    public function __construct($val, $unit = null)
     {
         // ensure singleton usage for zero
         if ($val === 0 && $unit === null) {

@@ -54,7 +54,7 @@ class HTimeZone extends HVal
     public $name;
     public $js;
 
-    private function __construct($name, $js)
+    public function __construct($name, $js)
     {
         /** Haystack timezone name */
         $this->name = $name;

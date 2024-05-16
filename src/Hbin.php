@@ -56,7 +56,7 @@ class HBin extends HVal {
 	/**
 	 * @param string $mime MIME type for binary file
 	 */
-	private function __construct(string $mime)
+	public function __construct(string $mime)
 	{
 		$this->mime = $mime;
 	}

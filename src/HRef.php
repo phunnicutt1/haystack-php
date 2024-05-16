@@ -41,7 +41,7 @@ class HRef extends HVal
     public $val;
     public $display;
 
-    private function __construct($val, $display = null)
+    public function __construct($val, $display = null)
     {
         if (!self::isIdChar($val)) {
             throw new Exception("Invalid id: " . $val);

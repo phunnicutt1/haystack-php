@@ -5,40 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HBool.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HBool.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCol.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCoord.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDate.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HDateTimeRange.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTimeRange.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDict.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDictBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HFilter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGrid.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridFormat.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridWriter.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HHisItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HHisItem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonWriter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HMarker.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HMarker.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HNum.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HNum.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HProj.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HProj.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HRef.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRef.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HRemove.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRemove.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRow.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HStr.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HStr.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTime.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTimeZone.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HUri.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HUri.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HVal.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincWriter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Haystack.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hbin.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -112,24 +90,23 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.CodyAccountHistoryMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyConvertUrlToCodebaseName&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyHistoryLlmMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;dumpAutoload /Users/patrick/Sites/haystack-php/composer.json&quot;: &quot;--no-interaction --ansi --verbose&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/patrick/Sites/haystack-php/src&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.CodyAccountHistoryMigration": "true",
+    "RunOnceActivity.CodyConvertUrlToCodebaseName": "true",
+    "RunOnceActivity.CodyHistoryLlmMigration": "true",
+    "RunOnceActivity.CodyProjectSettingsMigration": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "dumpAutoload /Users/patrick/Sites/haystack-php/composer.json": "--no-interaction --ansi --verbose",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/patrick/Sites/haystack-php/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "advanced.settings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -150,7 +127,7 @@
       <workItem from="1715474942456" duration="855000" />
       <workItem from="1715534483775" duration="1865000" />
       <workItem from="1715536370004" duration="33455000" />
-      <workItem from="1715830656860" duration="4132000" />
+      <workItem from="1715830656860" duration="4552000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -256,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715716586675</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Updated namespaces &amp; composer auto-loading">
+      <option name="closed" value="true" />
+      <created>1715841647721</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1715841647721</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +263,8 @@
     <MESSAGE value="Fixing mis-formatted files &amp; code. Preparing the project to be a composer package." />
     <MESSAGE value="Updated composer dependencies" />
     <MESSAGE value="Updated namespaces and composer auto loading" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated namespaces and composer auto loading" />
+    <MESSAGE value="Updated namespaces &amp; composer auto-loading" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated namespaces &amp; composer auto-loading" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [

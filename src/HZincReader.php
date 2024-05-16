@@ -17,7 +17,7 @@ use Cxalloy\Haystack\HTime;
 use Cxalloy\Haystack\HTimeZone;
 use Cxalloy\Haystack\HUri;
 use Cxalloy\Haystack\HVal;
-use Cxalloy\Haystack\Streams\Reader;
+use GuzzleHttp\Psr7\Stream;
 use Cxalloy\Haystack\HGridReader;
 use Cxalloy\Haystack\HJsonReader;
 

@@ -45,7 +45,7 @@ class HStr extends HVal
 
     public $val;
 
-    private function __construct($val)
+    public function __construct($val)
     {
         // ensure singleton usage
         if ($val === "" && static::$_emptySingletonInstance) {

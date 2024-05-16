@@ -47,7 +47,7 @@ class HUri extends HVal
 
     public $val;
 
-    private function __construct($val)
+    public function __construct($val)
     {
         $this->val = $val;
     }
