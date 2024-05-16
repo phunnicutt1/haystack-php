@@ -1,8 +1,8 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HVal;
+use \Exception;
+use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:

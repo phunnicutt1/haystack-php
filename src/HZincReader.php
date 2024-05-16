@@ -1,25 +1,25 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HBool;
-use HCoord;
-use HDate;
-use HDateTime;
-use HDictBuilder;
-use HFilter;
-use HGridBuilder;
-use HMarker;
-use HNum;
-use HRef;
-use HRemove;
-use HStr;
-use HTime;
-use HTimeZone;
-use HUri;
-use HVal;
-use Streams\Reader;
-use HGridReader;
-use HJsonReader;
+use Cxalloy\Haystack\HBool;
+use Cxalloy\Haystack\HCoord;
+use Cxalloy\Haystack\HDate;
+use Cxalloy\Haystack\HDateTime;
+use Cxalloy\Haystack\HDictBuilder;
+use Cxalloy\Haystack\HFilter;
+use Cxalloy\Haystack\HGridBuilder;
+use Cxalloy\Haystack\HMarker;
+use Cxalloy\Haystack\HNum;
+use Cxalloy\Haystack\HRef;
+use Cxalloy\Haystack\HRemove;
+use Cxalloy\Haystack\HStr;
+use Cxalloy\Haystack\HTime;
+use Cxalloy\Haystack\HTimeZone;
+use Cxalloy\Haystack\HUri;
+use Cxalloy\Haystack\HVal;
+use Cxalloy\Haystack\Streams\Reader;
+use Cxalloy\Haystack\HGridReader;
+use Cxalloy\Haystack\HJsonReader;
 
 /**
  * Translation Notes:

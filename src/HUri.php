@@ -1,9 +1,9 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HStr;
-use HVal;
+use \Exception;
+use Cxalloy\Haystack\HStr;
+use Cxalloy\Haystack\HVal;
 
 
 /**

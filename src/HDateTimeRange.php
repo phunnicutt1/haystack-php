@@ -1,10 +1,10 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HDate;
-use HDateTime;
-use HTimeZone;
+use \Exception;
+use Cxalloy\Haystack\HDate;
+use Cxalloy\Haystack\HDateTime;
+use Cxalloy\Haystack\HTimeZone;
 
 /**
  * Translation Notes:

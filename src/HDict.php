@@ -1,14 +1,14 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Error;
-use Haystack\Iterator;
-use HBool;
-use HMarker;
-use HNum;
-use HRef;
-use HStr;
-use HVal;
+use \Exception;
+use Cxalloy\Haystack\Iterator;
+use Cxalloy\Haystack\HBool;
+use Cxalloy\Haystack\HMarker;
+use Cxalloy\Haystack\HNum;
+use Cxalloy\Haystack\HRef;
+use Cxalloy\Haystack\HStr;
+use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:

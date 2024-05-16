@@ -1,9 +1,9 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HDict;
-use HGrid;
+use \Exception;
+use Cxalloy\Haystack\HDict;
+use Cxalloy\Haystack\HGrid;
 
 /**
  * Translation Notes:

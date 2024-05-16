@@ -2,10 +2,11 @@
 namespace Cxalloy\Haystack;
 
 
-use HCol;
-use HGrid;
-use HMarker;
-use HRow;
+use Cxalloy\Haystack\HCol;
+use Cxalloy\Haystack\HGrid;
+use Cxalloy\Haystack\HMarker;
+use Cxalloy\Haystack\HRow;
+use Cxalloy\Haystack\HGridWriter;
 
 /**
  * Translation Notes:
@@ -20,10 +21,7 @@ use HRow;
  * - Replaced JavaScript's `Stream.Writable` with PHP's `WritableStream` class
  */
 
-require_once 'HGridWriter.php';
-require_once 'Writer.php';
-require_once '../HMarker.php';
-require_once '../HGrid.php';
+
 
 class HZincWriter extends HGridWriter
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HVal;
+use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -31,7 +31,7 @@ class HMarker extends HVal
 {
     public static $VAL;
 
-    private function __construct()
+    public function __construct()
     {
         // ensure singleton usage
         if (static::$_singletonInstance) {

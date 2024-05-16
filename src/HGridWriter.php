@@ -2,7 +2,7 @@
 namespace Cxalloy\Haystack;
 
 
-use HGrid;
+use Cxalloy\Haystack\HGrid;
 
 /**
  * Translation Notes:

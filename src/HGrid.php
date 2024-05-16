@@ -1,10 +1,10 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HRow;
-use HCol;
-use HDict;
-use HZincWriter;
+use Cxalloy\Haystack\HRow;
+use Cxalloy\Haystack\HCol;
+use Cxalloy\Haystack\HDict;
+use Cxalloy\Haystack\HZincWriter;
 
 /**
  * Translation Notes:

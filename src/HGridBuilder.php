@@ -1,12 +1,12 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HCol;
-use HDict;
-use HDictBuilder;
-use HGrid;
-use HHisItem;
+use \Exception;
+use Cxalloy\Haystack\HCol;
+use Cxalloy\Haystack\HDict;
+use Cxalloy\Haystack\HDictBuilder;
+use Cxalloy\Haystack\HGrid;
+use Cxalloy\Haystack\HHisItem;
 
 /**
  * Translation Notes:

@@ -1,12 +1,12 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HBool;
-use HDict;
-use HMarker;
-use HNum;
-use HStr;
+use \Exception;
+use Cxalloy\Haystack\HBool;
+use Cxalloy\Haystack\HDict;
+use Cxalloy\Haystack\HMarker;
+use Cxalloy\Haystack\HNum;
+use Cxalloy\Haystack\HStr;
 
 /**
  * Translation Notes:

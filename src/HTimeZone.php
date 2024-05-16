@@ -1,10 +1,9 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HDateTime;
-use HVal;
+use \Exception;
+use Cxalloy\Haystack\HDateTime;
+use Cxalloy\Haystack\HVal;
 
 
 /**

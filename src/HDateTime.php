@@ -1,14 +1,14 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HDate;
-use HTime;
-use HTimeZone;
-use HVal;
-use HZincReader;
-use function Haystack\readScalar;
+use Cxalloy\Haystack\DateTime;
+use \Exception;
+use Cxalloy\Haystack\HDate;
+use Cxalloy\Haystack\HTime;
+use Cxalloy\Haystack\HTimeZone;
+use Cxalloy\Haystack\HVal;
+use Cxalloy\Haystack\HZincReader;
+use function Cxalloy\Haystack\readScalar;
 
 /**
  * Translation Notes:

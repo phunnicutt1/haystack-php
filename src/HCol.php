@@ -1,8 +1,8 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HDict;
-use HStr;
+use Cxalloy\Haystack\HDict;
+use Cxalloy\Haystack\HStr;
 
 /**
  * Translation Notes:

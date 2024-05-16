@@ -1,8 +1,8 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HDict;
+use \Exception;
+use Cxalloy\Haystack\HDict;
 
 /**
  * Translation Notes:

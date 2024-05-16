@@ -1,14 +1,14 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HDate;
-use HDateTime;
-use HNum;
-use HRef;
-use HStr;
-use HVal;
-use HZincReader;
+use \Exception;
+use Cxalloy\Haystack\HDate;
+use Cxalloy\Haystack\HDateTime;
+use Cxalloy\Haystack\HNum;
+use Cxalloy\Haystack\HRef;
+use Cxalloy\Haystack\HStr;
+use Cxalloy\Haystack\HVal;
+use Cxalloy\Haystack\HZincReader;
 /**
  * This code includes the following classes:
  *

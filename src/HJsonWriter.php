@@ -1,16 +1,16 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HDictBuilder;
-use HGrid;
-use HVal;
-use HBool;
-use HGridWriter;
-use HMarker;
-use HNum;
-use HRef;
-use HStr;
-use Writer;
+use Cxalloy\Haystack\HDictBuilder;
+use Cxalloy\Haystack\HGrid;
+use Cxalloy\Haystack\HVal;
+use Cxalloy\Haystack\HBool;
+use Cxalloy\Haystack\HGridWriter;
+use Cxalloy\Haystack\HMarker;
+use Cxalloy\Haystack\HNum;
+use Cxalloy\Haystack\HRef;
+use Cxalloy\Haystack\HStr;
+use Cxalloy\Haystack\Writer;
 
 /**
  * Translation Notes:

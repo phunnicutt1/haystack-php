@@ -1,8 +1,8 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\Exception;
-use HVal;
+use \Exception;
+use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -32,6 +32,10 @@ class HBool extends HVal
 
     public function __construct($val)
     {
+		//$this->val = $val;
+	    if (!HVal::typeis($val, 'boolean', 'bool')) {
+		    throw new Exception("Invalid boolean val: \"" . $val . "\"");
+	    }
         // ensure singleton usage
         if ($val && static::$_trueSingletonInstance) {
             return static::$_trueSingletonInstance;
@@ -40,13 +44,17 @@ class HBool extends HVal
             return static::$_falseSingletonInstance;
         }
 
-        if ($val) {
-            static::$_trueSingletonInstance = $this;
+        if ( ! empty($val)) {
+	        return static::$TRUE;
         } else {
-            static::$_falseSingletonInstance = $this;
+	        return static::$FALSE;
         }
 
-        $this->val = $val;
+	   /* if ($val instanceof HBool)
+	    {
+		    return $val ? static::$TRUE : static::$FALSE;
+	    }*/
+
     }
 
     public static function __constructStatic()
@@ -55,14 +63,14 @@ class HBool extends HVal
         static::$FALSE = new static(false);
     }
 
-    public static function make($val)
+    /*public static function make($val)
     {
         if (!HVal::typeis($val, 'boolean', 'bool')) {
             throw new Exception("Invalid boolean val: \"" . $val . "\"");
         }
 
         return $val ? static::$TRUE : static::$FALSE;
-    }
+    }*/
 
     public function toZinc()
     {
@@ -84,7 +92,7 @@ class HBool extends HVal
         return $this->val ? "true" : "false";
     }
 
-    private static $_trueSingletonInstance;
+    public static $_trueSingletonInstance;
     private static $_falseSingletonInstance;
 }
 

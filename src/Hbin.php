@@ -1,7 +1,7 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HVal;
+use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:

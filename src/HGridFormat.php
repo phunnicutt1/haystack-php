@@ -1,13 +1,13 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use HGridReader;
-use HGridWriter;
-use HCsvWriter;
-use HJsonReader;
-use HJsonWriter;
-use HZincReader;
-use HZincWriter;
+use Cxalloy\Haystack\HGridReader;
+use Cxalloy\Haystack\HGridWriter;
+use Cxalloy\Haystack\HCsvWriter;
+use Cxalloy\Haystack\HJsonReader;
+use Cxalloy\Haystack\HJsonWriter;
+use Cxalloy\Haystack\HZincReader;
+use Cxalloy\Haystack\HZincWriter;
 
 /**
  * Translation Notes:

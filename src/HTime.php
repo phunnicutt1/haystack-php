@@ -1,10 +1,10 @@
 <?php
 namespace Cxalloy\Haystack;
 
-use Haystack\DateTime;
-use Haystack\Exception;
-use HVal;
-use HZincReader;
+use Cxalloy\Haystack\DateTime;
+use \Exception;
+use Cxalloy\Haystack\HVal;
+use Cxalloy\Haystack\HZincReader;
 
 
 /**
