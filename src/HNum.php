@@ -8,7 +8,7 @@ use \Exception;
 
 class HNum extends HVal {
 	/** @var float */
-	private $val;
+	public $val;
 
 	/** @var string|null */
 	private $unit;

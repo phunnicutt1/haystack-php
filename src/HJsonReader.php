@@ -128,7 +128,7 @@ class HJsonReader extends HGridReader
                 } elseif ($v[0] === 'NaN') {
                     $v[0] = NAN;
                 }
-                return new HNum(floatval($v[0]), $v[1] ?? null);
+                return HNum::create(floatval($v[0]), $v[1] ?? null);
             } elseif ($type === 'r:') {
                 $v = explode(' ', $val, 2);
                 return new HRef($v[0], $v[1] ?? null);
@@ -160,8 +160,9 @@ class HJsonReader extends HGridReader
     public function readGrid(): HGrid
     {
         $cb = true;
+	    $b = new HGridBuilder();
         try {
-            $b = new HGridBuilder();
+
             // meta line
             $json = is_string($this->input) ? json_decode($this->input, true) : stream_get_contents($this->input);
             $ver = $json['meta']['ver'] ?? null;
@@ -200,12 +201,13 @@ class HJsonReader extends HGridReader
             }
 
             $cb = false;
-            return $b->toGrid();
+            //return $b->toGrid();
         } catch (Exception $err) {
             if ($cb) {
                 throw $err;
             }
         }
+	    return $b->toGrid();
     }
 
     /**

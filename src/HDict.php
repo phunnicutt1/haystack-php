@@ -493,12 +493,12 @@ class HDict {
 class HDict_MapEntry
 {
     private $key;
-    private $val;
+    private $mapVal;
 
     public function __construct(string $key, HVal $val)
     {
         $this->key = $key;
-        $this->val = $val;
+        $this->mapVal = $val;
     }
 
     public function getKey(): string
@@ -508,12 +508,12 @@ class HDict_MapEntry
 
     public function getValue(): HVal
     {
-        return $this->val;
+        return $this->mapVal;
     }
 
     public function equals(HDict_MapEntry $that): bool
     {
         return ($this->key === null ? $that->key === null : $this->key === $that->key) &&
-            ($this->val === null ? $that->val === null : $this->val === $that->val);
+            ($this->mapVal === null ? $that->val === null : $this->mapVal === $that->val);
     }
 }

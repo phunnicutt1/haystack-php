@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
+    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc.">
+      <change afterPath="$PROJECT_DIR$/src/HZincReader2.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCol.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDict.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGrid.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridFormat.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDictBuilder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HMarker.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HMarker.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HNum.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HNum.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRow.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincReader.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,25 +84,27 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.CodyAccountHistoryMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyConvertUrlToCodebaseName&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyHistoryLlmMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;dumpAutoload /Users/patrick/Sites/haystack-php/composer.json&quot;: &quot;--no-interaction --ansi --verbose&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/patrick/Sites/haystack-php/src&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.codegpt&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.CodyAccountHistoryMigration": "true",
+    "RunOnceActivity.CodyConvertUrlToCodebaseName": "true",
+    "RunOnceActivity.CodyHistoryLlmMigration": "true",
+    "RunOnceActivity.CodyProjectSettingsMigration": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "dumpAutoload /Users/patrick/Sites/haystack-php/composer.json": "--no-interaction --ansi --verbose",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/patrick/Sites/haystack-php/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "settings.codegpt"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -128,7 +125,7 @@
       <workItem from="1715536370004" duration="33455000" />
       <workItem from="1715830656860" duration="14257000" />
       <workItem from="1715881808556" duration="90000" />
-      <workItem from="1715881908753" duration="1727000" />
+      <workItem from="1715881908753" duration="6213000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -250,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715842022962</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc.">
+      <option name="closed" value="true" />
+      <created>1715883855849</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1715883855849</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -273,7 +278,8 @@
     <MESSAGE value="Updated composer dependencies" />
     <MESSAGE value="Updated namespaces and composer auto loading" />
     <MESSAGE value="Updated namespaces &amp; composer auto-loading" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated namespaces &amp; composer auto-loading" />
+    <MESSAGE value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [

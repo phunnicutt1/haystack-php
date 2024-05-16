@@ -76,7 +76,7 @@ class HDictBuilder
     public function toDict()
     {
         if ($this->isEmpty()) {
-            return HDict::EMPTY;
+            return HDict::$EMPTY;
         }
         $dict = new HDict\MapImpl($this->map);
         $this->map = null;
@@ -92,7 +92,7 @@ class HDictBuilder
                 }
                 return $this;
             } else {
-                return $this->add($name, HMarker::VAL);
+                return $this->add($name, HMarker::$VAL);
             }
         } else {
             if (!HDict::isTagName($name)) {
