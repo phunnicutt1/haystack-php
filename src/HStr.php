@@ -1,8 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use Cxalloy\Haystack\HVal;
-
 
 /**
  * Translation Notes:
@@ -31,8 +29,6 @@ use Cxalloy\Haystack\HVal;
  * 22. Replaced JavaScript's `for` loop with PHP's `for` loop.
  */
 
-
-
 /**
  * HStr wraps a java.lang.String as a tag value.
  * @see {@link http://project-haystack.org/doc/TagModel#tagKinds|Project Haystack}
@@ -45,7 +41,7 @@ class HStr extends HVal
 
     public $val;
 
-    public function __construct($val)
+    private function __construct($val)
     {
         // ensure singleton usage
         if ($val === "" && static::$_emptySingletonInstance) {
@@ -64,16 +60,15 @@ class HStr extends HVal
         static::$EMPTY = new static("");
     }
 
-    public static function make($val)
-    {
-        if ($val === null) {
-            return $val;
-        }
-        if (strlen($val) === 0) {
-            return static::$EMPTY;
-        }
-        return new static($val);
-    }
+	public static function create($val) : HStr
+	{
+		if(empty($val))
+		{
+			return static::$EMPTY;
+		}
+
+		return new static($val);
+	}
 
     public function toZinc()
     {

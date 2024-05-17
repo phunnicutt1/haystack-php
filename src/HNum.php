@@ -131,7 +131,7 @@ class HNum extends HVal {
 		}
 	}
 
-	public static function create($val, $unit = NULL) : HNum
+	public static function create($val, $unit = NULL) : mixed
 	{
 		return new self($val, $unit);
 	}

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
 
-use Cxalloy\Haystack\HVal;
+use \Exception;
 
 /**
  * Translation Notes:
@@ -58,7 +59,14 @@ class HBin extends HVal {
 	 */
 	public function __construct(string $mime)
 	{
+
+		if ( empty($mime) || strlen($mime) === 0 || ! str_contains($mime, '/'))
+		{
+			throw new Exception("Invalid mime val: \"" . $mime . "\"");
+		}
+
 		$this->mime = $mime;
+
 	}
 
 	/**
@@ -71,11 +79,6 @@ class HBin extends HVal {
 	 */
 	public static function make(string $mime) : HBin
 	{
-		if ($mime === NULL || strlen($mime) === 0 || strpos($mime, '/') === FALSE)
-		{
-			throw new Exception("Invalid mime val: \"" . $mime . "\"");
-		}
-
 		return new HBin($mime);
 	}
 
@@ -129,12 +132,12 @@ class HBin extends HVal {
 	/**
 	 * Equals is based on mime field
 	 *
-	 * @param HBin $that object to be compared to
+	 * @param HBin $other object to be compared to
 	 *
 	 * @return bool
 	 */
-	public function equals(HBin $that) : bool
+	public function equals($other) : bool
 	{
-		return $this->mime === $that->mime;
+		return $this->mime === $other->mime;
 	}
 }

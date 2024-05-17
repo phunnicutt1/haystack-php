@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
 
 use \Exception;
 
@@ -26,7 +26,7 @@ use \Exception;
 
 
 
-class HVal
+abstract class HVal
 {
     public function toString()
     {
@@ -68,6 +68,20 @@ class HVal
         $type = gettype($check);
         return $type === $prim || ($check instanceof $obj);
     }
+
+	/**
+	 *
+	 *   Factory method to create an instance of the subclass.
+	 *   This method should be implemented by each subclass.
+	 *
+	 *   @param $val
+	 *   @return mixed
+	 */
+	public static function create($val) : mixed
+	{
+		throw new Exception('must be implemented by subclass!');
+	}
+
 
     public static function cc($c)
     {
