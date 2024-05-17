@@ -11,21 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/patrick.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php-test-framework.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phpunit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridFormat.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HNum.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HNum.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HStr.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HStr.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HVal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Haystack.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hbin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HBool.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HBool.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +135,7 @@
       <workItem from="1715536370004" duration="33455000" />
       <workItem from="1715830656860" duration="14257000" />
       <workItem from="1715881808556" duration="90000" />
-      <workItem from="1715881908753" duration="16607000" />
+      <workItem from="1715881908753" duration="17806000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -286,7 +273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715890294269</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others.">
+      <option name="closed" value="true" />
+      <created>1715957750163</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1715957750163</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +307,8 @@
     <MESSAGE value="Updated namespaces and composer auto loading" />
     <MESSAGE value="Updated namespaces &amp; composer auto-loading" />
     <MESSAGE value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
+    <MESSAGE value="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others." />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [

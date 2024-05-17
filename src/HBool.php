@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
 
-use \Exception;
-use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -63,14 +62,15 @@ class HBool extends HVal
         static::$FALSE = new static(false);
     }
 
-    /*public static function make($val)
+    public static function create($val) : HBool
     {
         if (!HVal::typeis($val, 'boolean', 'bool')) {
             throw new Exception("Invalid boolean val: \"" . $val . "\"");
         }
 
         return $val ? static::$TRUE : static::$FALSE;
-    }*/
+
+    }
 
     public function toZinc()
     {
