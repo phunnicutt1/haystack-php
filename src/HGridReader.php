@@ -23,13 +23,13 @@ abstract class HGridReader
      * Read a grid
      * @return HGrid
      */
-    abstract public function readGrid(): HGrid;
+    abstract public function readGrid(HGrid $grid, callable $callback);
 
     /**
      * @throws Exception
      */
     public function __construct()
     {
-        throw new \Exception('must be implemented by subclass!');
+        throw Exception('must be implemented by subclass!');
     }
 }

@@ -1,14 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\Iterator;
-use Cxalloy\Haystack\HBool;
-use Cxalloy\Haystack\HMarker;
-use Cxalloy\Haystack\HNum;
-use Cxalloy\Haystack\HRef;
-use Cxalloy\Haystack\HStr;
-use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -31,13 +23,23 @@ use Cxalloy\Haystack\HVal;
 
 
 
-class HDict {
+class HDict extends HVal {
 
 	public static $EMPTY;
 
 	public function __construct()
 	{
 		// Empty constructor
+	}
+
+	public static function create($val) : HStr
+	{
+		if(empty($val))
+		{
+			return static::$EMPTY;
+		}
+
+		return new static($val);
 	}
 
 	/**

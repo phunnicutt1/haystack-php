@@ -1,9 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
 use \Exception;
-use Cxalloy\Haystack\HDict;
-use Cxalloy\Haystack\HGrid;
 
 /**
  * Translation Notes:
@@ -79,7 +77,7 @@ class HHisItem
         };
     }
 
-    public static function make($ts, $val)
+    public static function create($ts, $val)
     {
         if ($ts === null || $val === null) {
             throw new Exception("ts or val is undefined");

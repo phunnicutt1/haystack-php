@@ -1,10 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use Cxalloy\Haystack\DateTime;
 use \Exception;
-use Cxalloy\Haystack\HVal;
-use Cxalloy\Haystack\HZincReader;
 
 
 /**
@@ -140,7 +137,7 @@ class HTime extends HVal
         return "h:" . $this->toZinc();
     }
 
-    public static function make($arg1, $min = null, $sec = null, $ms = null)
+    public static function create($arg1, $min = null, $sec = null, $ms = null) : mixed
     {
         if (HVal::typeis($arg1, 'string', 'string')) {
             $val = new HZincReader($arg1);
@@ -148,7 +145,7 @@ class HTime extends HVal
             if ($val instanceof HTime) {
                 return $val;
             }
-            throw new Exception("Parse Error: " . $arg1);
+            throw Exception("Parse Error: " . $arg1);
         } elseif ($arg1 instanceof DateTime) {
             return new static($arg1->format('H'), $arg1->format('i'), $arg1->format('s'), $arg1->format('u') * 1000);
         } else {

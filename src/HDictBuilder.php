@@ -1,12 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\HBool;
-use Cxalloy\Haystack\HDict;
-use Cxalloy\Haystack\HMarker;
-use Cxalloy\Haystack\HNum;
-use Cxalloy\Haystack\HStr;
 
 /**
  * Translation Notes:
@@ -101,13 +95,13 @@ class HDictBuilder
 
             // handle primitives
             if (is_numeric($val)) {
-                return $this->add($name, HNum::make($val, $unit));
+                return $this->add($name, HNum::create($val, $unit));
             }
             if (is_string($val)) {
-                return $this->add($name, HStr::make($val));
+                return $this->add($name, HStr::create($val));
             }
             if (is_bool($val)) {
-                return $this->add($name, HBool::make($val));
+                return $this->add($name, HBool::create($val));
             }
 
             $this->map[$name] = $val;

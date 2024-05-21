@@ -1,14 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use Cxalloy\Haystack\DateTime;
-use \Exception;
-use Cxalloy\Haystack\HDate;
-use Cxalloy\Haystack\HTime;
-use Cxalloy\Haystack\HTimeZone;
-use Cxalloy\Haystack\HVal;
-use Cxalloy\Haystack\HZincReader;
-use function Cxalloy\Haystack\readScalar;
 
 /**
  * Translation Notes:
@@ -97,12 +89,12 @@ class HDateTime extends HVal
         $m = new DateTime($ds . "Z", $tz->js->name);
         $tzOffset = $m->getOffset() * 60;
 
-        $ts = self::make($date, $time, $tz, $tzOffset);
+        $ts = self::create($date, $time, $tz, $tzOffset);
 
         return $ts;
     }
 
-    public static function make($arg1, $arg2 = null, $arg3 = null, $arg4 = null) : HDateTime
+    public static function create($arg1, $arg2 = null, $arg3 = null, $arg4 = null) : HDateTime
     {
         if ($arg1 instanceof HDate) {
             /** Make from two timestamps */
@@ -117,16 +109,16 @@ class HDateTime extends HVal
                 $arg2 = $arg1;
             }
             // Make for single date within given timezone
-            return self::make(HDate::midnight($arg1, $arg3), HDate::midnight($arg2->plusDays(1), $arg3));
+            return self::create(HDate::midnight($arg1, $arg3), HDate::midnight($arg2->plusDays(1), $arg3));
         } elseif (HVal::typeis($arg1, 'string', 'string')) {
             /** Parse from string using the given timezone as context for date based ranges. */
             // handle keywords
             $str = trim($arg1);
             if ($str === "today") {
-                return self::make(HDate::today(), $arg2);
+                return self::create(HDate::today(), $arg2);
             }
             if ($str === "yesterday") {
-                return self::make(HDate::today()->minusDays(1), $arg2);
+                return self::create(HDate::today()->minusDays(1), $arg2);
             }
 
             // parse scalars
@@ -146,17 +138,17 @@ class HDateTime extends HVal
             // figure out what we parsed for start,end
             if ($start instanceof HDate) {
                 if ($end === null) {
-                    return self::make($start, $arg2);
+                    return self::create($start, $arg2);
                 }
                 if ($end instanceof HDate) {
-                    return self::make($start, $end, $arg2);
+                    return self::create($start, $end, $arg2);
                 }
             } elseif ($start instanceof HDateTime) {
                 if ($end === null) {
-                    return self::make($start, self::now($arg2));
+                    return self::create($start, self::now($arg2));
                 }
                 if ($end instanceof HDateTime) {
-                    return self::make($start, $end);
+                    return self::create($start, $end);
                 }
             }
 
@@ -174,7 +166,7 @@ class HDateTime extends HVal
             $m = new DateTime($ds . "Z", $tz->js->name);
             $tzOffset = $m->getOffset();
 
-            $ts = new self(HDate::make($m->format('Y'), $m->format('n'), $m->format('j')), HTime::make($m->format('H'), $m->format('i'), $m->format('s'), intval($m->format('u') / 1000)), $tz, $tzOffset);
+            $ts = new self(HDate::create($m->format('Y'), $m->format('n'), $m->format('j')), HTime::create($m->format('H'), $m->format('i'), $m->format('s'), intval($m->format('u') / 1000)), $tz, $tzOffset);
             $ts->mils = $arg1;
 
             return $ts;
@@ -187,7 +179,7 @@ class HDateTime extends HVal
             $tz = HTimeZone::DEFAULT;
         }
         $d = new DateTime();
-        return self::make($d->getTimestamp() * 1000, $tz);
+        return self::create($d->getTimestamp() * 1000, $tz);
     }
 
     public static function thisWeek($tz)
@@ -195,23 +187,23 @@ class HDateTime extends HVal
         $today = HDate::today();
         $sun = $today->minusDays($today->weekday() - 1);
         $sat = $today->plusDays(7 - $today->weekday());
-        return self::make($sun, $sat, $tz);
+        return self::create($sun, $sat, $tz);
     }
 
     public static function thisMonth($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year, $today->month, 1);
-        $last = HDate::make($today->year, $today->month, HDate::daysInMonth($today->year, $today->month));
-        return self::make($first, $last, $tz);
+        $first = HDate::create($today->year, $today->month, 1);
+        $last = HDate::create($today->year, $today->month, HDate::daysInMonth($today->year, $today->month));
+        return self::create($first, $last, $tz);
     }
 
     public static function thisYear($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year, 1, 1);
-        $last = HDate::make($today->year, 12, 31);
-        return self::make($first, $last, $tz);
+        $first = HDate::create($today->year, 1, 1);
+        $last = HDate::create($today->year, 12, 31);
+        return self::create($first, $last, $tz);
     }
 
     public static function lastWeek($tz)
@@ -220,7 +212,7 @@ class HDateTime extends HVal
         $prev = $today->minusDays(7);
         $sun = $prev->minusDays($prev->weekday() - 1);
         $sat = $prev->plusDays(7 - $prev->weekday());
-        return self::make($sun, $sat, $tz);
+        return self::create($sun, $sat, $tz);
     }
 
     public static function lastMonth($tz)
@@ -234,16 +226,16 @@ class HDateTime extends HVal
         } else {
             $month--;
         }
-        $first = HDate::make($year, $month, 1);
-        $last = HDate::make($year, $month, HDate::daysInMonth($year, $month));
-        return self::make($first, $last, $tz);
+        $first = HDate::create($year, $month, 1);
+        $last = HDate::create($year, $month, HDate::daysInMonth($year, $month));
+        return self::create($first, $last, $tz);
     }
 
     public static function lastYear($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year - 1, 1, 1);
-        $last = HDate::make($today->year - 1, 12, 31);
-        return self::make($first, $last, $tz);
+        $first = HDate::create($today->year - 1, 1, 1);
+        $last = HDate::create($today->year - 1, 12, 31);
+        return self::create($first, $last, $tz);
     }
 }

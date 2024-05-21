@@ -1,10 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\HDate;
-use Cxalloy\Haystack\HDateTime;
-use Cxalloy\Haystack\HTimeZone;
 
 /**
  * Translation Notes:
@@ -42,7 +38,7 @@ class HDateTimeRange
         return $this->start->toString() . "," . $this->end->toString();
     }
 
-    public static function make($arg1, $arg2 = null, $arg3 = null)
+    public static function create($arg1, $arg2 = null, $arg3 = null)
     {
         $arg1 = $arg1;
         $arg2 = $arg2;
@@ -60,16 +56,16 @@ class HDateTimeRange
                 $arg2 = $arg1;
             }
             // Make for single date within given timezone
-            return self::make(HDate::midnight($arg1, $arg3), HDate::midnight($arg2->plusDays(1), $arg3));
+            return self::create(HDate::midnight($arg1, $arg3), HDate::midnight($arg2->plusDays(1), $arg3));
         } else {
             /** Parse from string using the given timezone as context for date based ranges. */
             // handle keywords
             $str = trim($arg1);
             if ($str === "today") {
-                return self::make(HDate::today(), $arg2);
+                return self::create(HDate::today(), $arg2);
             }
             if ($str === "yesterday") {
-                return self::make(HDate::today()->minusDays(1), $arg2);
+                return self::create(HDate::today()->minusDays(1), $arg2);
             }
 
             // parse scalars
@@ -77,10 +73,10 @@ class HDateTimeRange
             $start = null;
             $end = null;
             if ($comma === false) {
-                $start = HDateTime::make($str, $arg2);
+                $start = HDateTime::create($str, $arg2);
             } else {
-                $start = HDateTime::make(substr($str, 0, $comma), $arg2);
-                $end = HDateTime::make(substr($str, $comma + 1), $arg2);
+                $start = HDateTime::create(substr($str, 0, $comma), $arg2);
+                $end = HDateTime::create(substr($str, $comma + 1), $arg2);
             }
 
             // figure out what we parsed for start,end
@@ -115,16 +111,16 @@ class HDateTimeRange
     public static function thisMonth($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year, $today->month, 1);
-        $last = HDate::make($today->year, $today->month, HDate::daysInMonth($today->year, $today->month));
+        $first = HDate::create($today->year, $today->month, 1);
+        $last = HDate::create($today->year, $today->month, HDate::daysInMonth($today->year, $today->month));
         return new self($first, $last, $tz);
     }
 
     public static function thisYear($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year, 1, 1);
-        $last = HDate::make($today->year, 12, 31);
+        $first = HDate::create($today->year, 1, 1);
+        $last = HDate::create($today->year, 12, 31);
         return new self($first, $last, $tz);
     }
 
@@ -148,16 +144,16 @@ class HDateTimeRange
         } else {
             $month--;
         }
-        $first = HDate::make($year, $month, 1);
-        $last = HDate::make($year, $month, HDate::daysInMonth($year, $month));
+        $first = HDate::create($year, $month, 1);
+        $last = HDate::create($year, $month, HDate::daysInMonth($year, $month));
         return new self($first, $last, $tz);
     }
 
     public static function lastYear($tz)
     {
         $today = HDate::today();
-        $first = HDate::make($today->year - 1, 1, 1);
-        $last = HDate::make($today->year - 1, 12, 31);
+        $first = HDate::create($today->year - 1, 1, 1);
+        $last = HDate::create($today->year - 1, 12, 31);
         return new self($first, $last, $tz);
     }
 }

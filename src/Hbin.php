@@ -77,7 +77,7 @@ class HBin extends HVal {
 	 * @return HBin
 	 * @throws Exception
 	 */
-	public static function make(string $mime) : HBin
+	public static function create(string $mime) : HBin
 	{
 		return new HBin($mime);
 	}

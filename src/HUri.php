@@ -1,10 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
 use \Exception;
-use Cxalloy\Haystack\HStr;
-use Cxalloy\Haystack\HVal;
-
 
 /**
  * Translation Notes:
@@ -97,7 +94,7 @@ class HUri extends HVal
         return $that instanceof HUri && $this->val === $that->val;
     }
 
-    public static function make($val)
+    public static function create($val)
     {
         if (strlen($val) === 0) {
             return static::$EMPTY;

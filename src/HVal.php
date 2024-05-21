@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+//declare(strict_types=1);
 namespace Cxalloy\Haystack;
 
 use \Exception;
@@ -28,6 +28,8 @@ use \Exception;
 
 abstract class HVal
 {
+	public static $EMPTY;
+
     public function toString()
     {
         return $this->toZinc();
@@ -40,17 +42,17 @@ abstract class HVal
 
     public function toZinc()
     {
-        throw new Exception('must be implemented by subclass!');
+        throw Exception('must be implemented by subclass!');
     }
 
     public function toJSON()
     {
-        throw new Exception('must be implemented by subclass!');
+        throw Exception('must be implemented by subclass!');
     }
 
     public function equals($other)
     {
-        throw new Exception('must be implemented by subclass!');
+        throw Exception('must be implemented by subclass!');
     }
 
     public static function startsWith($s, $prefix)
@@ -79,11 +81,18 @@ abstract class HVal
 	 */
 	public static function create($val) : mixed
 	{
-		throw new Exception('must be implemented by subclass!');
+		throw Exception('must be implemented by subclass!');
+	}
+
+	public static function empty()
+	{
+		//static::$EMPTY = new static('');
+		throw Exception('must be implemented by subclass!');
 	}
 
 
-    public static function cc($c)
+
+	public static function cc($c)
     {
         return ord($c);
     }

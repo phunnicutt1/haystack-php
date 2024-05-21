@@ -1,9 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
 use \Exception;
-use Cxalloy\Haystack\HStr;
-use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -50,7 +48,7 @@ class HRef extends HVal
         $this->display = $display;
     }
 
-    public static function make($val, $display = null)
+    public static function create($val, $display = null)
     {
         return new static($val, $display);
     }
@@ -65,7 +63,7 @@ class HRef extends HVal
             $acc = [];
             foreach ($ids as $id) {
                 if (strlen($id) > 0) {
-                    $acc[] = self::make($id);
+                    $acc[] = self::create($id);
                 }
             }
             return $acc;

@@ -1,10 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
 use \Exception;
-use Cxalloy\Haystack\HDateTime;
-use Cxalloy\Haystack\HVal;
-
 
 /**
  * Translation Notes:
@@ -72,7 +69,7 @@ class HTimeZone extends HVal
         return $that instanceof HTimeZone && $this->name === $that->name;
     }
 
-    public static function make($arg1, $checked = true)
+    public static function create($arg1, $checked = true)
     {
         $jsId = null;
         if (HVal::typeis($arg1, 'string', 'string')) {
@@ -113,7 +110,7 @@ class HTimeZone extends HVal
 
             $name = array_search($jsId, static::$fromJS);
             if ($name !== false) {
-                return self::make($name);
+                return self::create($name);
             }
             if ($checked) {
                 throw new Exception("Invalid Java timezone: " . $arg1->name);
@@ -194,7 +191,7 @@ class HTimeZone extends HVal
 
         $utc = null;
         try {
-            $utc = self::make(HDateTime::make(HTimeZone::make("Etc/UTC")));
+            $utc = self::create(HDateTime::create(HTimeZone::create("Etc/UTC")));
         } catch (Exception $err) {
             echo $err->getMessage();
         }
@@ -205,7 +202,7 @@ class HTimeZone extends HVal
             // check if configured with system property
             $defName = getenv("haystack.tz");
             if ($defName !== false && $defName !== null) {
-                $def = self::make($defName, false);
+                $def = self::create($defName, false);
                 if ($def === null) {
                     echo "WARN: invalid haystack.tz system property: " . $defName;
                 }
@@ -216,7 +213,7 @@ class HTimeZone extends HVal
                 $date = new DateTime();
                 $gmtStart = strpos($date->format('r'), 'GMT');
                 $gmtEnd = strpos($date->format('r'), ' ', $gmtStart);
-                $def = self::make(self::fixGMT(substr($date->format('r'), $gmtStart, $gmtEnd - $gmtStart)));
+                $def = self::create(self::fixGMT(substr($date->format('r'), $gmtStart, $gmtEnd - $gmtStart)));
             }
         } catch (Exception $err) {
             echo $err->getMessage();

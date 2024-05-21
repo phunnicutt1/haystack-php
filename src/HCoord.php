@@ -1,8 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -117,7 +115,7 @@ class HCoord extends HVal
         return $that instanceof HCoord && $this->ulat === $that->ulat && $this->ulng === $that->ulng;
     }
 
-    public static function make($lat, $lng)
+    public static function create($lat, $lng)
     {
         if (HVal::typeis($lat, 'string', 'string')) {
             if (!HVal::startsWith($lat, "C(")) {
@@ -136,7 +134,7 @@ class HCoord extends HVal
                 throw new Exception("Parse Exception: NaN");
             }
 
-            return self::make(floatval($plat), floatval($plng));
+            return self::create(floatval($plat), floatval($plng));
         } else {
             return new HCoord(intval($lat * 1000000.0), intval($lng * 1000000.0));
         }

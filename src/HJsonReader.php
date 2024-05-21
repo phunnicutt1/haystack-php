@@ -1,25 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use Cxalloy\Haystack\HVal;
-use Cxalloy\Haystack\HBin;
-use Cxalloy\Haystack\HBool;
-use Cxalloy\Haystack\HCoord;
-use Cxalloy\Haystack\HDate;
-use Cxalloy\Haystack\HDateTime;
-use Cxalloy\Haystack\HDictBuilder;
-use Cxalloy\Haystack\HFilter;
-use Cxalloy\Haystack\HGrid;
-use Cxalloy\Haystack\HGridBuilder;
-use Cxalloy\Haystack\HGridReader;
-use Cxalloy\Haystack\HMarker;
-use Cxalloy\Haystack\HNum;
-use Cxalloy\Haystack\HRef;
-use Cxalloy\Haystack\HRemove;
-use Cxalloy\Haystack\HStr;
-use Cxalloy\Haystack\HTime;
-use Cxalloy\Haystack\HTimeZone;
-use Cxalloy\Haystack\HUri;
+use \Exception;
 
 /**
  * Translation Notes:

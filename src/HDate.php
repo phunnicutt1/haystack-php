@@ -1,11 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\HDateTime;
-use Cxalloy\Haystack\HTime;
-use Cxalloy\Haystack\HTimeZone;
-use Cxalloy\Haystack\HVal;
 
 /**
  * Translation Notes:
@@ -113,7 +108,7 @@ class HDate extends HVal
                 }
             }
         }
-        return self::make($year, $month, $day);
+        return self::create($year, $month, $day);
     }
 
     public function minusDays($numDays)
@@ -139,7 +134,7 @@ class HDate extends HVal
                 $day = self::daysInMonth($year, $month);
             }
         }
-        return self::make($year, $month, $day);
+        return self::create($year, $month, $day);
     }
 
     public function weekday()
@@ -148,7 +143,7 @@ class HDate extends HVal
         return $date->format('N');
     }
 
-    public static function make($arg, $month = null, $day = null)
+    public static function create($arg, $month = null, $day = null)
     {
         if ($arg instanceof DateTime) {
             return new self($arg->format('Y'), $arg->format('n'), $arg->format('j'));
@@ -197,6 +192,6 @@ class HDate extends HVal
 
     public static function midnight($date, $tz)
     {
-        return HDateTime::make($date, HTime::MIDNIGHT, $tz);
+        return HDateTime::create($date, HTime::MIDNIGHT, $tz);
     }
 }

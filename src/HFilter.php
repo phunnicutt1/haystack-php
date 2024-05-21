@@ -1,14 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Cxalloy\Haystack;
-
-use \Exception;
-use Cxalloy\Haystack\HDate;
-use Cxalloy\Haystack\HDateTime;
-use Cxalloy\Haystack\HNum;
-use Cxalloy\Haystack\HRef;
-use Cxalloy\Haystack\HStr;
-use Cxalloy\Haystack\HVal;
-use Cxalloy\Haystack\HZincReader;
 /**
  * This code includes the following classes:
  *
@@ -105,7 +97,7 @@ class HFilter {
 	 *
 	 * @return HFilter|null
 	 */
-	public static function make(string $str, bool $checked = TRUE) : ?HFilter
+	public static function create(string $str, bool $checked = TRUE) : ?HFilter
 	{
 		try
 		{
@@ -130,7 +122,7 @@ class HFilter {
 	 */
 	public static function has(string $path) : HFilter\Has
 	{
-		return new HFilter\Has(HFilter\Path::make($path));
+		return new HFilter\Has(HFilter\Path::create($path));
 	}
 
 	/**
@@ -142,7 +134,7 @@ class HFilter {
 	 */
 	public static function missing(string $path) : HFilter\Missing
 	{
-		return new HFilter\Missing(HFilter\Path::make($path));
+		return new HFilter\Missing(HFilter\Path::create($path));
 	}
 
 	/**
@@ -156,7 +148,7 @@ class HFilter {
 	 */
 	public static function eq(string $path, HVal $hval) : HFilter\Eq
 	{
-		return new HFilter\Eq(HFilter\Path::make($path), $hval);
+		return new HFilter\Eq(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -170,7 +162,7 @@ class HFilter {
 	 */
 	public static function ne(string $path, HVal $hval) : HFilter\Ne
 	{
-		return new HFilter\Ne(HFilter\Path::make($path), $hval);
+		return new HFilter\Ne(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -184,7 +176,7 @@ class HFilter {
 	 */
 	public static function lt(string $path, HVal $hval) : HFilter\Lt
 	{
-		return new HFilter\Lt(HFilter\Path::make($path), $hval);
+		return new HFilter\Lt(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -198,7 +190,7 @@ class HFilter {
 	 */
 	public static function le(string $path, HVal $hval) : HFilter\Le
 	{
-		return new HFilter\Le(HFilter\Path::make($path), $hval);
+		return new HFilter\Le(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -212,7 +204,7 @@ class HFilter {
 	 */
 	public static function gt(string $path, HVal $hval) : HFilter\Gt
 	{
-		return new HFilter\Gt(HFilter\Path::make($path), $hval);
+		return new HFilter\Gt(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -226,7 +218,7 @@ class HFilter {
 	 */
 	public static function ge(string $path, HVal $hval) : HFilter\Ge
 	{
-		return new HFilter\Ge(HFilter\Path::make($path), $hval);
+		return new HFilter\Ge(HFilter\Path::create($path), $hval);
 	}
 
 	/**
@@ -328,7 +320,7 @@ class HFilter_Path {
 	}
 
 	/** Construct a new Path from string or throw ParseException */
-	public static function make(string $path) : HFilter_Path
+	public static function create(string $path) : HFilter_Path
 	{
 		try
 		{
