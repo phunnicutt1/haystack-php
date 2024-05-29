@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Cxalloy\Haystack;
 
 use Exception;
 
