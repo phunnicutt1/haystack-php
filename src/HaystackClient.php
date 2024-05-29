@@ -11,11 +11,11 @@ use Exception;
 class HaystackClient
 {
     private Client $client;
-    private LoggerInterface $logger;
 
-    public function __construct(string $baseUri, LoggerInterface $logger)
+
+    public function __construct(string $baseUri)
     {
-        $this->logger = $logger;
+
         try {
             $this->client = new Client([
                 'base_uri' => $baseUri,
@@ -24,9 +24,9 @@ class HaystackClient
                     'Content-Type' => 'application/json',
                 ],
             ]);
-            $this->logger->info("HaystackClient initialized with base URI: {$baseUri}");
+            $this->_message->info("HaystackClient initialized with base URI: {$baseUri}");
         } catch (GuzzleException $e) {
-            $this->logger->error("Failed to initialize HaystackClient: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message->error("Failed to initialize HaystackClient: " . $e->getMessage(), ['exception' => $e]);
             throw $e;
         }
     }
@@ -64,10 +64,10 @@ class HaystackClient
 
         try {
             $response = $this->client->request($method, $endpoint, $options);
-            $this->logger->info("Request sent to {$endpoint} using {$method} method.", ['endpoint' => $endpoint, 'method' => $method, 'options' => $options]);
+            $this->_message("Request sent to {$endpoint} using {$method} method.", 'info');
             return $response;
         } catch (GuzzleException $e) {
-            $this->logger->error("Request failed: " . $e->getMessage(), ['exception' => $e, 'endpoint' => $endpoint, 'method' => $method, 'options' => $options]);
+	        $this->_message("Request failed: " . $e->getMessage() , 'error');
             throw $e;
         }
     }
@@ -82,10 +82,10 @@ class HaystackClient
     {
         try {
             $encodedData = HaystackEncoder::encodeToHaystackFormat($data);
-            $this->logger->info("Data prepared for request body.", ['data' => $encodedData]);
+            $this->_message("Data prepared for request body ==> " . $encodedData, 'info');
             return $encodedData;
         } catch (\Exception $e) {
-            $this->logger->error("Failed to prepare request body: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to prepare request body: " . $e->getMessage(), 'error');
             throw $e;
         }
     }
@@ -103,7 +103,7 @@ class HaystackClient
             $body = $response->getBody()->getContents();
             return HaystackDecoder::decodeFromHaystackFormat($body);
         } catch (\Exception $e) {
-            $this->logger->error("Failed to process response: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to process response: " . $e->getMessage(),'error');
             throw $e;
         }
     }
@@ -120,7 +120,7 @@ class HaystackClient
             ]);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->logger->error("Failed to get points: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to get points: " . $e->getMessage(), 'error');
             throw $e;
         }
     }
@@ -137,7 +137,7 @@ class HaystackClient
             ]);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->logger->error("Failed to get histories for point ID {$pointId}: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to get histories for point ID {$pointId}: " . $e->getMessage(), 'error');
             throw $e;
         }
     }
@@ -157,8 +157,49 @@ class HaystackClient
             ]);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->logger->error("Failed to write data to point ID {$pointId}: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to write data to point ID {$pointId}: " . $e->getMessage(), 'error');
             throw $e;
         }
     }
+	private function _message(string $text, string $prefix = '', bool $extra_line = FALSE) : void
+	{
+		$message = '';
+
+		if ( ! empty($prefix))
+		{
+			$message = $prefix . ': ';
+		}
+
+		if (is_cli())
+		{
+			if ($extra_line)
+			{
+				$message .= PHP_EOL . $text . PHP_EOL;
+			}
+			else
+			{
+				$message .= $text . PHP_EOL;
+			}
+		}
+		else
+		{
+			if ($extra_line)
+			{
+				$message .= '<br>' . $text . '<br>';
+			}
+			else
+			{
+				$message .= $text . '<br>';
+			}
+		}
+
+		if ($this->echo_messages)
+		{
+			echo $message;
+		}
+		else
+		{
+			log_message('info', $message);
+		}
+	}
 }
