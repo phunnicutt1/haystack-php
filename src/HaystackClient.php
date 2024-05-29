@@ -11,7 +11,7 @@ use Exception;
 class HaystackClient
 {
     private Client $client;
-
+    private $echo_massages = TRUE;
 
     public function __construct(string $baseUri)
     {
