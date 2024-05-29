@@ -4,18 +4,16 @@ namespace Cxalloy\Haystack;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use Exception;
 
 class HaystackClient
 {
     private Client $client;
-    private bool $echo_massages = TRUE;
 
     public function __construct(string $baseUri)
     {
-
         try {
             $this->client = new Client([
                 'base_uri' => $baseUri,
@@ -24,9 +22,9 @@ class HaystackClient
                     'Content-Type' => 'application/json',
                 ],
             ]);
-            $this->_message("HaystackClient initialized with base URI: {$baseUri}", 'info');
+            log_message("info", "HaystackClient initialized with base URI: {$baseUri}");
         } catch (GuzzleException $e) {
-            $this->_message("Failed to initialize HaystackClient: " . $e->getMessage(), 'error');
+            log_message("error", "Failed to initialize HaystackClient: " . $e->getMessage());
             throw $e;
         }
     }
@@ -46,28 +44,19 @@ class HaystackClient
         $headers = $config['headers'] ?? [];
         $options = $config['options'] ?? [];
 
-        // Ensure default content-type is application/json if not specified
-       /* if (!array_key_exists('Content-Type', $headers)) {
-            $headers['Content-Type'] = 'application/json';
-        }
-
-        // Set the Authorization header
-        $headers['Authorization'] = 'Bearer ' . $authToken;*/
-
-        // Merge headers into options
+      
         $options['headers'] = $headers;
 
-        // Prepare request body if necessary
         if (isset($config['body'])) {
             $options['body'] = $this->prepareRequestBody($config['body']);
         }
 
         try {
             $response = $this->client->request($method, $endpoint, $options);
-            $this->_message("Request sent to {$endpoint} using {$method} method.", 'info');
+            log_message("info", "Request sent to {$endpoint} using {$method} method.");
             return $response;
         } catch (GuzzleException $e) {
-	        $this->_message("Request failed: " . $e->getMessage() , 'error');
+            log_message("error", "Request failed: " . $e->getMessage());
             throw $e;
         }
     }
@@ -82,16 +71,17 @@ class HaystackClient
     {
         try {
             $encodedData = HaystackEncoder::encodeToHaystackFormat($data);
-            $this->_message("Data prepared for request body ==> " . $encodedData, 'info');
+            log_message("info", "Data prepared for request body.");
             return $encodedData;
         } catch (\Exception $e) {
-            $this->_message("Failed to prepare request body: " . $e->getMessage(), 'error');
+            log_message("error", "Failed to prepare request body: " . $e->getMessage());
             throw $e;
         }
     }
 
     /**
      * Processes the response from the Skyspark server by decoding the Zinc formatted string back into a PHP array.
+     * This method now supports handling GuzzleHttp\Psr7\Stream responses.
      *
      * @param ResponseInterface $response The response object from the server.
      * @return array The decoded PHP array.
@@ -100,106 +90,74 @@ class HaystackClient
     public function processResponse(ResponseInterface $response): array
     {
         try {
-            $body = $response->getBody()->getContents();
-            return HaystackDecoder::decodeFromHaystackFormat($body);
+            $body = $response->getBody();
+            if ($body instanceof Stream) {
+                log_message("info", "Processing response as a Stream.");
+                return HaystackDecoder::decodeStreamResponse($body);
+            } else {
+                log_message("info", "Processing response as a non-Stream.");
+                return HaystackDecoder::decodeFromHaystackFormat($body->getContents());
+            }
         } catch (\Exception $e) {
-            $this->_message("Failed to process response: " . $e->getMessage(),'error');
+            log_message("error", "Failed to process response: " . $e->getMessage());
             throw $e;
         }
     }
 
-    public function getPoints(): array
+    public function getPoints(array $config): array
     {
         try {
-            $response = $this->sendRequest([
+            /* $config = [
                 'requestMethod' => 'GET',
                 'haystackOp' => 'points',
-                'authToken' => 'web-KyFAu1KQucdATXN91PhN7BKiQiMQXvUG9XDsZIhzG54-7d3',
                 'headers' => [],
                 'options' => []
-            ]);
+            ]; */
+
+            $response = $this->sendRequest($config);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->_message("Failed to get points: " . $e->getMessage(), 'error');
+            log_message("error", "Failed to get points: " . $e->getMessage());
             throw $e;
         }
     }
 
-    public function getHistories(string $pointId): array
+    public function getHistories(array $config): array
     {
         try {
-            $response = $this->sendRequest([
+            /* $config = [
                 'requestMethod' => 'GET',
-                'haystackOp' => "histories/{$pointId}",
-                'authToken' => 'web-KyFAu1KQucdATXN91PhN7BKiQiMQXvUG9XDsZIhzG54-7d3',
+                'haystackOp' => "histories/{$pointId}", 
                 'headers' => [],
                 'options' => []
-            ]);
+            ]; */
+            $response = $this->sendRequest($config);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->_message("Failed to get histories for point ID {$pointId}: " . $e->getMessage(), 'error');
+            log_message("error", "Failed to get histories for point ID {$pointId}: " . $e->getMessage());
             throw $e;
         }
     }
 
-    public function writeData(string $pointId, array $data): array
+    public function writeData(array $config, array $data): array
     {
         try {
             $encodedData = HaystackEncoder::encodeToHaystackFormat($data);
-            $response = $this->sendRequest([
+            /* $config = [
                 'requestMethod' => 'POST',
-                'haystackOp' => "points/{$pointId}/write",
-                'authToken' => 'web-KyFAu1KQucdATXN91PhN7BKiQiMQXvUG9XDsZIhzG54-7d3',
+                'haystackOp' => "points/{$pointId}/write", 
                 'headers' => [],
                 'options' => [
                     'body' => $encodedData
                 ]
-            ]);
+                ]; */
+             $config['options'] = array( 'body' => $encodedData);
+               
+            $response = $this->sendRequest($config);
             return $this->processResponse($response);
         } catch (\Exception $e) {
-            $this->_message("Failed to write data to point ID {$pointId}: " . $e->getMessage(), 'error');
+            log_message("error", "Failed to write data to point ID {$pointId}: " . $e->getMessage());
             throw $e;
         }
     }
-	private function _message(string $text, string $prefix = '', bool $extra_line = FALSE) : void
-	{
-		$message = '';
-
-		if ( ! empty($prefix))
-		{
-			$message = $prefix . ': ';
-		}
-
-		if (is_cli())
-		{
-			if ($extra_line)
-			{
-				$message .= PHP_EOL . $text . PHP_EOL;
-			}
-			else
-			{
-				$message .= $text . PHP_EOL;
-			}
-		}
-		else
-		{
-			if ($extra_line)
-			{
-				$message .= '<br>' . $text . '<br>';
-			}
-			else
-			{
-				$message .= $text . '<br>';
-			}
-		}
-
-		if ($this->echo_massages)
-		{
-			echo $message;
-		}
-		else
-		{
-			log_message('info', $message);
-		}
-	}
 }

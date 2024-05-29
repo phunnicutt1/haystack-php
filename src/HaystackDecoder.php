@@ -3,6 +3,7 @@
 namespace Cxalloy\Haystack;
 
 use Exception;
+use GuzzleHttp\Psr7\Stream;
 
 /**
  * Class HaystackDecoder
@@ -73,7 +74,6 @@ class HaystackDecoder
 
             return $decoded;
         } catch (Exception $e) {
-            // Log the error with full trace for debugging
             error_log($e->getMessage() . "\n" . $e->getTraceAsString());
             throw new Exception("Error decoding Zinc format: " . $e->getMessage());
         }
@@ -160,5 +160,23 @@ class HaystackDecoder
         }
 
         return null; // Return null if none of the formats match
+    }
+
+    /**
+     * Decodes a Guzzlehttp\Psr7\Stream response from the Zinc format into a PHP array.
+     *
+     * @param Stream $stream The Guzzle stream containing the response body.
+     * @return array The decoded PHP array.
+     * @throws Exception If decoding fails.
+     */
+    public static function decodeStreamResponse(Stream $stream): array
+    {
+        try {
+            $content = $stream->getContents();
+            return self::decodeFromHaystackFormat($content);
+        } catch (Exception $e) {
+            error_log("Failed to decode stream response: " . $e->getMessage());
+            throw new Exception("Decoding stream response failed: " . $e->getMessage());
+        }
     }
 }

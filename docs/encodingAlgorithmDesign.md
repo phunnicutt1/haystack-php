@@ -67,4 +67,4 @@ The output Zinc string should look like:
 }
 ```
 
-This document outlines the high-level design of the encoding algorithm. 
+This document outlines the high-level design of the encoding algorithm. The next step is to implement this design in the `HaystackEncoder.php` file.

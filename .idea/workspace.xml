@@ -12,7 +12,12 @@
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HaystackClient.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackClient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HaystackDecoder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackDecoder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/HaystackClientTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackClientTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +145,7 @@
       <workItem from="1715881908753" duration="20081000" />
       <workItem from="1716081224101" duration="13372000" />
       <workItem from="1716996290719" duration="4050000" />
-      <workItem from="1717006891657" duration="6696000" />
+      <workItem from="1717006891657" duration="9183000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -406,7 +411,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717016740735</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Removed logger dependency">
+      <option name="closed" value="true" />
+      <created>1717018876589</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1717018876589</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

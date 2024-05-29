@@ -5,7 +5,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\RequestException;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 
 class HaystackClientTest extends TestCase
 {
@@ -13,7 +12,7 @@ class HaystackClientTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = new HaystackClient('http://example.com', new NullLogger());
+        $this->client = new HaystackClient('http://example.com');
     }
 
     public function testSendRequest()
@@ -26,7 +25,13 @@ class HaystackClientTest extends TestCase
         $reflectedProperty->setAccessible(true);
         $reflectedProperty->setValue($this->client, $mock);
 
-        $response = $this->client->sendRequest('GET', 'test');
+        $response = $this->client->sendRequest([
+            'requestMethod' => 'GET',
+            'haystackOp' => 'test',
+            'authToken' => 'dummy_token',
+            'headers' => [],
+            'options' => []
+        ]);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('{"success":true}', $response->getBody()->getContents());
     }
@@ -87,6 +92,12 @@ class HaystackClientTest extends TestCase
         $reflectedProperty->setValue($this->client, $mock);
 
         $this->expectException(RequestException::class);
-        $this->client->sendRequest('GET', 'test');
+        $this->client->sendRequest([
+            'requestMethod' => 'GET',
+            'haystackOp' => 'test',
+            'authToken' => 'dummy_token',
+            'headers' => [],
+            'options' => []
+        ]);
     }
 }
