@@ -11,7 +11,7 @@ use Exception;
 class HaystackClient
 {
     private Client $client;
-    private $echo_massages = TRUE;
+    private bool $echo_massages = TRUE;
 
     public function __construct(string $baseUri)
     {
@@ -193,7 +193,7 @@ class HaystackClient
 			}
 		}
 
-		if ($this->echo_messages)
+		if ($this->echo_massages)
 		{
 			echo $message;
 		}
