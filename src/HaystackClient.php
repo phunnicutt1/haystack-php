@@ -47,12 +47,12 @@ class HaystackClient
         $options = $config['options'] ?? [];
 
         // Ensure default content-type is application/json if not specified
-        if (!array_key_exists('Content-Type', $headers)) {
+       /* if (!array_key_exists('Content-Type', $headers)) {
             $headers['Content-Type'] = 'application/json';
         }
 
         // Set the Authorization header
-        $headers['Authorization'] = 'Bearer ' . $authToken;
+        $headers['Authorization'] = 'Bearer ' . $authToken;*/
 
         // Merge headers into options
         $options['headers'] = $headers;
