@@ -1,4 +1,4 @@
-```
+
 # haystack-php
 
 haystack-php is a PHP library designed to facilitate seamless communication with Skyspark servers via REST API, leveraging the Project Haystack specifications for IoT time series data management in building intelligence systems. Built with PHP 8.2 and utilizing the GuzzleHTTP package, this library aims to offer a robust solution for interacting with Skyspark's RESTful services.
@@ -40,4 +40,3 @@ haystack-php offers the following capabilities:
 Copyright (c) 2024.
 
 This project is proprietary and not open source. All rights reserved.
-```
