@@ -20,7 +20,7 @@ class HaystackClient
             $this->client = new Client([
                 'base_uri' => $baseUri,
                 'headers' => [
-                    'Accept' => 'text/Zinc',
+                    'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
             ]);
