@@ -1,6 +1,6 @@
 <?php
 
-use App\HaystackEncoder;
+use Cxalloy\Haystack\HaystackEncoder;
 use PHPUnit\Framework\TestCase;
 
 class HaystackEncoderTest extends TestCase

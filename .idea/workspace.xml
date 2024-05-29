@@ -11,13 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackClient.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackClient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackDecoder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackDecoder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackDecodingException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackDecodingException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackEncoder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackEncoder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/HaystackClientTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackClientTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +140,7 @@
       <workItem from="1715881808556" duration="90000" />
       <workItem from="1715881908753" duration="20081000" />
       <workItem from="1716081224101" duration="13372000" />
-      <workItem from="1716996290719" duration="2645000" />
+      <workItem from="1716996290719" duration="3044000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -330,7 +326,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716997415970</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Updating namespaces and required dependencies">
+      <option name="closed" value="true" />
+      <created>1716999263665</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1716999263665</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +365,8 @@
     <MESSAGE value="New client, unit tests and enconding / decoding of haystack data.  Also documentation" />
     <MESSAGE value="Project restructuring" />
     <MESSAGE value="Updating composer.json" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating composer.json" />
+    <MESSAGE value="Updating namespaces and required dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating namespaces and required dependencies" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [

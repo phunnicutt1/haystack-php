@@ -1,6 +1,6 @@
 <?php
 
-use App\HaystackClient;
+use Cxalloy\Haystack\HaystackClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\RequestException;
