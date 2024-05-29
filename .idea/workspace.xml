@@ -11,39 +11,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/phpunit.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCol.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCoord.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTimeRange.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTimeRange.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDict.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDictBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HFilter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGrid.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridFormat.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGridReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HHisItem.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HHisItem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HJsonWriter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HMarker.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HMarker.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRef.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRef.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRemove.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRemove.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRow.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTime.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTimeZone.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HUri.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HUri.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HVal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HWatch.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HWatch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincReader2.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGuzzleGridReader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincWriter.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hbin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HBool.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HClient.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDateTimeRange.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGridBuilder.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGridReader.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGridWriter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HGuzzleGridReader.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HHisItem.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HJsonReader.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HJsonWriter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HMarker.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HNum.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HProj.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HRef.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HRemove.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HStr.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HTime.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HUri.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HWatch.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Streams.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,6 +114,8 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/global-state" />
       <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/instantiator" />
     </include_path>
   </component>
   <component name="ProblemsViewState">
@@ -134,13 +144,13 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "dumpAutoload /Users/patrick/Sites/haystack-php/composer.json": "--no-interaction --ansi --verbose",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/patrick/Sites/haystack-php/src",
+    "last_opened_file_path": "/Users/patrick/Sites/haystack-php",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "php.override.implement.member.chooser.php.doc": "NONE",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.sourcegraph.cody.config.ui.CodyConfigurable"
+    "settings.editor.selected.configurable": "settings.codegpt.configuration"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -167,7 +177,8 @@
       <workItem from="1715830656860" duration="14257000" />
       <workItem from="1715881808556" duration="90000" />
       <workItem from="1715881908753" duration="20081000" />
-      <workItem from="1716081224101" duration="9632000" />
+      <workItem from="1716081224101" duration="13372000" />
+      <workItem from="1716996290719" duration="392000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -321,7 +332,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715958809492</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="refactoring continues.">
+      <option name="closed" value="true" />
+      <created>1716321041581</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1716321041581</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -348,10 +367,13 @@
     <MESSAGE value="Updated namespaces &amp; composer auto-loading" />
     <MESSAGE value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
     <MESSAGE value="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others." />
+    <MESSAGE value="refactoring continues." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring continues." />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [
+    {
+    },
     {
     },
     {

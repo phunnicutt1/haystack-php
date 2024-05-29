@@ -377,6 +377,16 @@
                 </messages>
                 <updatedAt value="2024-05-21T15:29:34.42616" />
               </chat>
+              <chat>
+                <internalId value="fdee44af-3634-434e-bb80-4ba1014c9678" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>
