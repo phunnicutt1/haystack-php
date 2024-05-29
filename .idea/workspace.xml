@@ -11,47 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HBool.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HClient.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTimeRange.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HFilter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridBuilder.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridFormat.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridReader.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGridWriter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGuzzleGridReader.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HHisItem.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonReader.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HJsonWriter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HMarker.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HNum.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HProj.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRef.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRemove.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HStr.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTime.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HUri.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HWatch.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Haystack.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hbin.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Streams.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,7 +139,7 @@
       <workItem from="1715881808556" duration="90000" />
       <workItem from="1715881908753" duration="20081000" />
       <workItem from="1716081224101" duration="13372000" />
-      <workItem from="1716996290719" duration="392000" />
+      <workItem from="1716996290719" duration="1103000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -340,7 +301,23 @@
       <option name="project" value="LOCAL" />
       <updated>1716321041581</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="New client, unit tests and enconding / decoding of haystack data.  Also documentation">
+      <option name="closed" value="true" />
+      <created>1716996902969</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1716996902969</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Project restructuring">
+      <option name="closed" value="true" />
+      <created>1716996926897</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1716996926897</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,7 +345,9 @@
     <MESSAGE value="refactoring the haystack code to have a coherent PHP implementation of project haystack data types, units, defs, etc." />
     <MESSAGE value="refactoring the haystack library to be able to create the via a call to the static create class of the data type you want to create.  The data types extend the HVal base class (abstract) class which specifies that all sub classes specify a static create method among others." />
     <MESSAGE value="refactoring continues." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring continues." />
+    <MESSAGE value="New client, unit tests and enconding / decoding of haystack data.  Also documentation" />
+    <MESSAGE value="Project restructuring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Project restructuring" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [

@@ -1,4 +1,15 @@
 {
+    "name": "cxalloy/haystack-php",
+    "description": "Haystack-php is a PHP library designed to facilitate seamless communication with Skyspark servers via REST API, leveraging the Project Haystack specifications for IoT time series data management in building intelligence systems.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Patrick Hunnicutt",
+            "email": "patrick@cxalloy.com"
+        }
+    ],
+    "minimum-stability": "stable",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.8"
