@@ -24,9 +24,9 @@ class HaystackClient
                     'Content-Type' => 'application/json',
                 ],
             ]);
-            $this->_message->info("HaystackClient initialized with base URI: {$baseUri}");
+            $this->_message("HaystackClient initialized with base URI: {$baseUri}", 'info');
         } catch (GuzzleException $e) {
-            $this->_message->error("Failed to initialize HaystackClient: " . $e->getMessage(), ['exception' => $e]);
+            $this->_message("Failed to initialize HaystackClient: " . $e->getMessage(), 'error');
             throw $e;
         }
     }
