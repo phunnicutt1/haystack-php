@@ -4,7 +4,7 @@ Haystack-PHP is a PHP library designed to facilitate communication with Skyspark
 
 ## Overview
 
-The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP for sending HTTP requests and handling responses. The library provides functionalities to encode and decode data according to the Project Haystack standards, specifically targeting the interaction with Skyspark servers managing IoT data. The project is structured around key components including the `HaystackClient.php` class for initializing the HTTP client and handling requests, as well as `HaystackEncoder.php` and `HaystackDecoder.php` for data encoding and decoding. This setup ensures a robust and extensible codebase for easy integration with Skyspark servers.
+This library provides functionalities to encode and decode Zinc and JSON encoded strings, creating library specific objects in PHP from these strings.  This setup ensures a robust and extensible codebase for easy integration 3rd party software systems interfacing with Skyspark or other haystack compatible servers.  This library has been scaled back to simply be an implmentation of the Project Haystack spec in PHP.  This library supports all the custom haystack datatypes, the filtering and the full haystack specifications for defs, tagging, taxonomy and ontology. 
 
 ### Technologies Used:
 
@@ -14,7 +14,7 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 
 ### Project Structure:
 
-- `src/`: Contains the source code with the main classes for client initialization, request handling, and data encoding/decoding.
+- `src/`: Contains the source code with the main classes for haystack-php objects, error handling, JSON/Zinc reading & writing.
 - `tests/`: Includes unit tests for testing the functionality of the classes.
 - `docs/`: Documentation on the encoding algorithm and Zinc format research.
 - `composer.json`: Manages project dependencies.
