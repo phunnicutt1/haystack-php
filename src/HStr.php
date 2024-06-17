@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cxalloy\Haystack;
 
 use InvalidArgumentException;
@@ -9,153 +11,186 @@ use InvalidArgumentException;
  *
  * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
  */
-class HStr extends HVal
-{
-    /** Singleton value for empty string "" */
-    private static HStr $EMPTY;
+class HStr extends HVal {
 
-    /** String value */
-    public string $val;
+	/** @var string */
+	public string $val;
 
-    /** Construct from string value */
-    public static function make(?string $val): ?HStr
-    {
-        if ($val === null) {
-            return null;
-        }
-        if (strlen($val) === 0) {
-            return self::$EMPTY;
-        }
-        return new HStr($val);
-    }
+	public static ?HStr $EMPTY = NULL;
 
-    /** Private constructor */
-    private function __construct(string $val)
-    {
-        $this->val = $val;
-    }
+	public function __construct(string $val)
+	{
+		if ($val === '' && self::$EMPTY !== NULL)
+		{
+			return self::$EMPTY;
+		}
 
-    /** Hash code is same as string */
-    public function hashCode(): int
-    {
-        return crc32($this->val);
-    }
+		if ($val === '')
+		{
+			self::$EMPTY = $this;
+		}
 
-    /** Equals is based on string */
-    public function equals(object $that): bool
-    {
-        if (!($that instanceof HStr)) {
-            return false;
-        }
-        return $this->val === $that->val;
-    }
+		$this->val = $val;
+	}
 
-    /** Return value string. */
-    public function __toString(): string
-    {
-        return $this->val;
-    }
+	/**
+	 * Encode using double quotes and backslash escapes
+	 *
+	 * @return string
+	 */
+	public function toZinc() : string
+	{
+		return self::toCode($this->val);
+	}
 
-    /** Encode as "s:" if string contains a colon */
-    public function toJson(): string
-    {
-        return strpos($this->val, ':') === false ? $this->val : "s:" . $this->val;
-    }
+	/**
+	 * Encode using "s:" with backslash escapes
+	 *
+	 * @return string
+	 */
+	public function toJSON() : string
+	{
+		return 's:' . self::parseCode($this->val);
+	}
 
-    /** Encode using double quotes and back slash escapes */
-    public function toZinc(): string
-    {
-        $s = '';
-        self::toZincString($s, $this->val);
-        return $s;
-    }
+	/**
+	 * Equals is based on reference
+	 *
+	 * @param HStr $that
+	 *
+	 * @return bool
+	 */
+	public function equals($that) : bool
+	{
+		return $that instanceof HStr && $this->val === $that->val;
+	}
 
-    /** Encode using double quotes and back slash escapes */
-    public static function toCode(string $val): string
-    {
-        $s = '';
-        self::toZincString($s, $val);
-        return $s;
-    }
+	/**
+	 * String format is for human consumption only
+	 *
+	 * @return string
+	 */
+	public function __toString() : string
+	{
+		return $this->val;
+	}
 
-    /** Encode using double quotes and back slash escapes */
-    private static function toZincString(string &$s, string $val): void
-    {
-        $s .= '"';
-        for ($i = 0; $i < strlen($val); ++$i) {
-            $c = ord($val[$i]);
-            if ($c < ord(' ') || $c == ord('"') || $c == ord('\\')) {
-                $s .= '\\';
-                switch ($c) {
-                    case ord('\n'):
-                        $s .= 'n';
-                        break;
-                    case ord('\r'):
-                        $s .= 'r';
-                        break;
-                    case ord('\t'):
-                        $s .= 't';
-                        break;
-                    case ord('"'):
-                        $s .= '"';
-                        break;
-                    case ord('\\'):
-                        $s .= '\\';
-                        break;
-                    default:
-                        $s .= 'u00';
-                        if ($c <= 0xf) {
-                            $s .= '0';
-                        }
-                        $s .= dechex($c);
-                }
-            } else {
-                $s .= chr($c);
-            }
-        }
-        $s .= '"';
-    }
+	/**
+	 * Singleton value for empty string ""
+	 *
+	 * @static
+	 * @return HStr
+	 */
+	public static function EMPTY() : HStr
+	{
+		return self::$EMPTY = new self('');
+	}
 
-    /**
-     * Custom split routine so we don't have to depend on regex
-     */
-    public static function split(string $str, int $separator, bool $trim): array
-    {
-        $toks = [];
-        $len = strlen($str);
-        $x = 0;
-        for ($i = 0; $i < $len; ++$i) {
-            if (ord($str[$i]) !== $separator) {
-                continue;
-            }
-            if ($x <= $i) {
-                $toks[] = self::splitStr($str, $x, $i, $trim);
-            }
-            $x = $i + 1;
-        }
-        if ($x <= $len) {
-            $toks[] = self::splitStr($str, $x, $len, $trim);
-        }
-        return $toks;
-    }
+	/**
+	 * Construct from String value
+	 *
+	 * @static
+	 *
+	 * @param string $val
+	 *
+	 * @return HStr
+	 */
+	public static function make(?string $val) : ?HStr
+	{
+		if ($val === NULL || $val === '')
+		{
+			return self::EMPTY();
+		}
 
-    private static function splitStr(string $val, int $s, int $e, bool $trim): string
-    {
-        if ($trim) {
-            while ($s < $e && ord($val[$s]) <= ord(' ')) {
-                ++$s;
-            }
-            while ($e > $s && ord($val[$e - 1]) <= ord(' ')) {
-                --$e;
-            }
-        }
-        return substr($val, $s, $e - $s);
-    }
+		return new self($val);
+	}
 
-    public static function init()
-    {
-        self::$EMPTY = new HStr("");
-    }
+	/**
+	 * Encode using double quotes and backslash escapes
+	 *
+	 * @param string $val
+	 *
+	 * @return string
+	 */
+	public static function toCode(string $val) : string
+	{
+		return '"' . self::parseCode($val) . '"';
+	}
+
+	/**
+	 * Parse code with backslash escapes
+	 *
+	 * @param string $val
+	 *
+	 * @return string
+	 */
+	public static function parseCode(string $val) : string
+	{
+		$s = '';
+		for ($i = 0; $i < strlen($val); ++$i)
+		{
+			$c = ord($val[$i]);
+			if ($c < ord(' ') || $c === ord('"') || $c === ord('\\'))
+			{
+				$s .= '\\';
+				switch($c)
+				{
+					case ord("\n"):
+						$s .= 'n';
+						break;
+					case ord("\r"):
+						$s .= 'r';
+						break;
+					case ord("\t"):
+						$s .= 't';
+						break;
+					case ord('"'):
+						$s .= '"';
+						break;
+					case ord('\\'):
+						$s .= '\\';
+						break;
+					default:
+						$s .= 'u00';
+						if ($c <= 0xf)
+						{
+							$s .= '0';
+						}
+						$s .= dechex($c);
+				}
+			}
+			else
+			{
+				$s .= chr($c);
+			}
+		}
+
+		return $s;
+	}
+
+	/**
+	 * Custom split routine to maintain compatibility with Java Haystack
+	 *
+	 * @param string $str
+	 * @param string $sep
+	 * @param bool   $trim
+	 *
+	 * @return array
+	 */
+	public static function split(string $str, string $sep, bool $trim) : array
+	{
+		$s = explode($sep, $str);
+		if ($trim)
+		{
+			foreach ($s as &$part)
+			{
+				$part = trim($part);
+			}
+		}
+
+		return $s;
+	}
 }
 
-HStr::init();
+// Singleton value for empty string
+HStr::EMPTY();

@@ -100,4 +100,4 @@ class HList extends HVal
     private static HList |  array $items;
 }
 
-//HList::$EMPTY = HList::make([]);
+HList::$EMPTY = HList::make([]);

@@ -1,239 +1,263 @@
 <?php
-
 namespace Cxalloy\Haystack;
 
 use InvalidArgumentException;
 use NumberFormatter;
 
-/**
- * HNum wraps a 64-bit floating point number and optional unit name.
- *
- * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
- */
-class HNum extends HVal
-{
-    /** Singleton value for zero */
-    public static HNum $ZERO;
 
-    /** Singleton value for positive infinity "Inf" */
-    public static HNum $POS_INF;
+class HNum extends HVal {
 
-    /** Singleton value for negative infinity "-Inf" */
-    public static HNum $NEG_INF;
+	public float   $val;
+	public ?string $unit;
 
-    /** Singleton value for not-a-number "NaN" */
-    public static HNum $NaN;
+	private static ?HNum $ZERO                  = NULL;
+	private static ?HNum $POS_INF              = NULL;
+	private static ?HNum $NEG_INF = NULL;
+	private static ?HNum $NaN     = NULL;
 
-    /** Double scalar value */
-    public float | int $val;
+	public static array $unitChars = [];
 
-    /** Unit name or null */
-    public ?string $unit;
+	public function __construct(float $val, ?string $unit = NULL)
+	{
+		if ( ! self::isUnitName($unit))
+		{
+			throw new InvalidArgumentException('Invalid unit name: ' . $unit);
+		}
 
-    /** Private constructor */
-    private function __construct(float | int $val, ?string $unit)
-    {
-        if (!self::isUnitName($unit)) {
-            throw new InvalidArgumentException("Invalid unit name: " . $unit);
-        }
-        $this->val = $val;
-        $this->unit = $unit;
-    }
+		if ($val === 0.0 && self::$ZERO !== NULL)
+		{
+			return self::$ZERO;
+		}
+		if ($val === INF && self::$POS_INF !== NULL)
+		{
+			return self::$POS_INF;
+		}
+		if ($val === -INF && self::$NEG_INF !== NULL)
+		{
+			return self::$NEG_INF;
+		}
+		if (is_nan($val) && self::$NaN !== NULL)
+		{
+			return self::$NaN;
+		}
 
-    /** Construct with int and null unit (may have loss of precision) */
-    public static function makeFromInt(int $val): HNum
-    {
-        return self::make($val, null);
-    }
+		if ($val === 0.0)
+		{
+			self::$ZERO = $this;
+		}
+		if ($val === INF)
+		{
+			self::$POS_INF = $this;
+		}
+		if ($val === -INF)
+		{
+			self::$NEG_INF = $this;
+		}
+		if (is_nan($val))
+		{
+			self::$NaN = $this;
+		}
 
-    /** Construct with int and null/non-null unit (may have loss of precision) */
-    public static function make(int $val, ?string $unit = NULL): HNum
-    {
-        if ($val === 0 && $unit === null) {
-            return self::$ZERO;
-        }
-        return new HNum((float)$val, $unit);
-    }
+		$this->val  = $val;
+		$this->unit = $unit;
+	}
 
-    /** Construct with long and null unit (may have loss of precision) */
-    public static function makeWithInt(int $val): HNum
-    {
-        return self::make($val, null);
-    }
+	public static function isUnitName(?string $unit) : bool
+	{
+		if ($unit === NULL)
+		{
+			return TRUE;
+		}
+		if (strlen($unit) === 0)
+		{
+			return FALSE;
+		}
+		for ($i = 0; $i < strlen($unit); ++$i)
+		{
+			$c = ord($unit[$i]);
+			if ($c < 128 && ! self::$unitChars[$c])
+			{
+				return FALSE;
+			}
+		}
 
-    /** Construct with long and null/non-null unit (may have loss of precision) */
-    public static function makeWithUnit(int|float $val, ?string $unit): HNum
-    {
-        if ($val === 0 && $unit === null) {
-            return self::$ZERO;
-        }
-        return new HNum((float)$val, $unit);
-    }
+		return TRUE;
+	}
 
-    /** Construct with double and null unit */
-    public static function makeFromDouble(float $val): HNum
-    {
-        return self::make($val, null);
-    }
+	public function compareTo(HNum | HVal $that) : int
+	{
+		if ($this->val < $that->val)
+		{
+			return -1;
+		}
+		if ($this->val === $that->val)
+		{
+			return 0;
+		}
 
-    /** Construct with double and null/non-null unit */
-    public static function makeFromDoubleWithUnit(float $val, ?string $unit): HNum
-    {
-        if ($val === 0.0 && $unit === null) {
-            return self::$ZERO;
-        }
-        return new HNum($val, $unit);
-    }
+		return 1;
+	}
 
-    /** Hash code is based on val, unit */
-    public function hashCode(): int
-    {
-        $bits = unpack('l', pack('d', $this->val))[1];
-        $hash = $bits ^ ($bits >> 32);
-        if ($this->unit !== null) {
-            $hash ^= crc32($this->unit);
-        }
-        return $hash;
-    }
+	public function toZinc() : string
+	{
+		return $this->parse(FALSE);
+	}
 
-    /** Equals is based on val, unit (NaN == NaN) */
-    public function equals(HVal $that): bool
-    {
-        if (!($that instanceof HNum)) {
-            return false;
-        }
-        $x = $that;
-        if (is_nan($this->val)) {
-            return is_nan($x->val);
-        }
-        if ($this->val !== $x->val) {
-            return false;
-        }
-        if ($this->unit === null) {
-            return $x->unit === null;
-        }
-        if ($x->unit === null) {
-            return false;
-        }
-        return $this->unit === $x->unit;
-    }
+	public function toJSON() : string
+	{
+		return 'n:' . $this->parse(TRUE);
+	}
 
-    /** Return sort order as negative, 0, or positive */
-    public function compareTo(HVal $that): int
-    {
-        $thatVal = $that->val;
-        if ($this->val < $thatVal) {
-            return -1;
-        }
-        if ($this->val === $thatVal) {
-            return 0;
-        }
-        return 1;
-    }
+	private function parse(bool $json) : string
+	{
+		$s = '';
+		if ($this->val === INF)
+		{
+			$s .= 'INF';
+		}
+		elseif ($this->val === -INF)
+		{
+			$s .= '-INF';
+		}
+		elseif (is_nan($this->val))
+		{
+			$s .= 'NaN';
+		}
+		else
+		{
+			$abs = abs($this->val);
+			if ($abs > 1.0)
+			{
+				$s .= number_format($this->val, 4, '.', '');
+			}
+			else
+			{
+				$s .= $this->val;
+			}
+			if ($this->unit !== NULL)
+			{
+				$s .= ($json ? ' ' : '') . $this->unit;
+			}
+		}
 
-    /** Encode as {@code "n:<float> [unit]"} */
-    public function toJson(): string
-    {
-        $s = 'n:';
-        $this->encode($s, true);
-        return $s;
-    }
+		return $s;
+	}
 
-    /** Encode as floating value followed by optional unit string */
-    public function toZinc(): string
-    {
-        $s = '';
-        $this->encode($s, false);
-        return $s;
-    }
+	public function equals($that) : bool
+	{
+		if ( ! ($that instanceof HNum))
+		{
+			return FALSE;
+		}
+		if (is_nan($this->val))
+		{
+			return is_nan($that->val);
+		}
+		if ($this->val !== $that->val)
+		{
+			return FALSE;
+		}
+		if ($this->unit === NULL)
+		{
+			return $that->unit === NULL;
+		}
+		if ($that->unit === NULL)
+		{
+			return FALSE;
+		}
 
-    private function encode(string &$s, bool $spaceBeforeUnit): void
-    {
-        if ($this->val === INF) {
-            $s .= 'INF';
-        } elseif ($this->val === -INF) {
-            $s .= '-INF';
-        } elseif (is_nan($this->val)) {
-            $s .= 'NaN';
-        } else {
-            // don't encode huge set of decimals if over 1.0
-            $abs = abs($this->val);
-            if ($abs > 1.0) {
-                $formatter = new NumberFormatter('en', NumberFormatter::PATTERN_DECIMAL, '#0.####');
-                $s .= $formatter->format($this->val);
-            } else {
-                $s .= $this->val;
-            }
+		return $this->unit === $that->unit;
+	}
 
-            if ($this->unit !== null) {
-                if ($spaceBeforeUnit) {
-                    $s .= ' ';
-                }
-                $s .= $this->unit;
-            }
-        }
-    }
+	public function millis() : float
+	{
+		$u = $this->unit ?? 'null';
 
-    /**
-     * Get this number as a duration of milliseconds.
-     * Raise InvalidArgumentException if the unit is not a duration unit.
-     */
-    public function millis(): int
-    {
-        $u = $this->unit ?? 'null';
-        return match ($u) {
-            'ms', 'millisecond' => (int)$this->val,
-            's', 'sec', 'second' => (int)($this->val * 1000.0),
-            'min', 'minute' => (int)($this->val * 1000.0 * 60.0),
-            'h', 'hr', 'hour' => (int)($this->val * 1000.0 * 60.0 * 60.0),
-            'day' => (int)($this->val * 1000.0 * 60.0 * 60.0 * 24.0),
-            default => throw new InvalidArgumentException("Invalid duration unit: " . $u),
-        };
-    }
+		return match ($u)
+		{
+			'ms', 'millisecond' => $this->val,
+			's', 'sec'          => $this->val * 1000.0,
+			'min', 'minute'     => $this->val * 1000.0 * 60.0,
+			'h', 'hr'           => $this->val * 1000.0 * 60.0 * 60.0,
+			default             => throw new InvalidArgumentException('Invalid duration unit: ' . $u),
+		};
+	}
 
-    /**
-     * Return true if the given string is null or contains only valid unit
-     * chars. If the unit name contains invalid chars return false. This
-     * method does *not* check that the unit name is part of the standard
-     * unit database.
-     */
-    public static function isUnitName(?string $unit): bool
-    {
-        if ($unit === null) {
-            return true;
-        }
-        if (strlen($unit) === 0) {
-            return false;
-        }
-        for ($i = 0; $i < strlen($unit); ++$i) {
-            $c = ord($unit[$i]);
-            if ($c < 128 && !self::$unitChars[$c]) {
-                return false;
-            }
-        }
-        return true;
-    }
+	public static function make(float $val, ?string $unit = NULL) : HNum
+	{
+		if ($unit === NULL)
+		{
+			$unit = NULL;
+		}
+		if ($val === 0.0 && $unit === NULL)
+		{
+			return self::ZERO();
+		}
 
-    private static array $unitChars = [];
+		return new self($val, $unit);
+	}
 
-    static function init()
-    {
-        for ($i = ord('a'); $i <= ord('z'); ++$i) {
-            self::$unitChars[$i] = true;
-        }
-        for ($i = ord('A'); $i <= ord('Z'); ++$i) {
-            self::$unitChars[$i] = true;
-        }
-        self::$unitChars[ord('_')] = true;
-        self::$unitChars[ord('$')] = true;
-        self::$unitChars[ord('%')] = true;
-        self::$unitChars[ord('/')] = true;
+	public static function ZERO() : HNum
+	{
+		if (self::$ZERO === NULL)
+		{
+			self::$ZERO = new self(0.0);
+		}
 
-        self::$ZERO = new HNum(0.0, null);
-        self::$POS_INF = new HNum(INF, null);
-        self::$NEG_INF = new HNum(-INF, null);
-        self::$NaN = new HNum(NAN, null);
-    }
+		return self::$ZERO;
+	}
+
+	public static function POS_INF() : HNum
+	{
+		if (self::$POS_INF === NULL)
+		{
+			self::$POS_INF = new self(INF);
+		}
+
+		return self::$POS_INF;
+	}
+
+	public static function NEG_INF() : HNum
+	{
+		if (self::$NEG_INF === NULL)
+		{
+			self::$NEG_INF = new self(-INF);
+		}
+
+		return self::$NEG_INF;
+	}
+
+	public static function NaN() : HNum
+	{
+		if (self::$NaN === NULL)
+		{
+			self::$NaN = new self(NAN);
+		}
+
+		return self::$NaN;
+	}
 }
 
-HNum::init();
+// Initialize unitChars array
+for ($i = 0; $i < 128; $i++)
+{
+	HNum::$unitChars[$i] = FALSE;
+}
+for ($i = ord('a'); $i <= ord('z'); ++$i)
+{
+	HNum::$unitChars[$i] = TRUE;
+}
+for ($i = ord('A'); $i <= ord('Z'); ++$i)
+{
+	HNum::$unitChars[$i] = TRUE;
+}
+HNum::$unitChars[ord('_')] = TRUE;
+HNum::$unitChars[ord('$')] = TRUE;
+HNum::$unitChars[ord('%')] = TRUE;
+HNum::$unitChars[ord('/')] = TRUE;
+
+// Singleton values
+HNum::ZERO();
+HNum::POS_INF();
+HNum::NEG_INF();
+HNum::NaN();

@@ -1,62 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cxalloy\Haystack;
 
-/**
- * HMarker is the singleton value for a marker tag.
- *
- * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
- */
-class HMarker extends HVal
-{
-    /** Singleton value */
-    public static HMarker $VAL;
-	public static $VAL2;
 
-    private  function __construct()
-    {
-    }
+class HMarker extends HVal {
 
-	public static function create()
+	public static ?HMarker $VAL = NULL;
+
+	// Private constructor to prevent direct instantiation
+	private function __construct() {}
+
+	// Ensure singleton usage
+	public static function make() : HMarker
 	{
-		static::$VAL2 = new static();
+		if (self::$VAL === NULL)
+		{
+			self::$VAL = new self();
+		}
+
+		return self::$VAL;
 	}
 
-    public static function make()
-    {
-        HMarker::$VAL = new HMarker();
-    }
-    /** Hash code */
-    public function hashCode(): int
-    {
-        return 0x1379de;
-    }
+	/**
+	 * Equals is based on reference
+	 *
+	 * @param HMarker $that
+	 *
+	 * @return bool
+	 */
+	public function equals($that) : bool
+	{
+		return $that instanceof HMarker && $this === $that;
+	}
 
-    /** Equals is based on reference */
-    public function equals(object $that): bool
-    {
-        return $this === $that;
-    }
+	/**
+	 * Encode as "marker"
+	 *
+	 * @return string
+	 */
+	public function __toString() : string
+	{
+		return 'marker';
+	}
 
-    /** Encode as "marker" */
-    public function __toString(): string
-    {
-        return "marker";
-    }
+	/**
+	 * Encode as "M"
+	 *
+	 * @return string
+	 */
+	public function toZinc() : string
+	{
+		return 'M';
+	}
 
-    /** Encode as "m:" */
-    public function toJson(): string
-    {
-        return "m:";
-    }
-
-    /** Encode as "M" */
-    public function toZinc(): string
-    {
-        return "M";
-    }
+	/**
+	 * Encode as "m:"
+	 *
+	 * @return string
+	 */
+	public function toJSON() : string
+	{
+		return 'm:';
+	}
 }
 
-//HMarker::VAL() = new HMarker();
-HMarker::create();
-HMarker::make();
+// Singleton value
+HMarker::$VAL = HMarker::make();

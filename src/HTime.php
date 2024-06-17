@@ -84,7 +84,7 @@ class HTime extends HVal
     }
 
     /** Private constructor */
-    private function __construct(int $hour, int $min, int $sec, int $ms)
+    public function __construct(int $hour, int $min, int $sec, int $ms)
     {
         $this->hour = $hour;
         $this->min = $min;
@@ -152,7 +152,7 @@ class HTime extends HVal
     }
 
     /** Package private implementation shared with HDateTime */
-    private function encode(string &$s): void
+    public function encode(string &$s): void
     {
         $s .= sprintf('%02d:%02d:%02d', $this->hour, $this->min, $this->sec);
         if ($this->ms !== 0) {

@@ -12,8 +12,6 @@ abstract class HGridWriter
     /** Write a grid */
     abstract public function writeGrid(HGrid $grid): void;
 
-    /** Flush output stream */
-    abstract public function flush(): void;
 
     /** Close output stream */
     abstract public function close(): void;

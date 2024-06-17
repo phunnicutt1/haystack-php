@@ -387,6 +387,36 @@
                   </llm>
                 </llm>
               </chat>
+              <chat>
+                <internalId value="43706e25-d2ca-4c96-85d9-cb034edce44e" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8feaf2dc-b914-4b03-8f09-566db06c245d" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="946980db-7cfb-4e03-a48b-a9cb0c7be90a" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4-turbo" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4 Turbo" />
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>

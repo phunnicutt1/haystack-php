@@ -1,88 +1,85 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Cxalloy\Haystack;
-use InvalidArgumentException;
-use IteratorAggregate;
-use ArrayIterator;
-use Iterator;
-use NoSuchElementException;
+
+use \Exception;
 
 /**
- * HGrid is an immutable two dimension data structure of cols and rows.
+ * HGrid is an immutable two-dimensional data structure of cols and rows.
  * Use HGridBuilder to construct an HGrid instance.
- *
- * @see <a href='http://project-haystack.org/doc/Grids'>Project Haystack</a>
+ * @see {@link http://project-haystack.org/doc/Grids|Project Haystack}
  */
-class HGrid extends HVal implements IteratorAggregate
+class HGrid
 {
-    /**
-     * Empty grid with one column called "empty" and zero rows
-     */
-    public static HGrid $EMPTY;
-
-    public array $rows;
-    public array $cols;
-    public array $colsByName;
-    public HDict $meta;
+    private HDict $dict;
+    public array  $cols;
+    private array $rows;
+    private array $colsByName;
 
     /**
-     * Package private constructor
+     * HGrid constructor.
+     * @param HDict $dict
+     * @param array $cols
+     * @param array $rowList
+     * @throws Exception
      */
-    public function __construct(HDict $meta, array $cols, array $rowList)
+    public function __construct(HDict $dict, array $cols, array $rowList)
     {
-        $this->meta = $meta;
-        $this->cols = $cols;
-
-        if ($meta === null) {
-            throw new InvalidArgumentException("metadata cannot be null");
+        if ($dict === null) {
+            throw new Exception("metadata cannot be null");
         }
 
+        $this->dict = $dict;
+        $this->cols = $cols;
         $this->rows = [];
+
         foreach ($rowList as $i => $cells) {
             if (count($cols) !== count($cells)) {
-                throw new InvalidArgumentException("Number of rows does not match number of columns");
+                throw new Exception("Row cells size != cols size");
             }
             $this->rows[$i] = new HRow($this, $cells);
         }
 
         $this->colsByName = [];
         foreach ($cols as $i => $col) {
-            $colName = $col->name;
+            $colName = $col->name();
             if (isset($this->colsByName[$colName])) {
-                throw new InvalidArgumentException("Duplicate col name: " . $colName);
+                throw new Exception("Duplicate col name: " . $colName);
             }
             $this->colsByName[$colName] = $col;
         }
     }
 
-	public static function initStaticProps() {
-		HGrid::$EMPTY = new HGrid(
-			HDict::$EMPTY,
-			[new HCol(0, 'empty', HDict::$EMPTY)],
-			[]
-		);
-}
-
     /**
-     * Return grid level meta
+     * Empty grid with one column called "empty" and zero rows
      */
-    public function meta(): HDict
+    public static function EMPTY(): HGrid
     {
-        return $this->meta;
+        return new HGrid(HDict::EMPTY(), [new HCol(0, "empty", HDict::EMPTY())], []);
     }
 
     /**
-     * Error grid have the meta.err marker tag
+     * Return grid level meta
+     * @return HDict
+     */
+    public function meta(): HDict
+    {
+        return $this->dict;
+    }
+
+    /**
+     * Error grid has the dict.err marker tag
+     * @return bool
      */
     public function isErr(): bool
     {
-        return $this->meta->has("err");
+        return $this->dict->has("err");
     }
 
     /**
      * Return if number of rows is zero
+     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -91,6 +88,7 @@ class HGrid extends HVal implements IteratorAggregate
 
     /**
      * Return number of rows
+     * @return int
      */
     public function numRows(): int
     {
@@ -98,7 +96,9 @@ class HGrid extends HVal implements IteratorAggregate
     }
 
     /**
-     * Get a row by its zero based index
+     * Get a row by its zero-based index
+     * @param int $row
+     * @return HRow
      */
     public function row(int $row): HRow
     {
@@ -107,6 +107,7 @@ class HGrid extends HVal implements IteratorAggregate
 
     /**
      * Get number of columns
+     * @return int
      */
     public function numCols(): int
     {
@@ -114,134 +115,90 @@ class HGrid extends HVal implements IteratorAggregate
     }
 
     /**
-     * Get a column by its index
-     */
-    public function col(int $index): HCol
-    {
-        return $this->cols[$index];
-    }
-
-    /**
-     * Convenience for "col(name, true)"
-     */
-    public function colByName2(string $name): HCol
-    {
-        return $this->col($name, true);
-    }
-
-    /**
-     * Get a column by name. If not found and checked if false then
+     * Get a column by name. If not found and checked is false then
      * return null, otherwise throw UnknownNameException
+     * @param string|int $name
+     * @param bool $checked
+     * @return HCol|null
+     * @throws Exception
      */
-    public function colByName(string $name, bool $checked = true): ?HCol
+    public function col($name, bool $checked = true): ?HCol
     {
+        if (is_int($name)) {
+            return $this->cols[$name];
+        }
+
         $col = $this->colsByName[$name] ?? null;
         if ($col !== null) {
             return $col;
         }
+
         if ($checked) {
-            throw new UnknownNameException($name);
+            throw new Exception($name);
         }
+
         return null;
     }
 
     /**
      * Create iterator to walk each row
+     * @return \Iterator
      */
-    public function getIterator(): Iterator
+    public function iterator(): \Iterator
     {
-		return new ArrayIterator($this->rows);
-        //return new GridIterator($this->rows);
-    }
+        return new class($this->rows) implements \Iterator {
+            private array $rows;
+            private int $pos = 0;
 
-    public function toZinc(): string
-    {
-        return HZincWriter::gridToString($this);
-    }
+            public function __construct(array $rows)
+            {
+                $this->rows = $rows;
+            }
 
-    public function toJson(): string
-    {
-        throw new UnsupportedOperationException();
-    }
+            public function current()
+            {
+                return $this->rows[$this->pos];
+            }
 
-    public function equals($o): bool
-    {
-        if ($this === $o) {
-            return true;
-        }
-        if ($o === null || get_class($this) !== get_class($o)) {
-            return false;
-        }
+            public function next(): void
+            {
+                $this->pos++;
+            }
 
-        $hGrid = $o;
-        if (!$this->meta->equals($hGrid->meta)) {
-            return false;
-        }
-        if ($this->cols !== $hGrid->cols) {
-            return false;
-        }
-        if ($this->rows !== $hGrid->rows) {
-            return false;
-        }
-        return true;
-    }
+            public function key()
+            {
+                return $this->pos;
+            }
 
-    public function hashCode(): int
-    {
-        $result = hash('sha256', serialize($this->rows));
-        $result = 31 * $result + hash('sha256', serialize($this->cols));
-        $result = 31 * $result + $this->meta->hashCode();
-        return $result;
-    }
+            public function valid(): bool
+            {
+                return isset($this->rows[$this->pos]);
+            }
 
-    /**
-     * Convenience for "dump(stdout)".
-     */
-    public function dump(): void
-    {
-        $this->dumpToWriter(new PrintWriter(STDOUT));
+            public function rewind(): void
+            {
+                $this->pos = 0;
+            }
+        };
     }
 
     /**
      * Debug dump - this is Zinc right now.
+     * @param mixed $out
      */
-    public function dumpToWriter(PrintWriter $out): void
+    public function dump($out = null): void
     {
-        $out->println(HZincWriter::gridToString($this));
-        $out->flush();
+        if ($out === null) {
+            $out = new class {
+                public function log($str)
+                {
+                    echo $str . PHP_EOL;
+                }
+            };
+        }
+
+        HZincWriter::gridToString($this, function ($err, $str) use ($out) {
+            $out->log($str);
+        });
     }
 }
-
-/*class GridIterator implements Iterator
-{
-    private array $rows;
-    private int $pos = 0;
-
-    public function __construct(array $rows)
-    {
-        $this->rows = $rows;
-		$this->pos = 0;
-    }
-
-    public function hasNext(): bool
-    {
-        return $this->pos < count($this->rows);
-    }
-
-    public function next(): mixed
-    {
-        if ($this->hasNext()) {
-            return $this->rows[$this->pos++];
-        } else {
-            throw new NoSuchElementException();
-        }
-    }
-
-    public function remove(): void
-    {
-        throw new UnsupportedOperationException();
-    }
-}*/
-
-// Initialize the EMPTY constant
-HGrid::initStaticProps();

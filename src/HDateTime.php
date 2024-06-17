@@ -28,7 +28,7 @@ class HDateTime extends HVal
     /** Timezone as Olson database city name */
     public readonly HTimeZone $tz;
 
-    private volatile int $millis = 0;
+    public volatile int $millis = 0;
 
     /** Constructor with basic fields */
     public static function make(HDate $date, HTime $time, HTimeZone $tz, int $tzOffset): self
@@ -121,7 +121,7 @@ class HDateTime extends HVal
         return self::make($date, HTime::makeFromString(substr($s, $tIdx + 1, $offsetIdx - $tIdx - 1)), $tz, $offset);
     }
 
-    private static function parseOffset(string $s): int
+    public static function parseOffset(string $s): int
     {
         if (strlen($s) !== 6) {
             throw new Exception("Invalid tz offset: $s");
@@ -150,7 +150,7 @@ class HDateTime extends HVal
     }
 
     /** Private constructor */
-    private function __construct(HDate $date, HTime $time, HTimeZone $tz, int $tzOffset)
+    public function __construct(HDate $date, HTime $time, HTimeZone $tz, int $tzOffset)
     {
         $this->date = $date;
         $this->time = $time;

@@ -1,153 +1,218 @@
 <?php
+declare(strict_types=1);
 
 namespace Cxalloy\Haystack;
 
-use RuntimeException;
-use InvalidArgumentException;
+use Exception;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * HJsonWriter is used to write grids in JavaScript Object Notation.
  * It is a plain text format commonly used for serialization of data.
  * It is specified in RFC 4627.
- *
- * @see <a href='http://project-haystack.org/doc/Json'>Project Haystack</a>
+ * @see {@link http://project-haystack.org/doc/Json|Project Haystack}
  */
-class HJsonWriter extends HGridWriter
-{
-    private \PrintWriter $out;
+class HJsonWriter extends HGridWriter {
 
-    ////////////////////////////////////////////////////////////////////////
-    // Construction
-    ////////////////////////////////////////////////////////////////////////
+	//public StreamInterface $out;
+	  public string $text;
 
-    /** Write using UTF-8 */
-    public function __construct($out)
-    {
-        try {
-            $this->out = new \PrintWriter(new \OutputStreamWriter($out, "UTF-8"));
-        } catch (\IOException $e) {
-            throw new RuntimeException($e);
-        }
-    }
+	public function __construct()
+	{
 
-    /** Write a grid to an in-memory string */
-    public static function gridToString(HGrid $grid): string
-    {
-        $out = new \StringWriter($grid->numCols() * $grid->numRows() * 32);
-        (new HJsonWriter($out))->writeGrid($grid);
-        return $out->toString();
-    }
+		$this->text = "{\n";
+	}
 
-    private function __constructFromStringWriter(\StringWriter $out)
-    {
-        $this->out = new \PrintWriter($out);
-    }
+	/**
+	 * @param HJsonWriter $self
+	 * @param HVal        $val
+	 */
+	private static function writeVal(HJsonWriter $self, $val) : void
+	{
+		if ($val === NULL)
+		{
+			$self->text .= "null";
+		}
+		elseif ($val instanceof HBool)
+		{
+			$self->text .= "" . $val->val;
+		}
+		else
+		{
+			$self->text .= '"' . $val->toJSON() . '"';
+		}
+	}
 
-    ////////////////////////////////////////////////////////////////////////
-    // HGridWriter
-    ////////////////////////////////////////////////////////////////////////
+	/**
+	 * @param HJsonWriter $self
+	 * @param HDict       $dict
+	 * @param bool        $first
+	 */
+	public function writeDictTags( HDict $dict, bool $first) : void
+	{
+		$firstFlag = $first;
+		foreach ($dict->iterator() as $entry)
+		{
+			if ($firstFlag)
+			{
+				$firstFlag = FALSE;
+			}
+			else
+			{
+				$this->text .= ", ";
+			}
 
-    /** Write a grid */
-    public function writeGrid(HGrid $grid): void
-    {
-        // grid begin
-        $this->out->print("{\n");
+			$name = $entry->getKey();
+			$val  = $entry->getValue();
 
-        // meta
-        $meta = $grid->meta();
-        $ver = $meta->has("ver") ? $meta->getStr("ver") : "3.0";
-        $this->out->print("\"meta\": {\"ver\":\"" . $ver . "\"");
-        $this->writeDictTags($grid->meta(), false);
-        $this->out->print("},\n");
+			$this->text .= HStr::toCode($name);
+			$this->text .= ":";
+			self::writeVal($this, $val);
+		}
+	}
 
-        // columns
-        $this->out->print("\"cols\":[\n");
-        for ($i = 0; $i < $grid->numCols(); ++$i) {
-            if ($i > 0) {
-                $this->out->print(",\n");
-            }
-            $col = $grid->col($i);
-            $this->out->print("{\"name\":");
-            $this->out->print(HStr::toCode($col->name()));
-            $this->writeDictTags($col->meta(), false);
-            $this->out->print("}");
-        }
-        $this->out->print("\n],\n");
+	/**
+	 * @param HJsonWriter $self
+	 * @param HDict       $dict
+	 */
+	private function writeDict(HDict $dict) : void
+	{
+		$this->text .= "{";
+		$this->writeDictTags($dict, TRUE);
+		$this->text .="}";
+	}
 
-        // rows
-        $this->out->print("\"rows\":[\n");
-        for ($i = 0; $i < $grid->numRows(); ++$i) {
-            if ($i > 0) {
-                $this->out->print(",\n");
-            }
-            $this->writeDict($grid->row($i));
-        }
-        $this->out->print("\n]\n");
+	/**
+	 * Write a grid
+	 *
+	 * @param HGrid $grid
+	 *
+	 * @throws Exception
+	 */
+	public function writeGrid(HGrid $grid) : void
+	{
+		// grid begin
 
-        // grid end
-        $this->out->print("}\n");
-        $this->out->flush();
-    }
+		// meta
+		$meta = $grid->meta();
+		$ver  = $meta->has('ver') ? $meta->getStr('ver') : '3.0';
+		$this->text .="\"meta\": {\"ver\":\"" . $ver . "\"";
+		$this->writeDictTags($grid->meta(), FALSE);
+		$this->text .="},\n";
 
-    private function writeDict(HDict $dict): void
-    {
-        $this->out->print("{");
-        $this->writeDictTags($dict, true);
-        $this->out->print("}");
-    }
 
-    private function writeDictTags(HDict $dict, bool $first): void
-    {
-        foreach ($dict as $name => $val) {
-            if ($first) {
-                $first = false;
-            } else {
-                $this->out->print(", ");
-            }
-            $this->out->print(HStr::toCode($name));
-            $this->out->print(":");
-            $this->writeVal($val);
-        }
-    }
+		// columns
+		$this->text .="\"cols\":[\n";
+		for ($i = 0; $i < $grid->numCols(); ++$i)
+		{
+			if ($i > 0)
+			{
+				$this->text .=",\n";
+			}
+			$col        = $grid->col($i);
+			$this->text .= "{\"name\":";
+			$this->text .=HStr::toCode($col->name());
+			$this->writeDictTags($col->meta(), FALSE);
+			$this->text .='}';
+		}
+		$this->text .="\n],\n";
 
-    private function writeVal(HVal $val): void
-    {
-        if ($val === null) {
-            $this->out->print("null");
-        } elseif ($val instanceof HBool) {
-            $this->out->print($val);
-        } elseif ($val instanceof HDict) {
-            $this->writeDict($val);
-        } elseif ($val instanceof HGrid) {
-            $this->writeGrid($val);
-        } elseif ($val instanceof HList) {
-            $this->writeList($val);
-        } else {
-            $this->out->print(HStr::toCode($val->toJson()));
-        }
-    }
+		// rows
+		$this->text .="\"rows\":[\n";
+		for ($i = 0; $i < $grid->numRows(); ++$i)
+		{
+			if ($i > 0)
+			{
+				$this->text .=",\n";
+			}
+			$this->writeDict($grid->row($i));
+		}
+		$this->text .="\n]\n";
 
-    private function writeList(HList $list): void
-    {
-        $this->out->print("[");
-        for ($i = 0; $i < $list->size(); ++$i) {
-            if ($i > 0) {
-                $this->out->print(",");
-            }
-            $this->writeVal($list->get($i));
-        }
-        $this->out->print("]");
-    }
+		// grid end
+		$this->text .="}\n";
 
-    /** Flush underlying output stream */
-    public function flush(): void
-    {
-        $this->out->flush();
-    }
 
-    /** Close underlying output stream */
-    public function close(): void
-    {
-        $this->out->close();
-    }
+
+	}
+
+	/*public function writeGridold(HGrid $grid) : void
+	{
+		try
+		{
+			$text = new UnicodeString('hello');
+			$this->out->write()
+			// grid begin
+			$this->out->write('{');
+
+			// meta
+			$this->out->write("\"meta\": {\"ver\":\"3.0\"");
+			self::writeDictTags($this, $grid->meta(), FALSE);
+			$this->out->write("},\n");
+
+			// columns
+			$this->out->write("\"cols\":[");
+			for ($i = 0; $i < $grid->numCols(); ++$i)
+			{
+				if ($i > 0)
+				{
+					$this->out->write(', ');
+				}
+				$col = $grid->col($i);
+				$this->out->write("{\"name\":");
+				$this->out->write(HStr::toCode($col->name()));
+				self::writeDictTags($this, $col->meta(), FALSE);
+				$this->out->write('}');
+			}
+			$this->out->write("],\n");
+
+			// rows
+			$this->out->write("\"rows\":[\n");
+			for ($i = 0; $i < $grid->numRows(); ++$i)
+			{
+				if ($i > 0)
+				{
+					$this->out->write(",\n");
+				}
+				self::writeDict($this, $grid->row($i));
+			}
+			$this->out->write("\n]");
+
+			// grid end
+			$this->out->write("}\n");
+			$this->out->close();
+		}
+		catch(Exception $err)
+		{
+			$this->out->close();
+			throw $err;
+		}
+	}*/
+
+	/** Flush underlying output stream */
+	public function flush() : void
+	{
+		return;
+	}
+
+	/** Close underlying output stream */
+	public function close() : void
+	{
+		return;
+	}
+
+	/**
+	 * Write a grid to a string
+	 *
+	 * @param HGrid $grid
+	 *
+	 * @throws Exception
+	 * @return string
+	 */
+	public function gridToString(HGrid $grid) : string
+	{
+		$this->writeGrid($grid);
+					//echo 'encoded string => ' . $this->text2;
+		return $this->text;
+	}
 }

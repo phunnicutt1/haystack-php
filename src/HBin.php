@@ -26,7 +26,7 @@ class HBin extends HVal
     }
 
     /** Private constructor */
-    private function __construct(string $mime)
+    public function __construct(string $mime)
     {
         self::verifyMime($mime);
         $this->mime = $mime;

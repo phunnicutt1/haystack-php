@@ -9,133 +9,170 @@ namespace Cxalloy\Haystack;
  *
  * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
  */
-class HRef extends HVal
-{
-    public string $val;
-    public ?string $dis;
+class HRef extends HVal {
 
-    /** Singleton for the null ref */
-    public static HRef $nullRef;
+	/** @var string String identifier for reference */
+	private string $val;
 
-    public static array $idChars = [];
+	/** @var ?string Display name for reference or null */
+	private ?string $display;
 
-    /** Static initializer */
-    public static function init(): void
-    {
-        for ($i = ord('a'); $i <= ord('z'); ++$i) self::$idChars[$i] = true;
-        for ($i = ord('A'); $i <= ord('Z'); ++$i) self::$idChars[$i] = true;
-        for ($i = ord('0'); $i <= ord('9'); ++$i) self::$idChars[$i] = true;
-        self::$idChars[ord('_')] = true;
-        self::$idChars[ord(':')] = true;
-        self::$idChars[ord('-')] = true;
-        self::$idChars[ord('.')] = true;
-        self::$idChars[ord('~')] = true;
+	public static array $idChars = [];
 
-        self::$nullRef = new HRef("null", null);
-    }
+	public function __construct(string $val, ?string $display = NULL)
+	{
+		$this->val     = $val;
+		$this->display = $display;
+	}
 
-    /** Construct for string identifier and optional display */
-    public static function make(string $val, ?string $dis = null): HRef
-    {
-        if ( ! self::isId($val)) {
-            throw new InvalidArgumentException("Invalid id val: \"$val\"");
-        }
-        return new HRef($val, $dis);
-    }
+	/**
+	 * Encode as "@id <dis>"
+	 *
+	 * @return string
+	 */
+	public function toZinc() : string
+	{
+		$s = '@' . $this->val;
+		if ($this->display !== NULL)
+		{
+			$s .= ' ' . HStr::toCode($this->display);
+		}
 
-    /** Private constructor */
-    private function __construct(string $val, ?string $dis)
-    {
-        $this->val = $val;
-        $this->dis = $dis;
-    }
+		return $s;
+	}
 
-    /** String identifier for reference */
-    public function getVal(): string
-    {
-        return $this->val;
-    }
+	/**
+	 * Encode as "r:id <dis>"
+	 *
+	 * @return string
+	 */
+	public function toJSON() : string
+	{
+		$s = 'r:' . $this->val;
+		if ($this->display !== NULL)
+		{
+			$s .= ' ' . HStr::parseCode($this->display);
+		}
 
-    /** Display name for reference or null */
-    public function getDis(): ?string
-    {
-        return $this->dis;
-    }
+		return $s;
+	}
 
-    /** Hash code is based on val field only */
-    public function hashCode(): int
-    {
-        return hash('crc32', $this->val);
-    }
+	/**
+	 * Equals is based on val field only
+	 *
+	 * @param HRef $that
+	 *
+	 * @return bool
+	 */
+	public function equals($that) : bool
+	{
+		return $that instanceof HRef && $this->val === $that->val;
+	}
 
-    /** Equals is based on val field only */
-    public function equals(object $that): bool
-    {
-        if (!$that instanceof HRef) {
-            return false;
-        }
-        return $this->val === $that->val;
-    }
+	/**
+	 * Return the val string
+	 *
+	 * @return string
+	 */
+	public function __toString() : string
+	{
+		return $this->val;
+	}
 
-    /** Return display string which is dis field if non-null, val field otherwise */
-    public function dis(): string
-    {
-        return $this->dis ?? $this->val;
-    }
+	/**
+	 * Encode as "@id"
+	 *
+	 * @return string
+	 */
+	public function toCode() : string
+	{
+		return '@' . $this->val;
+	}
 
-    /** Return the val string */
-    public function __toString(): string
-    {
-        return $this->val;
-    }
+	/**
+	 * Return display string which is dis field if non-null, val field otherwise
+	 *
+	 * @return string
+	 */
+	public function dis() : string
+	{
+		return $this->display ?? $this->val;
+	}
 
-    /** Encode as "@id" */
-    public function toCode(): string
-    {
-        return "@" . $this->val;
-    }
+	/**
+	 * Construct for string identifier and optional display
+	 *
+	 * @param string  $val
+	 * @param ?string $dis
+	 *
+	 * @return HRef
+	 */
+	public static function make(string $val, ?string $dis = NULL) : HRef
+	{
+		if ( ! self::isId($val))
+		{
+			throw new InvalidArgumentException("Invalid id val: \"" . $val . "\"");
+		}
 
-    /** Encode as {@code "r:<id> [dis]"} */
-    public function toJson(): string
-    {
-        $s = "r:" . $this->val;
-        if ($this->dis !== null) {
-            $s .= ' ' . $this->dis;
-        }
-        return $s;
-    }
+		return new self($val, $dis);
+	}
 
-    /** Encode as {@code "@<id> [dis]"} */
-    public function toZinc(): string
-    {
-        $s = '@' . $this->val;
-        if ($this->dis !== null) {
-            $s .= ' ';
-            $s .= HStr::toZinc($this->dis);
-        }
-        return $s;
-    }
+	/**
+	 * Return if the given string is a valid id for a reference
+	 *
+	 * @param string $id
+	 *
+	 * @return bool
+	 */
+	public static function isId(string $id) : bool
+	{
+		if (strlen($id) === 0)
+		{
+			return FALSE;
+		}
+		for ($i = 0; $i < strlen($id); ++$i)
+		{
+			if ( ! self::isIdChar(ord($id[$i])))
+			{
+				return FALSE;
+			}
+		}
 
-    /** Return if the given string is a valid id for a reference */
-    public static function isId(string $id): bool
-    {
-        if (strlen($id) === 0) {
-            return false;
-        }
-        for ($i = 0; $i < strlen($id); ++$i) {
-            if (!self::isIdChar(ord($id[$i]))) {
-                return false;
-            }
-        }
-        return true;
-    }
+		return TRUE;
+	}
 
-    /** Is the given character valid in the identifier part */
-    public static function isIdChar(int $ch): bool
-    {
-        return $ch >= 0 && $ch < 127 && (self::$idChars[$ch] ?? false);
-    }
+	/**
+	 * Is the given character valid in the identifier part
+	 *
+	 * @param int $ch
+	 *
+	 * @return bool
+	 */
+	public static function isIdChar(int $ch) : bool
+	{
+		return $ch >= 0 && $ch < 127 && self::$idChars[$ch];
+	}
 }
 
-// Initialize static properties
-HRef::init();
+// Initialize idChars array
+for ($i = 0; $i < 127; $i++)
+{
+	HRef::$idChars[$i] = FALSE;
+}
+for ($i = ord('a'); $i <= ord('z'); ++$i)
+{
+	HRef::$idChars[$i] = TRUE;
+}
+for ($i = ord('A'); $i <= ord('Z'); ++$i)
+{
+	HRef::$idChars[$i] = TRUE;
+}
+for ($i = ord('0'); $i <= ord('9'); ++$i)
+{
+	HRef::$idChars[$i] = TRUE;
+}
+HRef::$idChars[ord('_')] = TRUE;
+HRef::$idChars[ord(':')] = TRUE;
+HRef::$idChars[ord('-')] = TRUE;
+HRef::$idChars[ord('.')] = true;
+HRef::$idChars[ord('~')] = true;

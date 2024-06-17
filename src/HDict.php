@@ -3,69 +3,70 @@ declare(strict_types=1);
 
 namespace Cxalloy\Haystack;
 
-use Iterator;
-use Error;
-use Exception;
+use \Iterator;
+use \Exception;
 
 /**
- * HDict is an immutable map of name/HVal pairs. Use HDictBuilder
- * to construct a HDict instance.
- *
- * @see <a href='http://project-haystack.org/doc/TagModel#tags'>Project Haystack</a>
- */
-abstract class HDict extends HVal {
+HDict is an immutable map of name/HVal pairs. Use HDictBuilder
+to construct a HDict instance.
+@see <a href='http://project-haystack.org/doc/TagModel#tags'>Project Haystack</a>
+**/
+abstract class HDict extends HVal
+{
 
-	//////////////////////////////////////////////////////////////////////////
-	// Constructor
-	//////////////////////////////////////////////////////////////////////////
-
-	/** Singleton for empty set of tags. */
 	public static HDict $EMPTY;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Access
-	//////////////////////////////////////////////////////////////////////////
 
-	/** Return if size is zero */
+	public static function init(): void
+	{
+		self::$EMPTY = new MapImpl([]);
+		self::initTagChars();
+	}
+
+
+	/**
+	 * Return if size is zero
+	 *
+	 * @return bool
+	 */
 	public function isEmpty() : bool
 	{
 		return $this->size() === 0;
 	}
 
-	/** Return number of tag name/value pairs */
-	public abstract function size() : int;
-
-	/** Return if the given tag is present */
-	public  function has(string $name) : bool
+	/**
+	 * Return if the given tag is present
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function has(string $name) : bool
 	{
-		return $this->get($name, FALSE) !== NULL;
+		$t = $this->get($name, FALSE);
+
+		return $t !== NULL;
 	}
 
-	/** Return if the given tag is not present */
+	/**
+	 * Return if the given tag is not present
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public function missing(string $name) : bool
 	{
-		return $this->get($name, FALSE) === NULL;
+		$t = $this->get($name, FALSE);
+
+		return $t === NULL;
 	}
 
-	/** Convenience for "get(name, true)" */
-	public function get(string $name, bool $checked = TRUE) : ?HVal
-	{
-		return $this->getChecked($name, TRUE);
-	}
-
-	/** Get a tag by name. If not found and checked if false then
-	 * return null, otherwise throw UnknownNameException
+	/**
+	 * Get the "id" tag as HRef.
+	 *
+	 * @return HRef
 	 */
-	public function getChecked(string $name, bool $checked) : ?HVal {
-        // Implement the method logic here
-    }
-
-	/** Create Map.Entry iterator to walk each name/tag pair */
-	public function iterator() : Iterator {
-        // Implement the method logic here
-    }
-
-	/** Get the "id" tag as HRef. */
 	public function id() : HRef
 	{
 		return $this->getRef("id");
@@ -75,88 +76,179 @@ abstract class HDict extends HVal {
 	 * Get display string for this entity:
 	 * - dis tag
 	 * - id tag
+	 *
+	 * @return string
 	 */
 	public function dis() : string
 	{
-		$v = $this->getChecked("dis", FALSE);
+		$v = $this->get("dis", FALSE);
 		if ($v instanceof HStr)
 		{
 			return $v->val;
 		}
 
-		$v = $this->getChecked("id", FALSE);
+		$v = $this->get("id", FALSE);
 		if ($v !== NULL)
 		{
 			return $v->dis();
 		}
 
-		return "????";
+		return "Not Found";
+	}
+
+	/**
+	 * Return number of tag name/value pairs
+	 *
+	 * @abstract
+	 * @return int
+	 */
+	public function size() : int
+	{
+		throw new Exception('must be implemented by subclass!');
+	}
+
+	/**
+	 * Get a tag by name. If not found and checked if false then return null, otherwise throw Error
+	 *
+	 * @abstract
+	 *
+	 * @param string $name
+	 * @param bool   $checked
+	 *
+	 * @return HVal|null
+	 */
+	public function get(string $name, bool $checked = TRUE) : ?HVal
+	{
+		throw new Exception('must be implemented by subclass!');
+	}
+
+	/**
+	 * Create Map.Entry iterator to walk each name/tag pair
+	 *
+	 * @abstract
+	 * @return \Iterator
+	 */
+	public function iterator() : \Iterator
+	{
+		throw new Exception('must be implemented by subclass!');
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get Conveniences
 	//////////////////////////////////////////////////////////////////////////
 
-	/** Get tag as HBool or raise UnknownNameException or ClassCastException. */
+	/**
+	 * Get tag as HBool or raise Error.
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public function getBool(string $name) : bool
 	{
-		return $this->get($name)->val;
+		$v = $this->get($name);
+		if ( ! ($v instanceof HBool))
+		{
+			throw new Exception("ClassCastException: " . $name);
+		}
+
+		return $v->val;
 	}
 
-	/** Get tag as HStr or raise UnknownNameException or ClassCastException. */
+	/**
+	 * Get tag as HStr or raise Error.
+	 *
+	 * @param string $name
+	 *
+	 * @return string
+	 */
 	public function getStr(string $name) : string
 	{
-		return $this->get($name)->val;
+		$v = $this->get($name);
+		if ( ! ($v instanceof HStr))
+		{
+			throw new Exception("ClassCastException: " . $name);
+		}
+
+		return $v->val;
 	}
 
-	/** Get tag as HRef or raise UnknownNameException or ClassCastException. */
+	/**
+	 * Get tag as HRef or raise Error.
+	 *
+	 * @param string $name
+	 *
+	 * @return HRef
+	 */
 	public function getRef(string $name) : HRef
 	{
-		return $this->get($name);
+		$v = $this->get($name);
+		if ( ! ($v instanceof HRef))
+		{
+			throw new Exception("ClassCastException: " . $name);
+		}
+
+		return $v;
 	}
 
-	/** Get tag as HNum or raise UnknownNameException or ClassCastException. */
-	public function getNum(string $name) : int | float
+	/**
+	 * Get tag as HNum or raise Error.
+	 *
+	 * @param string $name
+	 *
+	 * @return int
+	 */
+	public function getInt(string $name) : int
 	{
-		return (int) $this->get($name)->val;
+		$v = $this->get($name);
+		if ( ! ($v instanceof HNum))
+		{
+			throw new \Exception("ClassCastException: " . $name);
+		}
+
+		return $v->val;
+	}
+
+	/**
+	 * Get tag as HNum or raise Error.
+	 *
+	 * @param string $name
+	 *
+	 * @return float
+	 */
+	public function getDouble(string $name) : float
+	{
+		$v = $this->get($name);
+		if ( ! ($v instanceof HNum))
+		{
+			throw new \Exception("ClassCastException: " . $name);
+		}
+
+		return $v->val;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Identity
 	//////////////////////////////////////////////////////////////////////////
 
-	/** String format is always "toZinc" */
+	/**
+	 * String format is always "toZinc"
+	 *
+	 * @return string
+	 */
 	public function __toString() : string
 	{
 		return $this->toZinc();
 	}
 
-	/** Hash code is based on tags */
-	public function hashCode() : int
-	{
-		if ($this->hashCode === 0)
-		{
-			$x = 33;
-			foreach ($this->iterator() as $entry)
-			{
-				$key = $entry->getKey();
-				$val = $entry->getValue();
-				if ($val === NULL)
-				{
-					continue;
-				}
-				$x ^= ($key->hashCode() << 7) ^ $val->hashCode();
-			}
-			$this->hashCode = $x;
-		}
-
-		return $this->hashCode;
-	}
-
-	public int $hashCode = 0;
-
-	/** Equality is tags */
-	public  function equals(object $that) : bool
+	/**
+	 * Equality is tags
+	 *
+	 * @param HDict $that
+	 *
+	 * @return bool
+	 */
+	public function equals(HVal $that) : bool
 	{
 		if ( ! ($that instanceof HDict))
 		{
@@ -166,15 +258,15 @@ abstract class HDict extends HVal {
 		{
 			return FALSE;
 		}
+
 		foreach ($this->iterator() as $entry)
 		{
-			$key = $entry->getKey();
-			$val = $entry->getValue();
-			if ($val === NULL)
-			{
-				continue;
-			}
-			if ( ! $val->equals($that->getChecked($key, FALSE)))
+			$name = $entry->getKey();
+			$val  = $entry->getValue();
+			$tval = $that->get($name, FALSE);
+			$neq  = ! ($val->equals($tval) ?? $val !== $tval);
+
+			if ($neq)
 			{
 				return FALSE;
 			}
@@ -187,10 +279,39 @@ abstract class HDict extends HVal {
 	// Encoding
 	//////////////////////////////////////////////////////////////////////////
 
+	public static function cc(string $c) : int
+	{
+		return HVal::cc($c);
+	}
+
+	public static array $tagChars;
+
+	public static function initTagChars() : void
+	{
+		self::$tagChars = [];
+		for ($i = self::cc("a"); $i <= self::cc("z"); ++$i)
+		{
+			self::$tagChars[$i] = TRUE;
+		}
+		for ($i = self::cc("A"); $i <= self::cc("Z"); ++$i)
+		{
+			self::$tagChars[$i] = TRUE;
+		}
+		for ($i = self::cc("0"); $i <= self::cc("9"); ++$i)
+		{
+			self::$tagChars[$i] = TRUE;
+		}
+		self::$tagChars[self::cc("_")] = TRUE;
+	}
+
 	/**
 	 * Return if the given string is a legal tag name. The
 	 * first char must be ASCII lower case letter. Rest of
 	 * chars must be ASCII letter, digit, or underbar.
+	 *
+	 * @param string $n
+	 *
+	 * @return bool
 	 */
 	public static function isTagName(string $n) : bool
 	{
@@ -199,7 +320,7 @@ abstract class HDict extends HVal {
 			return FALSE;
 		}
 		$first = ord($n[0]);
-		if ($first < ord('a') || $first > ord('z'))
+		if ($first < self::cc("a") || $first > self::cc("z"))
 		{
 			return FALSE;
 		}
@@ -215,157 +336,175 @@ abstract class HDict extends HVal {
 		return TRUE;
 	}
 
-	public static array $tagChars = [];
-
-	public static function initTagChars() : void
-	{
-		for ($i = ord('a'); $i <= ord('z'); ++$i)
-		{
-			self::$tagChars[$i] = TRUE;
-		}
-		for ($i = ord('A'); $i <= ord('Z'); ++$i)
-		{
-			self::$tagChars[$i] = TRUE;
-		}
-		for ($i = ord('0'); $i <= ord('9'); ++$i)
-		{
-			self::$tagChars[$i] = TRUE;
-		}
-		self::$tagChars[ord('_')] = TRUE;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// HVal
-	//////////////////////////////////////////////////////////////////////////
-
-	/** Encode value to zinc format */
+	/**
+	 * Encode value to zinc format
+	 *
+	 * @return string
+	 */
 	public function toZinc() : string
 	{
-		return HZincWriter::valToString($this);
+		$s     = "";
+		$first = TRUE;
+		foreach ($this->iterator() as $entry)
+		{
+			$name = $entry->getKey();
+			$val  = $entry->getValue();
+			if ($first)
+			{
+				$first = FALSE;
+			}
+			else
+			{
+				$s .= " ";
+			}
+			$s .= $name;
+			if ($val !== HMarker::$VAL())
+			{
+				$s .= ":" . $val->toZinc();
+			}
+		}
+
+		return $s;
 	}
+}
+
+    //////////////////////////////////////////////////////////////////////////
+    // MapImpl
+    //////////////////////////////////////////////////////////////////////////
+
+class MapImpl extends HDict {
+
+	public array $map;
+
+	public function __construct(array $map)
+	{
+		$this->map = $map;
+	}
+
+	public function size() : int
+	{
+		return count($this->map);
+	}
+
+	public function get(string $name, bool $checked = TRUE) : ?HVal
+	{
+		$val = $this->map[$name] ?? NULL;
+		if ($val !== NULL)
+		{
+			return $val;
+		}
+		if ( ! $checked)
+		{
+			return NULL;
+		}
+		throw new \Exception("Unknown name: " . $name);
+	}
+
 
 	/** Encode value to json format */
 	public function toJson() : string
 	{
 		throw new Error('UnsupportedOperationException');
 	}
-}
-    //////////////////////////////////////////////////////////////////////////
-    // MapImpl
-    //////////////////////////////////////////////////////////////////////////
 
-    class MapImpl extends HDict
-    {
-        public array $map;
+	public function iterator() : \Iterator
+	{
+		$index = 0;
+		$keys  = array_keys($this->map);
+		sort($keys);
+		$length = count($keys);
 
-        public function __construct(array $map)
-        {
-            $this->map = $map;
-        }
+		return new class($keys, $this->map, $index, $length) implements \Iterator {
 
-        public function size(): int
-        {
-            return count($this->map);
-        }
+			private array $keys;
+			private array $map;
+			private int   $index;
+			private int   $length;
 
-        public function getChecked(string $name, bool $checked): ?HVal
-        {
-            $val = $this->map[$name] ?? null;
+			public function __construct(array $keys, array $map, int $index, int $length)
+			{
+				$this->keys   = $keys;
+				$this->map    = $map;
+				$this->index  = $index;
+				$this->length = $length;
+			}
 
-            if ($val instanceof HVal || $val === null) {
-                return $val;
-            }
+			public function current() : MapEntry
+			{
+				$elem = $this->keys[$this->index];
 
-            if (!$checked) {
-                return null;
-            }
+				return new MapEntry($elem, $this->map[$elem]);
+			}
 
-            throw new UnknownNameException($name);
-        }
+			public function next() : void
+			{
+				$this->index++;
+			}
 
-        public function iterator(): Iterator
-        {
-            $map = $this->map;
-            $keys = array_keys($map);
-            sort($keys);
-            $length = count($keys);
+			public function key() : int
+			{
+				return $this->index;
+			}
 
-            return new class($keys, $map, $length) implements Iterator {
-				public array $keys;
-	            public array $map;
-	            public int $length;
-	            public int $index = 0;
+			public function valid() : bool
+			{
+				return $this->index < $this->length;
+			}
 
-                public function __construct(array $keys, array $map, int $length)
-                {
-                    $this->keys = $keys;
-                    $this->map = $map;
-                    $this->length = $length;
-                }
+			public function rewind() : void
+			{
+				$this->index = 0;
+			}
+		};
+	}
 
-                public function current(): mixed
-                {
-                    $key = $this->keys[$this->index];
-                    return new HDict_MapEntry($key, $this->map[$key]);
-                }
+	//////////////////////////////////////////////////////////////////////////
+	// MapEntry
+	//////////////////////////////////////////////////////////////////////////
 
-                public function next(): void
-                {
-                    $this->index++;
-                }
+	/**
+	 * Create immutable Map.Entry for given name/value tag pair
+	 *
+	 * @param string $key
+	 * @param HVal   $val
+	 *
+	 * @return HDict\MapEntry
+	 */
+	public function toEntry(string $key, HVal $val) : MapEntry
+	{
+		return new MapEntry($key, $val);
+	}
 
-                public function key(): mixed
-                {
-                    return $this->index;
-                }
-
-                public function valid(): bool
-                {
-                    return $this->index < $this->length;
-                }
-
-                public function rewind(): void
-                {
-                    $this->index = 0;
-                }
-            };
-        }
-
-
-    //////////////////////////////////////////////////////////////////////////
-    // MapEntry
-    //////////////////////////////////////////////////////////////////////////
-
-    /** Create Map.Entry for given name/value tag pair */
-    public static function toEntry(string $key, HVal $val): HDict_MapEntry
-    {
-        return new HDict_MapEntry($key, $val);
-    }
 }
 
-readonly class HDict_MapEntry
-{
-    public function __construct(
-        public string $key,
-        public HVal $mapVal
-    ) {}
 
-    public function getKey(): string
+// Immutable object so can be safely passed around
+    class MapEntry
     {
-        return $this->key;
+        private string $key;
+        private HVal $val;
+
+        public function __construct(string $key, HVal $val)
+        {
+            $this->key = $key;
+            $this->val = $val;
+        }
+
+        public function getKey(): string
+        {
+            return $this->key;
+        }
+
+        public function getValue(): HVal
+        {
+            return $this->val;
+        }
+
+        public function equals(MapEntry $that): bool
+        {
+            return ($this->key === $that->key) && ($this->val === $that->val);
+        }
     }
 
-    public function getValue(): HVal
-    {
-        return $this->mapVal;
-    }
-
-    public function equals(HDict_MapEntry $that): bool
-    {
-        return ($this->key === $that->key) && ($this->mapVal === $that->mapVal);
-    }
-}
-
-// Initialize static properties
-HDict::$EMPTY = new MapImpl([]);
-HDict::initTagChars();
+	// Init static properties & methods
+HDict::init();

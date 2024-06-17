@@ -10,14 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
+    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="Removed logger dependency &amp; standardized namespaces">
+      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/encodingAlgorithmDesign.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackClient.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackClient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HaystackDecoder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HaystackDecoder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/HaystackClientTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackClientTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HaystackEncoderTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,26 +94,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.CodyAccountHistoryMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyConvertUrlToCodebaseName&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyHistoryLlmMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;dumpAutoload /Users/patrick/Sites/haystack-php/composer.json&quot;: &quot;--no-interaction --ansi --verbose&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/patrick/Sites/haystack-php&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.codegpt.configuration&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.CodyAccountHistoryMigration": "true",
+    "RunOnceActivity.CodyConvertUrlToCodebaseName": "true",
+    "RunOnceActivity.CodyHistoryLlmMigration": "true",
+    "RunOnceActivity.CodyProjectSettingsMigration": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "dumpAutoload /Users/patrick/Sites/haystack-php/composer.json": "--no-interaction --ansi --verbose --optimize",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/patrick/Sites/haystack-php",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
@@ -145,7 +140,11 @@
       <workItem from="1715881908753" duration="20081000" />
       <workItem from="1716081224101" duration="13372000" />
       <workItem from="1716996290719" duration="4050000" />
-      <workItem from="1717006891657" duration="9183000" />
+      <workItem from="1717006891657" duration="10559000" />
+      <workItem from="1717025933179" duration="6818000" />
+      <workItem from="1717445454225" duration="669000" />
+      <workItem from="1717476315764" duration="5234000" />
+      <workItem from="1718151135520" duration="881000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -419,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717018876589</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Removed logger dependency &amp; standardized namespaces">
+      <option name="closed" value="true" />
+      <created>1717022565838</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1717022565838</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -453,10 +460,19 @@
     <MESSAGE value="Updating namespaces and required dependencies" />
     <MESSAGE value="Refactoring client methods" />
     <MESSAGE value="Removed logger dependency" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed logger dependency" />
+    <MESSAGE value="Removed logger dependency &amp; standardized namespaces" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed logger dependency &amp; standardized namespaces" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [
+    {
+    },
+    {
+    },
+    {
+    },
+    {
+    },
     {
     },
     {

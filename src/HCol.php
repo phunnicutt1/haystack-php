@@ -9,54 +9,64 @@ namespace Cxalloy\Haystack;
  *
  * @see <a href='http://project-haystack.org/doc/Grids'>Project Haystack</a>
  */
-class HCol
-{
-    public int $index;
-    public string $name;
-    public HDict $meta;
+class HCol {
 
-    /** Package private constructor */
-    public function __construct(int $index, string $name, HDict $meta)
-    {
-        $this->index = $index;
-        $this->name = $name;
-        $this->meta = $meta;
-    }
+	private int    $index;
+	private string $uname;
+	private HDict  $dict;
 
-    /** Return programmatic name of column */
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	public function __construct(int $index, string $uname, HDict $dict)
+	{
+		$this->index = $index;
+		$this->uname = $uname;
+		$this->dict  = $dict;
+	}
 
-    /** Return display name of column which is meta.dis or name */
-    public function getDisplayName(): string
-    {
-        $dis = $this->meta->get('dis', false);
-        if ($dis instanceof HStr) {
-            return $dis->val;
-        }
-        return $this->name;
-    }
+	/**
+	 * Return programmatic name of column
+	 *
+	 * @return string
+	 */
+	public function name() : string
+	{
+		return $this->uname;
+	}
 
-    /** Column meta-data tags */
-    public function getMeta(): HDict
-    {
-        return $this->meta;
-    }
+	/**
+	 * Column meta-data tags
+	 *
+	 * @return HDict
+	 */
+	public function meta() : HDict
+	{
+		return $this->dict;
+	}
 
-    /** Hash code is based on name and meta */
-    public function hashCode(): int
-    {
-        return (hash('crc32', $this->name) << 13) ^ $this->meta->hashCode();
-    }
+	/**
+	 * Return display name of column which is dict.dis or uname
+	 *
+	 * @return string
+	 */
+	public function dis() : string
+	{
+		$dis = $this->dict->get('dis', FALSE);
+		if ($dis instanceof HStr)
+		{
+			return $dis->val();
+		}
 
-    /** Equality is name and meta */
-    public function equals(object $that): bool
-    {
-        if (!$that instanceof HCol) {
-            return false;
-        }
-        return $this->name === $that->name && $this->meta->equals($that->meta);
-    }
+		return $this->uname;
+	}
+
+	/**
+	 * Equality is name and meta
+	 *
+	 * @param HCol $that - object to be compared to
+	 *
+	 * @return bool
+	 */
+	public function equals($that) : bool
+	{
+		return $that instanceof HCol && $this->uname === $that->uname && $this->dict->equals($that->dict);
+	}
 }

@@ -1,149 +1,151 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Cxalloy\Haystack;
-use UnknownNameException;
-use IteratorAggregate;
 use Iterator;
 
 /**
- * HRow is a row in an HGrid. It implements the HDict interface also.
- *
+ * HRow is a row in a HGrid. It implements the HDict interface also.
  * @see <a href='http://project-haystack.org/doc/Grids'>Project Haystack</a>
  */
-class HRow extends HDict implements IteratorAggregate
+class HRow extends HDict
 {
-    public HGrid $grid;
-    public array $cells;
+    private HGrid $ugrid;
+    private array $cells;
 
-    /** Package private constructor */
     public function __construct(HGrid $grid, array $cells)
     {
-        $this->grid = $grid;
+        $this->ugrid = $grid;
         $this->cells = $cells;
     }
 
-    /** Get the grid associated with this row */
+    /**
+     * Get the grid associated with this row
+     * @return HGrid
+     */
     public function grid(): HGrid
     {
-        return $this->grid;
+        return $this->ugrid;
     }
 
-    /** Number of columns in grid (which may map to null cells) */
+    /**
+     * Number of columns in grid (which may map to null cells)
+     * @return int
+     */
     public function size(): int
     {
-        return count($this->grid->cols());
+        return count($this->ugrid->cols);
     }
 
-    /** Get a cell by column name. If the column is undefined or
-        the cell is null then raise UnknownNameException or return
-        null based on checked flag. */
-    public function get(string $name, bool $checked = true): ?HVal
+    /**
+     * Get a cell by column. If cell is null then raise
+     * Error or return null based on checked flag.
+     * @param string|HCol $col
+     * @param bool $checked
+     * @return HVal|null
+     * @throws \Exception
+     */
+    public function get($col, bool $checked = true): ?HVal
     {
-        $col = $this->grid->col($name, false);
-        if ($col !== null) {
+        if ($col instanceof HCol) {
             $val = $this->cells[$col->index] ?? null;
             if ($val !== null) {
                 return $val;
             }
-        }
-        if ($checked) {
-            throw new \Exception( 'Unknown Name Exception Name = ' . $name);
-        }
-        return null;
-    }
-
-    /** Get a cell by column. If cell is null then raise
-        UnknownNameException or return null based on checked flag. */
-    public function getByCol(HCol $col, bool $checked = true): ?HVal
-    {
-        $val = $this->cells[$col->index] ?? null;
-        if ($val !== null) {
-            return $val;
-        }
-        if ($checked) {
-            throw new UnknownNameException($col->name());
-        }
-        return null;
-    }
-
-    /** Return Map.Entry name/value iterator which only includes
-        non-null cells */
-    public function getIterator(): Iterator
-    {
-        return new RowIterator($this->grid, $this->cells);
-    }
-}
-
-class RowIterator implements Iterator
-{
-    public HGrid $grid;
-    public array $cells;
-    public int $col = 0;
-
-    public function __construct(HGrid $grid, array $cells)
-    {
-        $this->grid = $grid;
-        $this->cells = $cells;
-        $this->advanceToNextNonNull();
-    }
-
-    private function advanceToNextNonNull(): void
-    {
-        while ($this->col < count($this->grid->cols()) && $this->cells[$this->col] === null) {
-            $this->col++;
+            if ($checked) {
+                throw new \Exception($col->name());
+            }
+            return null;
+        } else {
+            // Get a cell by column name
+            $name = $col;
+            $col = $this->ugrid->col($name, false);
+            if ($col !== null) {
+                $val = $this->cells[$col->index] ?? null;
+                if ($val !== null) {
+                    return $val;
+                }
+            }
+            if ($checked) {
+                throw new \Exception($name);
+            }
+            return null;
         }
     }
 
-    public function current(): MapEntry
+    /**
+     * Return Map.Entry name/value iterator which only includes non-null cells
+     * @return \Iterator
+     */
+    public function iterator(): \Iterator
     {
-        $name = $this->grid->col($this->col)->name();
-        $val = $this->cells[$this->col];
-        return new MapEntry($name, $val);
+        $col = 0;
+        while ($col < count($this->ugrid->cols)) {
+            if (isset($this->cells[$col]) && $this->cells[$col] !== null) {
+                break;
+            }
+            $col++;
+        }
+
+        $grid = $this->ugrid;
+        $cells = $this->cells;
+
+        return new class($grid, $cells, $col) implements \Iterator {
+            private HGrid $grid;
+            private array $cells;
+            private int $col;
+
+            public function __construct(HGrid $grid, array $cells, int $col)
+            {
+                $this->grid = $grid;
+                $this->cells = $cells;
+                $this->col = $col;
+            }
+
+            public function current(): MapEntry
+            {
+                if ($this->col >= count($this->grid->cols)) {
+                    throw new \Exception("No Such Element");
+                }
+
+                $name = $this->grid->col($this->col)->name();
+                $val = $this->cells[$this->col];
+
+                $this->col++;
+                while ($this->col < count($this->grid->cols)) {
+                    if (isset($this->cells[$this->col]) && $this->cells[$this->col] !== null) {
+                        break;
+                    }
+                    $this->col++;
+                }
+
+                return new MapEntry($name, $val);
+            }
+
+            public function next(): void
+            {
+                $this->col++;
+            }
+
+            public function key(): int
+            {
+                return $this->col;
+            }
+
+            public function valid(): bool
+            {
+                return $this->col < count($this->grid->cols);
+            }
+
+            public function rewind(): void
+            {
+                $this->col = 0;
+            }
+        };
     }
 
-    public function next(): void
-    {
-        $this->col++;
-        $this->advanceToNextNonNull();
-    }
-
-    public function key(): int
-    {
-        return $this->col;
-    }
-
-    public function valid(): bool
-    {
-        return $this->col < count($this->grid->cols());
-    }
-
-    public function rewind(): void
-    {
-        $this->col = 0;
-        $this->advanceToNextNonNull();
-    }
-}
-
-class MapEntry
-{
-    public string $key;
-    public HVal $value;
-
-    public function __construct(string $key, HVal $value)
-    {
-        $this->key = $key;
-        $this->value = $value;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getValue(): HVal
-    {
-        return $this->value;
-    }
+	public function toJSON() : string
+	{
+		throw new Error('UnsupportedOperationException');
+	}
 }

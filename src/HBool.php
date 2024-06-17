@@ -18,7 +18,7 @@ class HBool extends HVal
     public static HBool $FALSE;
 
     /** Boolean value */
-    public readonly bool $val;
+    public  bool $val;
 
     /** Construct from boolean value */
     public static function make(bool $val): self
@@ -27,7 +27,7 @@ class HBool extends HVal
     }
 
     /** Private constructor */
-    private function __construct(bool $val)
+    public function __construct(bool $val)
     {
         $this->val = $val;
     }

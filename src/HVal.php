@@ -1,21 +1,12 @@
 <?php
-
 declare(strict_types=1);
 namespace Cxalloy\Haystack;
 
-/**
- * HVal is the base class for representing haystack tag scalar values as an immutable class.
- *
- * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
- */
-abstract class HVal implements \JsonSerializable, \Stringable
-{
-    // Package private constructor
-    protected function __construct() {}
 
+abstract class HVal
+{
     /**
-     * String format is for human consumption only.
-     *
+     * String format is for human consumption only
      * @return string
      */
     public function __toString(): string
@@ -24,52 +15,77 @@ abstract class HVal implements \JsonSerializable, \Stringable
     }
 
     /**
-     * Encode value to zinc format.
-     *
+     * Return sort order as negative, 0, or positive
+     * @param HVal $that - HVal to compare to
+     * @return int
+     */
+    public function compareTo(HVal $that): int
+    {
+        return strcmp($this->toString(), $that->toString());
+    }
+
+    /**
+     * Encode value to zinc format
+     * @abstract
      * @return string
      */
     abstract public function toZinc(): string;
 
     /**
-     * Encode to JSON string value.
-     *
+     * Encode value to JSON format
+     * @abstract
      * @return string
      */
-    abstract public function toJson(): string;
+    abstract public function toJSON(): string;
 
     /**
-     * Hash code is value based.
-     *
-     * @return int
-     */
-    abstract public function hashCode(): int;
-
-    /**
-     * Equality is value based.
-     *
-     * @param mixed $that
+     * Equality is value based
+     * @abstract
      * @return bool
      */
     abstract public function equals(HVal $that): bool;
 
     /**
-     * Return sort order as negative, 0, or positive.
-     *
-     * @param mixed $that
-     * @return int
+     * Check if a string starts with a given prefix
+     * @param string $s
+     * @param string $prefix
+     * @return bool
      */
-    public function compareTo(HVal $that): int
+    public static function startsWith(string $s, string $prefix): bool
     {
-        return strcmp($this->__toString(), (string)$that);
+        return substr($s, 0, strlen($prefix)) === $prefix;
     }
 
     /**
-     * Specify data which should be serialized to JSON.
-     *
-     * @return mixed
+     * Check if a string ends with a given suffix
+     * @param string $s
+     * @param string $suffix
+     * @return bool
      */
-    public function jsonSerialize(): mixed
+    public static function endsWith(string $s, string $suffix): bool
     {
-        return $this->toJson();
+        return substr($s, -strlen($suffix)) === $suffix;
+    }
+
+    /**
+     * Check the type of a variable
+     * @param mixed $check
+     * @param string $prim
+     * @param string $obj
+     * @return bool
+     */
+    public static function typeis($check, string $prim, string $obj): bool
+    {
+        return gettype($check) === $prim || $check instanceof $obj;
+    }
+
+    /**
+     * Get the character code of a character
+     * @param string $c
+     * @return int
+     */
+    public static function cc(string $c): int
+    {
+        return ord($c);
     }
 }

@@ -67,7 +67,7 @@ class HCsvWriter extends HGridWriter
     {
         if ($val === null) return "";
 
-        if ($val === HMarker::VAL) return "\u2713";
+        if ($val === HMarker::$VAL) return "\u2713";
 
         if ($val instanceof HRef) {
             $ref = $val;
@@ -82,7 +82,7 @@ class HCsvWriter extends HGridWriter
     /** Flush underlying output stream */
     public function flush()
     {
-        $this->out->fflush();
+        $this->out->flush();
     }
 
     /** Close underlying output stream */

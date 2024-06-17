@@ -1,49 +1,64 @@
 <?php
+declare(strict_types=1);
 
 namespace Cxalloy\Haystack;
 
-use RuntimeException;
+use \Exception;
+use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\StreamInterface;
 use InvalidArgumentException;
 
 /**
  * HZincReader reads grids using the Zinc format.
- *
- * @see <a href='http://project-haystack.org/doc/Zinc'>Project Haystack</a>
+ * @see {@link http://project-haystack.org/doc/Zinc|Project Haystack}
  */
-class HZincReader extends HGridReader
+class HZincReader
 {
-    private HaystackTokenizer $tokenizer;
-    private HaystackToken $cur;
-    private mixed $curVal;
-    private int $curLine;
-    private HaystackToken $peek;
-    private mixed $peekVal;
-    private int $peekLine;
-    private int $version = 3;
-    private bool $isTop = true;
+    private ?string $cur = null;
+    private ?string $peek = null;
+    private ?int $version = null;
+    private int $lineNum = 1;
+    private bool $isFilter = false;
+	private StreamInterface $input;
 
-    ////////////////////////////////////////////////////////////////////////
-    // Construction
-    ////////////////////////////////////////////////////////////////////////
 
-    /** Read from UTF-8 input stream. */
-    public function __construct($in)
+
+    public function __construct($i)
     {
-        try {
-            $this->tokenizer = new HaystackTokenizer(new \BufferedReader(new \InputStreamReader($in, "UTF-8")));
-            $this->init();
-        } catch (\IOException $e) {
-            throw $this->err("init failed", $e);
-        }
+        $this->input = $i;
+
+	    if (is_string($i)) {
+		    $this->input = Utils::streamFor($i);
+	    } elseif ($i instanceof StreamInterface) {
+		    $this->input = $i;
+	    } else {
+		    throw new InvalidArgumentException('Invalid input type.  Needs to be a string or a Stream');
+	    }
+
+        $this->init();
     }
 
-    /** Read from in-memory string. */
-    public static function fromString(string $in): self
+    private function err(string $msg, ?Exception $ex = null): Exception
     {
-        $instance = new self(null);
-        $instance->tokenizer = new HaystackTokenizer(new \StringReader($in));
-        $instance->init();
-        return $instance;
+        if (empty($ex) ) {
+	        $ex = new \Exception($msg);
+        }
+
+        return $ex;
+    }
+
+    private function consume(): void
+    {
+        try {
+            $this->cur = $this->peek;
+            $this->peek = $this->input->read(1);
+            if ($this->cur === "\n") {
+                $this->lineNum++;
+            }
+        } catch (Exception $e) {
+            throw $this->err($e);
+        }
     }
 
     private function init(): void
@@ -52,370 +67,854 @@ class HZincReader extends HGridReader
         $this->consume();
     }
 
-    ////////////////////////////////////////////////////////////////////////
-    // Public
-    ////////////////////////////////////////////////////////////////////////
-
-    /** Close underlying input stream */
-    public function close(): void
+    private function done(?string $c): bool
     {
-        $this->tokenizer->close();
+        return $c === null || HVal::cc($c) < 0;
     }
 
-    /** Read a value and auto-close the stream */
-    public function readVal(bool $close = true): HVal
+    private function notdone(?string $c, bool $eq): bool
     {
-        try {
-            $val = null;
-            if ($this->cur === HaystackToken::ID && $this->curVal === "ver") {
-                $val = $this->parseGrid();
-            } else {
-                $val = $this->parseVal();
+        if ($c === null) {
+            return false;
+        }
+        return $eq ? HVal::cc($c) >= 0 : HVal::cc($c) > 0;
+    }
+
+    private function errChar(string $msg): Exception
+    {
+        if ($this->done($this->cur)) {
+            $msg .= " (end of stream)";
+        } else {
+            $msg .= " (char=0x" . dechex(HVal::cc($this->cur));
+            if ($this->cur >= ' ') {
+                $msg .= " '" . $this->cur . "'";
             }
-            $this->verify(HaystackToken::EOF);
-            return $val;
-        } finally {
-            if ($close) {
-                $this->close();
-            }
+            $msg .= ")";
         }
+        return $this->err($msg);
     }
 
-    /** Convenience for {@link #readVal} as Grid */
-    public function readGrid(): HGrid
+    private function skipSpace(): void
     {
-        return $this->readVal(true);
-    }
-
-    /** Read a list of grids separated by blank line from stream */
-    public function readGrids(): array
-    {
-        $acc = [];
-        while ($this->cur === HaystackToken::ID) {
-            $acc[] = $this->parseGrid();
-        }
-        return $acc;
-    }
-
-    /**
-     * Read a set of tags as {@code name:val} pairs separated by space. The
-     * tags may optionally be surrounded by '{' and '}'
-     */
-    public function readDict(): HDict
-    {
-        return $this->parseDict();
-    }
-
-    /**
-     * Read scalar value: Bool, Int, Str, Uri, etc
-     *
-     * @deprecated Will be removed in future release.
-     */
-    public function readScalar(): HVal
-    {
-        return $this->parseVal();
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-    // Utils
-    ////////////////////////////////////////////////////////////////////////
-
-    private function parseVal(): HVal
-    {
-        // if it's an id
-        if ($this->cur === HaystackToken::ID) {
-            $id = $this->curVal;
-            $this->consume(HaystackToken::ID);
-
-            // check for coord or xstr
-            if ($this->cur === HaystackToken::LPAREN) {
-                if ($this->peek === HaystackToken::NUM) {
-                    return $this->parseCoord($id);
-                } else {
-                    return $this->parseXStr($id);
-                }
-            }
-
-            // check for keyword
-            return match ($id) {
-                "T" => HBool::TRUE,
-                "F" => HBool::FALSE,
-                "N" => null,
-                "M" => HMarker::VAL,
-                "NA" => HNA::VAL,
-                "R" => HRemove::VAL,
-                "NaN" => HNum::NaN,
-                "INF" => HNum::POS_INF,
-                default => throw $this->err("Unexpected identifier: " . $id),
-            };
-        }
-
-        // literals
-        if ($this->cur->isLiteral()) {
-            return $this->parseLiteral();
-        }
-
-        // -INF
-        if ($this->cur === HaystackToken::MINUS && $this->peekVal === "INF") {
-            $this->consume(HaystackToken::MINUS);
-            $this->consume(HaystackToken::ID);
-            return HNum::NEG_INF;
-        }
-
-        // nested collections
-        return match ($this->cur) {
-            HaystackToken::LBRACKET => $this->parseList(),
-            HaystackToken::LBRACE => $this->parseDict(),
-            HaystackToken::LT2 => $this->parseGrid(),
-            default => throw $this->err("Unexpected token: " . $this->curToStr()),
-        };
-    }
-
-    private function parseCoord(string $id): HCoord
-    {
-        if ($id !== "C") {
-            throw $this->err("Expecting 'C' for coord, not " . $id);
-        }
-        $this->consume(HaystackToken::LPAREN);
-        $lat = $this->consumeNum();
-        $this->consume(HaystackToken::COMMA);
-        $lng = $this->consumeNum();
-        $this->consume(HaystackToken::RPAREN);
-        return HCoord::make($lat->val, $lng->val);
-    }
-
-    private function parseXStr(string $id): HVal
-    {
-        if (!ctype_upper($id[0])) {
-            throw $this->err("Invalid XStr type: " . $id);
-        }
-        $this->consume(HaystackToken::LPAREN);
-        if ($this->version < 3 && $id === "Bin") {
-            return $this->parseBinObsolete();
-        }
-        $val = $this->consumeStr();
-        $this->consume(HaystackToken::RPAREN);
-        return HXStr::decode($id, $val);
-    }
-
-    private function parseBinObsolete(): HBin
-    {
-        $s = '';
-        while ($this->cur !== HaystackToken::RPAREN && $this->cur !== HaystackToken::EOF) {
-            $s .= $this->curVal ?? $this->cur->dis;
+        while ($this->cur === ' ' || $this->cur === "\t") {
             $this->consume();
         }
-        $this->consume(HaystackToken::RPAREN);
+    }
+
+    private function consumeNewline(): void
+    {
+        if ($this->cur !== "\n") {
+            throw $this->errChar("Expecting newline");
+        }
+        $this->consume();
+    }
+
+    private function readBinVal(): HVal
+    {
+        if ($this->done($this->cur)) {
+            throw $this->err("Expected '(' after Bin");
+        }
+        $this->consume();
+        $s = "";
+        while ($this->cur !== ')') {
+            if ($this->done($this->cur)) {
+                throw $this->err("Unexpected end of bin literal");
+            }
+            if ($this->cur === "\n" || $this->cur === "\r") {
+                throw $this->err("Unexpected newline in bin literal");
+            }
+            $s .= $this->cur;
+            $this->consume();
+        }
+        $this->consume();
         return HBin::make($s);
     }
 
-    private function parseLiteral(): HVal
+    private function readCoordVal(): HVal
     {
-        $val = $this->curVal;
-        if ($this->cur === HaystackToken::REF && $this->peek === HaystackToken::STR) {
-            $val = HRef::make($val->val, $this->peekVal->val);
-            $this->consume(HaystackToken::REF);
+        if ($this->done($this->cur)) {
+            throw $this->err("Expected '(' after Coord");
         }
+        $this->consume();
+        $s = "C(";
+        while ($this->cur !== ')') {
+            if ($this->done($this->cur)) {
+                throw $this->err("Unexpected end of coord literal");
+            }
+            if ($this->cur === "\n" || $this->cur === "\r") {
+                throw $this->err("Unexpected newline in coord literal");
+            }
+            $s .= $this->cur;
+            $this->consume();
+        }
+        $this->consume();
+        $s .= ")";
+        return HCoord::make($s);
+    }
+
+    private function readWordVal(): HVal
+    {
+        $s = "";
+        do {
+            $s .= $this->cur;
+            $this->consume();
+        } while ($this->isAlpha($this->cur));
+
+        if ($this->isFilter) {
+            if ($s === "true") {
+                return HBool::TRUE();
+            }
+            if ($s === "false") {
+                return HBool::FALSE();
+            }
+        } else {
+            if ($s === "N") {
+                return HStr::$EMPTY;
+            }
+            if ($s === "M") {
+                return HMarker::make();
+            }
+            if ($s === "R") {
+                return HRemove::VAL();
+            }
+            if ($s === "T") {
+                return HBool::TRUE();
+            }
+            if ($s === "F") {
+                return HBool::FALSE();
+            }
+            if ($s === "Bin") {
+                return $this->readBinVal();
+            }
+            if ($s === "C") {
+                return $this->readCoordVal();
+            }
+        }
+        if ($s === "NaN") {
+            return HNum::NaN();
+        }
+        if ($s === "INF") {
+            return HNum::POS_INF();
+        }
+        if ($s === "-INF") {
+            return HNum::NEG_INF();
+        }
+        throw $this->err("Unknown value identifier: " . $s);
+    }
+
+    private function readTwoDigits(string $errMsg): int
+    {
+        if (!$this->isDigit($this->cur)) {
+            throw $this->errChar($errMsg);
+        }
+        $tens = (HVal::cc($this->cur) - HVal::cc('0')) * 10;
+        $this->consume();
+        if (!$this->isDigit($this->cur)) {
+            throw $this->errChar($errMsg);
+        }
+        $val = $tens + (HVal::cc($this->cur) - HVal::cc('0'));
         $this->consume();
         return $val;
     }
 
-    private function parseList(): HList
+    private function readNumVal(): HVal
     {
-        $arr = [];
-        $this->consume(HaystackToken::LBRACKET);
-        while ($this->cur !== HaystackToken::RBRACKET && $this->cur !== HaystackToken::EOF) {
-            $arr[] = $this->parseVal();
-            if ($this->cur !== HaystackToken::COMMA) {
-                break;
-            }
-            $this->consume(HaystackToken::COMMA);
-        }
-        $this->consume(HaystackToken::RBRACKET);
-        return HList::make($arr);
-    }
-
-    private function parseDict(): HDict
-    {
-        $db = new HDictBuilder();
-        $braces = $this->cur === HaystackToken::LBRACE;
-        if ($braces) {
-            $this->consume(HaystackToken::LBRACE);
-        }
-        while ($this->cur === HaystackToken::ID) {
-            // tag name
-            $id = $this->consumeTagName();
-            if (!ctype_lower($id[0])) {
-                throw $this->err("Invalid dict tag name: " . $id);
-            }
-
-            // tag value
-            $val = HMarker::VAL;
-            if ($this->cur === HaystackToken::COLON) {
-                $this->consume(HaystackToken::COLON);
-                $val = $this->parseVal();
-            }
-            $db->add($id, $val);
-        }
-        if ($braces) {
-            $this->consume(HaystackToken::RBRACE);
-        }
-        return $db->toDict();
-    }
-
-    private function parseGrid(): HGrid
-    {
-        $nested = $this->cur === HaystackToken::LT2;
-        if ($nested) {
-            $this->consume(HaystackToken::LT2);
-            if ($this->cur === HaystackToken::NL) {
-                $this->consume(HaystackToken::NL);
-            }
-        }
-
-        // ver:"3.0"
-        if ($this->cur !== HaystackToken::ID || $this->curVal !== "ver") {
-            throw $this->err("Expecting grid 'ver' identifier, not " . $this->curToStr());
-        }
+        $s = $this->cur;
         $this->consume();
-        $this->consume(HaystackToken::COLON);
-        $this->version = $this->checkVersion($this->consumeStr());
-
-        // grid meta
-        $gb = new HGridBuilder();
-        if ($this->cur === HaystackToken::ID) {
-            $gb->meta()->add($this->parseDict());
-        }
-        $this->consume(HaystackToken::NL);
-
-        // column definitions
-        $numCols = 0;
-        while ($this->cur === HaystackToken::ID) {
-            ++$numCols;
-            $name = $this->consumeTagName();
-            $colMeta = HDict::EMPTY;
-            if ($this->cur === HaystackToken::ID) {
-                $colMeta = $this->parseDict();
+        while ($this->isDigit($this->cur) || $this->cur === '.' || $this->cur === '_') {
+            if ($this->cur !== '_') {
+                $s .= $this->cur;
             }
-            $gb->addCol($name)->add($colMeta);
-            if ($this->cur !== HaystackToken::COMMA) {
-                break;
+            $this->consume();
+            if ($this->cur === 'e' || $this->cur === 'E') {
+                if ($this->peek === '-' || $this->peek === '+' || $this->isDigit($this->peek)) {
+                    $s .= $this->cur;
+                    $this->consume();
+                    $s .= $this->cur;
+                    $this->consume();
+                }
             }
-            $this->consume(HaystackToken::COMMA);
         }
-        if ($numCols === 0) {
-            throw $this->err("No columns defined");
-        }
-        $this->consume(HaystackToken::NL);
+        $val = floatval($s);
 
-        // grid rows
-        while (true) {
-            if ($this->cur === HaystackToken::NL || $this->cur === HaystackToken::EOF || ($nested && $this->cur === HaystackToken::GT2)) {
-                break;
+        $date = null;
+        $time = null;
+        $hour = -1;
+        if ($this->cur === '-') {
+            $year = $this->_parseInt($s, "Invalid year for date value: ");
+            $this->consume();
+            $month = $this->readTwoDigits("Invalid digit for month in date value");
+            if ($this->cur !== '-') {
+                throw $this->errChar("Expected '-' for date value");
+            }
+            $this->consume();
+            $day = $this->readTwoDigits("Invalid digit for day in date value");
+            $date = HDate::make($year, $month, $day);
+
+            if ($this->cur !== 'T') {
+                return $date;
             }
 
-            // read cells
-            $cells = array_fill(0, $numCols, null);
-            for ($i = 0; $i < $numCols; ++$i) {
-                if ($this->cur === HaystackToken::COMMA || $this->cur === HaystackToken::NL || $this->cur === HaystackToken::EOF) {
-                    $cells[$i] = null;
+            $this->consume();
+            $hour = $this->readTwoDigits("Invalid digit for hour in date time value");
+        }
+
+        if ($this->cur === ':') {
+            if ($hour < 0) {
+                if (strlen($s) !== 2) {
+                    throw $this->err("Hour must be two digits for time value: " . $s);
+                }
+                $hour = $this->_parseInt($s, "Invalid hour for time value: ");
+            }
+            $this->consume();
+            $min = $this->readTwoDigits("Invalid digit for minute in time value");
+            if ($this->cur !== ':') {
+                throw $this->errChar("Expected ':' for time value");
+            }
+            $this->consume();
+            $sec = $this->readTwoDigits("Invalid digit for seconds in time value");
+            $ms = 0;
+            if ($this->cur === '.') {
+                $this->consume();
+                $places = 0;
+                while ($this->isDigit($this->cur)) {
+                    $ms = ($ms * 10) + (HVal::cc($this->cur) - HVal::cc('0'));
+                    $this->consume();
+                    $places++;
+                }
+                switch ($places) {
+                    case 1:
+                        $ms *= 100;
+                        break;
+                    case 2:
+                        $ms *= 10;
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        throw $this->err("Too many digits for milliseconds in time value");
+                }
+            }
+            $time = HTime::make($hour, $min, $sec, $ms);
+            if ($date === null) {
+                return $time;
+            }
+        }
+
+        if ($date !== null) {
+            $tzOffset = 0;
+            if ($this->cur === 'Z') {
+                $this->consume();
+                $tz = HTimeZone::UTC();
+            } else {
+                $neg = ($this->cur === '-');
+                if ($this->cur !== '-' && $this->cur !== '+') {
+                    throw $this->errChar("Expected -/+ for timezone offset");
+                }
+                $this->consume();
+                $tzHours = $this->readTwoDigits("Invalid digit for timezone offset");
+                if ($this->cur !== ':') {
+                    throw $this->errChar("Expected colon for timezone offset");
+                }
+                $this->consume();
+                $tzMins = $this->readTwoDigits("Invalid digit for timezone offset");
+                $tzOffset = ($tzHours * 3600) + ($tzMins * 60);
+                if ($neg) {
+                    $tzOffset = -$tzOffset;
+                }
+                $tz = null;
+                if ($this->cur !== ' ') {
+                    if (!isset($tz)) {
+                        throw $this->errChar("Expected space between timezone offset and name");
+                    }
                 } else {
-                    $cells[$i] = $this->parseVal();
+                    $this->consume();
+                    $tzBuf = "";
+                    if (!$this->isTz($this->cur)) {
+                        throw $this->errChar("Expected timezone name");
+                    }
+                    while ($this->isTz($this->cur)) {
+                        $tzBuf .= $this->cur;
+                        $this->consume();
+                    }
+                    $tz = HTimeZone::make($tzBuf);
                 }
-                if ($i + 1 < $numCols) {
-                    $this->consume(HaystackToken::COMMA);
-                }
+                return HDateTime::make($date, $time, $tz, $tzOffset);
             }
-            $gb->addRow($cells);
+        }
 
-            // newline or end
-            if ($nested && $this->cur === HaystackToken::GT2) {
+        $unit = null;
+        if ($this->isUnit($this->cur)) {
+            $s = "";
+            while ($this->isUnit($this->cur)) {
+                $s .= $this->cur;
+                $this->consume();
+            }
+            $unit = $s;
+        }
+
+        return HNum::make($val, $unit);
+    }
+
+    private function _parseInt(string $val, string $errMsg): int
+    {
+        try {
+            return intval($val);
+        } catch (Exception $e) {
+            throw $this->err($errMsg . $val);
+        }
+    }
+
+    private function readTimeMs(): int
+    {
+        return 0;
+    }
+
+
+
+    private function readRefVal(): HVal
+    {
+        $this->consume();
+        $s = "";
+        while (HRef::isIdChar(HVal::cc($this->cur))) {
+            if ($this->done($this->cur)) {
+                throw $this->err("Unexpected end of ref literal");
+            }
+            if ($this->cur === "\n" || $this->cur === "\r") {
+                throw $this->err("Unexpected newline in ref literal");
+            }
+            $s .= $this->cur;
+            $this->consume();
+        }
+        $this->skipSpace();
+        $dis = null;
+        if ($this->cur === '"') {
+            $dis = $this->readStrLiteral();
+        }
+        return HRef::make($s, $dis);
+    }
+
+    private function readStrVal(): HVal
+    {
+        return HStr::make($this->readStrLiteral());
+    }
+
+    private function readUriVal(): HVal
+    {
+        $this->consume();
+        $s = "";
+        while (true) {
+            if ($this->done($this->cur)) {
+                throw $this->err("Unexpected end of uri literal");
+            }
+            if ($this->cur === "\n" || $this->cur === "\r") {
+                throw $this->err("Unexpected newline in uri literal");
+            }
+            if ($this->cur === '`') {
                 break;
             }
-            if ($this->cur === HaystackToken::EOF) {
-                break;
+            if ($this->cur === '\\') {
+                switch (HVal::cc($this->peek)) {
+                    case HVal::cc(':'):
+                    case HVal::cc('/'):
+                    case HVal::cc('?'):
+                    case HVal::cc('#'):
+                    case HVal::cc('['):
+                    case HVal::cc(']'):
+                    case HVal::cc('@'):
+                    case HVal::cc('\\'):
+                    case HVal::cc('&'):
+                    case HVal::cc('='):
+                    case HVal::cc(';'):
+                        $s .= $this->cur;
+                        $s .= $this->peek;
+                        $this->consume();
+                        $this->consume();
+                        break;
+                    case HVal::cc('`'):
+                        $s .= '`';
+                        $this->consume();
+                        $this->consume();
+                        break;
+                    default:
+                        if ($this->peek === 'u' || $this->peek === '\\') {
+                            $s .= chr($this->readEscChar());
+                        } else {
+                            throw $this->err("Invalid URI escape sequence \\" . $this->peek);
+                        }
+                        break;
+                }
+            } else {
+                $s .= $this->cur;
+                $this->consume();
             }
-            $this->consume(HaystackToken::NL);
         }
-
-        if ($this->cur === HaystackToken::NL) {
-            $this->consume(HaystackToken::NL);
-        }
-        if ($nested) {
-            $this->consume(HaystackToken::GT2);
-        }
-        return $gb->toGrid();
+        $this->consume();
+        return HUri::make($s);
     }
 
-    private function checkVersion(string $s): int
-    {
-        return match ($s) {
-            "3.0" => 3,
-            "2.0" => 2,
-            default => throw $this->err("Unsupported version " . $s),
-        };
-    }
+	private function readVal() : HVal
+	{
+		if ($this->isDigit($this->cur))
+		{
+			return $this->readNumVal();
+		}
+		if ($this->isAlpha($this->cur))
+		{
+			return $this->readWordVal();
+		}
+		switch(HVal::cc($this->cur))
+		{
+			case HVal::cc('@'):
+				return $this->readRefVal();
+			case HVal::cc('"'):
+				return $this->readStrVal();
+			case HVal::cc('`'):
+				return $this->readUriVal();
+			case HVal::cc('-'):
+				if (HVal::cc($this->peek) === HVal::cc('I'))
+				{
+					return $this->readWordVal();
+				}
 
-    ////////////////////////////////////////////////////////////////////////
-    // Token Reads
-    ////////////////////////////////////////////////////////////////////////
+				return $this->readNumVal();
+			default:
+				throw $this->errChar('Unexpected char for start of value');
+		}
+	}
 
-    private function consumeTagName(): string
-    {
-        $this->verify(HaystackToken::ID);
-        $id = $this->curVal;
-        if (empty($id) || !ctype_lower($id[0])) {
-            throw $this->err("Invalid dict tag name: " . $id);
-        }
-        $this->consume(HaystackToken::ID);
-        return $id;
-    }
+	public function readScalar() : HVal
+	{
+		$val = $this->readVal();
+		if ($this->notdone($this->cur, TRUE))
+		{
+			throw $this->errChar('Expected end of stream');
+		}
 
-    private function consumeNum(): HNum
-    {
-        $this->verify(HaystackToken::NUM);
-        $num = $this->curVal;
-        $this->consume(HaystackToken::NUM);
-        return $num;
-    }
+		return $val;
+	}
 
-    private function consumeStr(): string
-    {
-        $this->verify(HaystackToken::STR);
-        $val = $this->curVal->val;
-        $this->consume(HaystackToken::STR);
-        return $val;
-    }
+	private function readId() : string
+	{
+		if ( ! $this->isIdStart($this->cur))
+		{
+			throw $this->errChar('Invalid name start char');
+		}
+		$s = '';
+		while ($this->isId($this->cur))
+		{
+			$s .= $this->cur;
+			$this->consume();
+		}
 
-    private function verify(HaystackToken $expected): void
-    {
-        if ($this->cur !== $expected) {
-            throw $this->err("Expected " . $expected . " not " . $this->curToStr());
-        }
-    }
+		return $s;
+	}
 
-    private function curToStr(): string
-    {
-        return $this->curVal !== null ? $this->cur . " " . $this->curVal : (string)$this->cur;
-    }
+	private function readVer() : void
+	{
+		$id = $this->readId();
+		if ($id !== 'ver')
+		{
+			throw $this->err("Expecting zinc header 'ver:3.0', not '" . $id . "'");
+		}
+		if ($this->cur !== ':')
+		{
+			throw $this->err("Expecting ':' colon");
+		}
+		$this->consume();
+		$ver = $this->readStrLiteral();
+		if ($ver === '2.0')
+		{
+			$this->version = 2;
+		}
+		else
+		{
+			throw $this->err('Unsupported zinc version: ' . $ver);
+		}
+		$this->skipSpace();
+	}
 
-    private function consume(?HaystackToken $expected = null): void
-    {
-        if ($expected !== null) {
-            $this->verify($expected);
-        }
+	private function readMeta(HDictBuilder $b) : void
+	{
+		while ($this->isIdStart($this->cur))
+		{
+			$name = $this->readId();
+			$val  = HMarker::make();
+			$this->skipSpace();
+			if ($this->cur === ':')
+			{
+				$this->consume();
+				$this->skipSpace();
+				$val = $this->readVal();
+				$this->skipSpace();
+			}
+			$b->add($name, $val);
+			$this->skipSpace();
+		}
+	}
 
-        $this->cur = $this->peek;
-        $this->curVal = $this->peekVal;
-        $this->curLine = $this->peekLine;
+	public function readGrid() : HGrid
+	{
+		try {
+			$b = new HGridBuilder();
+			//$this->readVer();
+			$this->readMeta($b->meta());
+			$this->consumeNewline();
+			$numCols = 0;
+			while (true) {
+				$name = $this->readId();
+				$this->skipSpace();
+				$numCols++;
+				$this->readMeta($b->addCol($name));
+				if ($this->cur !== ',') {
+					break;
+				}
+				$this->consume();
+				$this->skipSpace();
+			}
+			$this->consumeNewline();
+			while ($this->cur !== '\n' && $this->notdone($this->cur, false)) {
+				$cells = array_fill(0, $numCols, null);
+				for ($i = 0; $i < $numCols; ++$i) {
+					$this->skipSpace();
+					if ($this->cur !== ',' && $this->cur !== '\n') {
+						$cells[$i] = $this->readVal();
+					}
+					$this->skipSpace();
+					if ($i + 1 < $numCols) {
+						if ($this->cur !== ',') {
+							throw $this->errChar('Expecting comma in row');
+						}
+						$this->consume();
+					}
+				}
+				$this->consumeNewline();
+				$b->addRow($cells);
+			}
+			if ($this->cur === '\n') {
+				$this->consumeNewline();
+			}
+			return $b->toGrid();
+		} catch (Exception $err) {
+			throw $err;
+		}
+	}
 
-        $this->peek = $this->tokenizer->next();
-        $this->peekVal = $this->tokenizer->val;
-        $this->peekLine = $this->tokenizer->line;
-    }
+	public function readGrids() : array
+	{
+		$this->_readGrid([]);
+	}
 
-    private function err(string $msg, ?\Exception $e = null): ParseException
-    {
-        return new ParseException($msg . " [line " . $this->curLine . "]", $e);
-    }
+	private function _readGrid(array $acc) : array
+	{
+		while ($this->notdone($this->cur, false)) {
+			try {
+				$grid = $this->readGrid();
+				$acc[] = $grid;
+			} catch (Exception $err) {
+				throw $err;
+			}
+		}
+		return $acc;
+	}
+
+	public function readDict(callable $callback) : void
+	{
+		try
+		{
+			$b = new HDictBuilder();
+			$this->readMeta($b);
+			if ($this->notdone($this->cur, TRUE))
+			{
+				throw $this->errChar('Expected end of stream');
+			}
+			$callback(NULL, $b->toDict());
+		}
+		catch(Exception $err)
+		{
+			$callback($err);
+		}
+	}
+
+	private function readFilterAnd() : HFilter
+	{
+		$q = $this->readFilterAtomic();
+		$this->skipSpace();
+		if ($this->cur !== 'a')
+		{
+			return $q;
+		}
+		if ($this->readId() !== 'and')
+		{
+			throw $this->err("Expecting 'and' keyword");
+		}
+		$this->skipSpace();
+
+		return $q->and($this->readFilterAnd());
+	}
+
+	private function readFilterOr() : HFilter
+	{
+		$q = $this->readFilterAnd();
+		$this->skipSpace();
+		if ($this->cur !== 'o')
+		{
+			return $q;
+		}
+		if ($this->readId() !== 'or')
+		{
+			throw $this->err("Expecting 'or' keyword");
+		}
+		$this->skipSpace();
+
+		return $q->or($this->readFilterOr());
+	}
+
+	private function readFilterParens() : HFilter
+	{
+		$this->consume();
+		$this->skipSpace();
+		$q = $this->readFilterOr();
+		if ($this->cur !== ')')
+		{
+			throw $this->err("Expecting ')'");
+		}
+		$this->consume();
+
+		return $q;
+	}
+
+	private function consumeCmp() : void
+	{
+		$this->consume();
+		if ($this->cur === '=')
+		{
+			$this->consume();
+		}
+		$this->skipSpace();
+	}
+
+	private function readFilterPath() : string
+	{
+		$id = $this->readId();
+		if ($this->cur !== '-' || $this->peek !== '>')
+		{
+			return $id;
+		}
+		$s     = $id;
+		$acc   = [];
+		$acc[] = $id;
+		while ($this->cur === '-' || $this->peek === '>')
+		{
+			$this->consume();
+			$this->consume();
+			$id    = $this->readId();
+			$acc[] = $id;
+			$s     .= '-' . '>' . $id;
+		}
+
+		return $s;
+	}
+
+	private function readFilterAtomic() : HFilter
+	{
+		$this->skipSpace();
+		if ($this->cur === '(')
+		{
+			return $this->readFilterParens();
+		}
+		$path = $this->readFilterPath();
+		$this->skipSpace();
+		if ($path === 'not')
+		{
+			return HFilter::missing($this->readFilterPath());
+		}
+		if ($this->cur === '=' && $this->peek === '=')
+		{
+			$this->consumeCmp();
+
+			return HFilter::eq($path, $this->readVal());
+		}
+		if ($this->cur === '!' && $this->peek === '=')
+		{
+			$this->consumeCmp();
+
+			return HFilter::ne($path, $this->readVal());
+		}
+		if ($this->cur === '<' && $this->peek === '=')
+		{
+			$this->consumeCmp();
+
+			return HFilter::le($path, $this->readVal());
+		}
+		if ($this->cur === '>' && $this->peek === '=')
+		{
+			$this->consumeCmp();
+
+			return HFilter::ge($path, $this->readVal());
+		}
+		if ($this->cur === '<')
+		{
+			$this->consumeCmp();
+
+			return HFilter::lt($path, $this->readVal());
+		}
+		if ($this->cur === '>')
+		{
+			$this->consumeCmp();
+
+			return HFilter::gt($path, $this->readVal());
+		}
+
+		return HFilter::has($path);
+	}
+
+	public function readFilter() : HFilter
+	{
+		$this->isFilter = TRUE;
+		$this->skipSpace();
+		$q = $this->readFilterOr();
+		$this->skipSpace();
+		if ($this->notdone($this->cur, TRUE))
+		{
+			throw $this->errChar('Expected end of stream');
+		}
+
+		return $q;
+	}
+
+	// Helper functions
+	private function isDigit(?string $c) : bool
+	{
+		return $c !== NULL && ctype_digit($c);
+	}
+
+	private function isAlpha(?string $c) : bool
+	{
+		return $c !== NULL && ctype_alpha($c);
+	}
+
+	private function isIdStart(?string $c) : bool
+	{
+		return $c !== NULL && (ctype_alpha($c) || $c === '_');
+	}
+
+	private function isId(?string $c) : bool
+	{
+		return $c !== NULL && (ctype_alnum($c) || $c === '_' || $c === '-');
+	}
+
+	private function isTz(?string $c) : bool
+	{
+		return $c !== NULL && (ctype_alnum($c) || $c === '/' || $c === '_' || $c === '-');
+	}
+
+	private function isUnit(?string $c) : bool
+	{
+		return $c !== NULL && (ctype_alpha($c) || $c === '%' || $c === '/' || $c === '_' || $c === '-' || $c === '*');
+	}
+
+	private function readStrLiteral() : string
+	{
+		$this->consume();
+		$s = '';
+		while ($this->cur !== '"')
+		{
+			if ($this->done($this->cur))
+			{
+				throw $this->err('Unexpected end of str literal');
+			}
+			if ($this->cur === "\n" || $this->cur === "\r")
+			{
+				throw $this->err('Unexpected newline in str literal');
+			}
+			if ($this->cur === '\\')
+			{
+				$s .= chr($this->readEscChar());
+			}
+			else
+			{
+				$s .= $this->cur;
+				$this->consume();
+			}
+		}
+		$this->consume();
+
+		return $s;
+	}
+
+	private function readEscChar() : int
+	{
+		$this->consume();
+		switch(HVal::cc($this->cur))
+		{
+			case HVal::cc('b'):
+				$this->consume();
+
+				return HVal::cc('\b');
+			case HVal::cc('f'):
+				$this->consume();
+
+				return HVal::cc("\f");
+			case HVal::cc('n'):
+				$this->consume();
+
+				return HVal::cc("\n");
+			case HVal::cc('r'):
+				$this->consume();
+
+				return HVal::cc("\r");
+			case HVal::cc('t'):
+				$this->consume();
+
+				return HVal::cc("\t");
+			case HVal::cc('"'):
+				$this->consume();
+
+				return HVal::cc('"');
+			case HVal::cc('$'):
+				$this->consume();
+
+				return HVal::cc('$');
+			case HVal::cc('\\'):
+				$this->consume();
+
+				return HVal::cc('\\');
+		}
+
+		if ($this->cur === 'u')
+		{
+			$this->consume();
+			$n3 = $this->toNibble($this->cur);
+			$this->consume();
+			$n2 = $this->toNibble($this->cur);
+			$this->consume();
+			$n1 = $this->toNibble($this->cur);
+			$this->consume();
+			$n0 = $this->toNibble($this->cur);
+			$this->consume();
+
+			return ($n3 << 12) | ($n2 << 8) | ($n1 << 4) | $n0;
+		}
+
+		throw $this->err("Invalid escape sequence: \\" . $this->cur);
+	}
+
+	private function toNibble(string $c) : int
+	{
+		$c = HVal::cc($c);
+		if (HVal::cc('0') <= $c && $c <= HVal::cc('9'))
+		{
+			return $c - HVal::cc('0');
+		}
+		if (HVal::cc('a') <= $c && $c <= HVal::cc('f'))
+		{
+			return $c - HVal::cc('a') + 10;
+		}
+		if (HVal::cc('A') <= $c && $c <= HVal::cc('F'))
+		{
+			return $c - HVal::cc('A') + 10;
+		}
+		throw $this->errChar('Invalid hex char');
+	}
 }

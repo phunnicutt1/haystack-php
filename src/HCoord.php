@@ -33,7 +33,7 @@ class HCoord extends HVal
     }
 
     /** Package private constructor */
-    private function __construct(int $ulat, int $ulng)
+    public function __construct(int $ulat, int $ulng)
     {
         if ($ulat < -90000000 || $ulat > 90000000) {
             throw new InvalidArgumentException("Invalid lat > +/- 90");
