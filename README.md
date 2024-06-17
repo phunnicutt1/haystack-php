@@ -22,8 +22,8 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 ## Features
 
 - **REST API Communication**: Enables sending requests to and receiving responses from Skyspark servers via REST API.
-- **Data Encoding and Decoding**: Supports encoding PHP arrays into the Zinc format and decoding Zinc formatted strings back into PHP arrays, adhering to the Project Haystack specifications.
-- **Extensible Design**: The library is designed for easy extension and integration with other systems or applications requiring Skyspark server communication.
+- **Data Encoding and Decoding**: Supports encoding the custom data objects provided by this library into the Zinc & JSON formated strings for transmission via the API. There is also support for decoding Zinc & JSON formatted strings back into PHP Haystack HGrid objects that have support for all Haystack custom data types.  This is a PHP implmentation of the Project Haystack datatypes, adhering to the Project Haystack specifications.
+- **Extensible Design**: The library is designed for easy extension and integration with other systems or applications requiring Skyspark server communication or that has a Project Haystack compatible API.
 - **Error Handling**: Implements robust error handling mechanisms for request failures and data encoding/decoding issues.
 
 ## Getting Started
@@ -37,7 +37,7 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 
 1. **Install Dependencies**: Run `composer install` to install the required packages, including GuzzleHTTP.
 2. **Configuration**: Configure the base URI and authentication details for your Skyspark server in the `HaystackClient` class constructor.
-3. **Usage**: Use the `HaystackClient` class to send requests to your Skyspark server. Data to be sent should be encoded using the `HaystackEncoder` class, and responses can be decoded with the `HaystackDecoder` class.
+3. **Usage**: Use one of these classes: `HJsonWriter`, `HJsonReader`, HZincReader & HZincWriter to consume an encoded string or create an encoded string representing a haystack-php HGrid object to send requests to your Skyspark server. This HGrid object can contain all other haystack-php objects including  nested HGrids, HLists and HDicts.  
 
 ### License
 
