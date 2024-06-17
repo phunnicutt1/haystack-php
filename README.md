@@ -36,8 +36,7 @@ This library provides functionalities to encode and decode Zinc and JSON encoded
 ### Quickstart
 
 1. **Install Dependencies**: Run `composer install` to install the required packages, including GuzzleHTTP.
-2. **Configuration**: Configure the base URI and authentication details for your Skyspark server in the `HaystackClient` class constructor.
-3. **Usage**: Use one of these classes: `HJsonWriter`, `HJsonReader`, HZincReader & HZincWriter to consume an encoded string or create an encoded string representing a haystack-php HGrid object to send requests to your Skyspark server. This HGrid object can contain all other haystack-php objects including  nested HGrids, HLists and HDicts.  
+2. **Usage**: Use one of these classes: `HJsonWriter`, `HJsonReader`, HZincReader & HZincWriter to consume an encoded string or create an encoded string representing a haystack-php HGrid object to send requests to your Skyspark server. This HGrid object can contain all other haystack-php objects including  nested HGrids, HLists and HDicts.  
 
 ### License
 
