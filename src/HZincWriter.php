@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cxalloy\Haystack;
 
 use Exception;
-use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Psr7\Stream;
 
 /**
  * HZincWriter is used to write grids in the Zinc format
@@ -16,7 +16,7 @@ class HZincWriter extends HGridWriter
 
 	public function __construct()
 	{
-		$this->out = new \GuzzleHttp\Psr7\Stream(fopen('php://temp', 'r+'));
+		$this->out = new Stream(fopen('php://temp', 'r+'));
 	}
 
 	/**
