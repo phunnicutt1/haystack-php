@@ -10,9 +10,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="Removed logger dependency &amp; standardized namespaces">
+    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="Fixed a couple of bugs in the HDictBuilder and working on completing the HZincWriter">
+      <change afterPath="$PROJECT_DIR$/.idea/haystack-php.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDictBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDictBuilder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincWriter.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,26 +98,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.CodyAccountHistoryMigration": "true",
-    "RunOnceActivity.CodyConvertUrlToCodebaseName": "true",
-    "RunOnceActivity.CodyHistoryLlmMigration": "true",
-    "RunOnceActivity.CodyProjectSettingsMigration": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "dumpAutoload /Users/patrick/Sites/haystack-php/composer.json": "--no-interaction --ansi --verbose --optimize",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/patrick/Sites/haystack-php",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "php.override.implement.member.chooser.php.doc": "NONE",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.CodyAccountHistoryMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.CodyConvertUrlToCodebaseName&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.CodyHistoryLlmMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;dumpAutoload /Users/patrick/Sites/haystack-php/composer.json&quot;: &quot;--no-interaction --ansi --verbose --optimize&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/patrick/Sites/haystack-php&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
@@ -145,6 +149,8 @@
       <workItem from="1717445454225" duration="669000" />
       <workItem from="1717476315764" duration="5234000" />
       <workItem from="1718151135520" duration="881000" />
+      <workItem from="1718635870298" duration="459000" />
+      <workItem from="1719514225764" duration="294000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -461,10 +467,15 @@
     <MESSAGE value="Refactoring client methods" />
     <MESSAGE value="Removed logger dependency" />
     <MESSAGE value="Removed logger dependency &amp; standardized namespaces" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed logger dependency &amp; standardized namespaces" />
+    <MESSAGE value="Fixed a couple of bugs in the HDictBuilder and working on completing the HZincWriter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a couple of bugs in the HDictBuilder and working on completing the HZincWriter" />
   </component>
   <component name="WfRunsListSearchHistory"><![CDATA[{
   "history": [
+    {
+    },
+    {
+    },
     {
     },
     {

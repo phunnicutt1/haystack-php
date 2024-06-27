@@ -12,11 +12,11 @@ use Psr\Http\Message\StreamInterface;
  */
 class HZincWriter extends HGridWriter
 {
-	private StreamInterface $out;
+	private Stream $out;
 
-	public function __construct(StreamInterface $o)
+	public function __construct()
 	{
-		$this->out = $o;
+		$this->out = new \GuzzleHttp\Psr7\Stream(fopen('php://temp', 'r+'));
 	}
 
 	/**
@@ -80,11 +80,9 @@ class HZincWriter extends HGridWriter
 	/**
 	 * Write a grid
 	 * @param HGrid $grid
-	 * @param callable $callback
 	 */
-	public function writeGrid(HGrid $grid, callable $callback): void
+	public function writeGrid(HGrid $grid): void
 	{
-		$cb = true;
 		try {
 			// meta
 			$this->out->write("ver:\"3.0\"");
@@ -106,29 +104,35 @@ class HZincWriter extends HGridWriter
 				$this->out->write("\n");
 			}
 
-			$cb = false;
 			$this->out->close();
-			$callback(null);
 		} catch (Exception $err) {
 			$this->out->close();
-			if ($cb) {
-				$callback($err);
-			}
+			throw $err;
 		}
 	}
 
 	/**
 	 * Write a grid to a string
 	 * @param HGrid $grid
-	 * @param callable $callback
-	 * @return void
+	 * @return string
 	 */
-	public static function gridToString(HGrid $grid, callable $callback): void
+	public static function gridToString(HZincWriter $self, HGrid $grid): string
 	{
-		$out = new \GuzzleHttp\Psr7\Stream(fopen('php://temp', 'r+'));
-		(new HZincWriter($out))->writeGrid($grid, function ($err) use ($out, $callback) {
-		$out->rewind();
-		$callback($err, $out->getContents());
-		});
+
+		$self->writeGrid($grid);
+		$self->out->rewind();
+		return $self->out->getContents();
 	}
+
+	public function flush() : void
+	{
+		return;
+	}
+
+	/** Close underlying output stream */
+	public function close() : void
+	{
+		return;
+	}
+
 }

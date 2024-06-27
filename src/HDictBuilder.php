@@ -87,7 +87,7 @@ class HDictBuilder
     public function toDict(): HDict
     {
         if ($this->map === null || $this->isEmpty()) {
-            return HDict::EMPTY();
+            return HDict::$EMPTY;
         }
         $dict = new MapImpl($this->map);
         $this->map = null;
