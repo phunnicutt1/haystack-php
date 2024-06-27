@@ -4,7 +4,7 @@ Haystack-PHP is a PHP library designed to facilitate communication with Skyspark
 
 ## Overview
 
-The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP for sending HTTP requests and handling responses. The library provides functionalities to encode and decode data according to the Project Haystack standards, specifically targeting the interaction with Skyspark servers managing IoT data. The project is structured around key components including the `HaystackClient.php` class for initializing the HTTP client and handling requests, as well as `HaystackEncoder.php` and `HaystackDecoder.php` for data encoding and decoding. This setup ensures a robust and extensible codebase for easy integration with Skyspark servers.
+This library provides functionalities to encode and decode Zinc and JSON encoded strings, creating library specific objects in PHP from these strings.  This setup ensures a robust and extensible codebase for easy integration 3rd party software systems interfacing with Skyspark or other haystack compatible servers.  This library has been scaled back to simply be an implmentation of the Project Haystack spec in PHP.  This library supports all the custom haystack datatypes, the filtering and the full haystack specifications for defs, tagging, taxonomy and ontology. 
 
 ### Technologies Used:
 
@@ -14,7 +14,7 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 
 ### Project Structure:
 
-- `src/`: Contains the source code with the main classes for client initialization, request handling, and data encoding/decoding.
+- `src/`: Contains the source code with the main classes for haystack-php objects, error handling, JSON/Zinc reading & writing.
 - `tests/`: Includes unit tests for testing the functionality of the classes.
 - `docs/`: Documentation on the encoding algorithm and Zinc format research.
 - `composer.json`: Manages project dependencies.
@@ -22,8 +22,8 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 ## Features
 
 - **REST API Communication**: Enables sending requests to and receiving responses from Skyspark servers via REST API.
-- **Data Encoding and Decoding**: Supports encoding PHP arrays into the Zinc format and decoding Zinc formatted strings back into PHP arrays, adhering to the Project Haystack specifications.
-- **Extensible Design**: The library is designed for easy extension and integration with other systems or applications requiring Skyspark server communication.
+- **Data Encoding and Decoding**: Supports encoding the custom data objects provided by this library into the Zinc & JSON formated strings for transmission via the API. There is also support for decoding Zinc & JSON formatted strings back into PHP Haystack HGrid objects that have support for all Haystack custom data types.  This is a PHP implmentation of the Project Haystack datatypes, adhering to the Project Haystack specifications.
+- **Extensible Design**: The library is designed for easy extension and integration with other systems or applications requiring Skyspark server communication or that has a Project Haystack compatible API.
 - **Error Handling**: Implements robust error handling mechanisms for request failures and data encoding/decoding issues.
 
 ## Getting Started
@@ -35,9 +35,8 @@ The architecture of Haystack-PHP involves a PHP package that utilizes GuzzleHTTP
 
 ### Quickstart
 
-1. **Install Dependencies**: Run `composer install` to install the required packages, including GuzzleHTTP.
-2. **Configuration**: Configure the base URI and authentication details for your Skyspark server in the `HaystackClient` class constructor.
-3. **Usage**: Use the `HaystackClient` class to send requests to your Skyspark server. Data to be sent should be encoded using the `HaystackEncoder` class, and responses can be decoded with the `HaystackDecoder` class.
+1. **Install Dependencies**: Run `composer require cxalloy/haystack-php` to install the required packages, including GuzzleHTTP.
+2. **Usage**: Use one of these classes: `HJsonWriter`, `HJsonReader`, `HZincReader` & `HZincWriter` to consume an encoded string or create an encoded string representing a haystack-php HGrid object to send requests to your Skyspark server. This HGrid object can contain all other haystack-php objects including  nested HGrids, HLists and HDicts.  
 
 ### License
 
