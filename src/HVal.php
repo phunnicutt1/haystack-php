@@ -43,7 +43,7 @@ abstract class HVal
      * @abstract
      * @return bool
      */
-    abstract public function equals(HVal $that): bool;
+    abstract public function equals(mixed $that): bool;
 
     /**
      * Check if a string starts with a given prefix

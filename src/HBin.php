@@ -16,56 +16,68 @@ class HBin extends HVal
     /** MIME type for binary file */
     public readonly string $mime;
 
-    /** Construct for MIME type */
-    public static function make(string $mime): self
+    /** Private constructor */
+    private function __construct(string $mime)
+    {
+        $this->mime = $mime;
+    }
+
+    /**
+     * Construct for MIME type
+     *
+     * @param string $mime
+     * @return HBin
+     */
+    public static function make(string $mime): HBin
     {
         if (empty($mime) || strpos($mime, '/') === false) {
             throw new InvalidArgumentException("Invalid mime val: \"$mime\"");
         }
+
         return new self($mime);
     }
 
-    /** Private constructor */
-    public function __construct(string $mime)
-    {
-        self::verifyMime($mime);
-        $this->mime = $mime;
-    }
-
-    /** Hash code is based on mime field */
-    public function hashCode(): int
-    {
-        return hash('sha256', $this->mime);
-    }
-
-    /** Equals is based on mime field */
-    public function equals(object $that): bool
-    {
-        if (!$that instanceof self) {
-            return false;
-        }
-        return $this->mime === $that->mime;
-    }
-
-    /** Encode as {@code "b:<mime>"} */
-    public function toJson(): string
-    {
-        return 'b:' . $this->mime;
-    }
-
-    /** Encode as {@code Bin("<mime>")} */
+    /**
+     * Encode as "Bin(<mime>)"
+     *
+     * @return string
+     */
     public function toZinc(): string
     {
-        return 'Bin("' . $this->mime . '")';
+        return "Bin(" . $this->parse($this->mime) . ")";
     }
 
-    private static function verifyMime(string $mime): void
+    /**
+     * Encode as "b:<mime>"
+     *
+     * @return string
+     */
+    public function toJSON(): string
     {
-        for ($i = 0, $len = strlen($mime); $i < $len; ++$i) {
-            $c = ord($mime[$i]);
-            if ($c > 127 || $c === ord(')')) {
-                throw new InvalidArgumentException("Invalid mime, char='" . chr($c) . "'");
+        return "b:" . $this->parse($this->mime);
+    }
+
+    private function parse(string $mime): string
+    {
+        $s = "";
+        for ($i = 0; $i < strlen($mime); ++$i) {
+            $c = $mime[$i];
+            if (ord($c) > 127 || $c === ')') {
+                throw new InvalidArgumentException("Invalid mime, char='$c'");
             }
+            $s .= $c;
         }
+        return $s;
+    }
+
+    /**
+     * Equals is based on mime field
+     *
+     * @param HBin $that
+     * @return bool
+     */
+    public function equals(HBin $that): bool
+    {
+        return $this->mime === $that->mime;
     }
 }
