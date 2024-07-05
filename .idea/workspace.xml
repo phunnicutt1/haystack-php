@@ -10,9 +10,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
+    <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="Updated the HZincReader to correctly parse dates, times and timezones correctly.">
       <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTimeZone.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HVal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HVal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HZincReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/alpha.zinc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bravo.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,21 +39,21 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "phunnicutt1"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;phunnicutt1&quot;
   }
-}]]></component>
+}</component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/phunnicutt1/haystack-php.git",
-    "accountId": "73bc046b-33d4-4622-8884-ba7965ddd38d"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/phunnicutt1/haystack-php.git&quot;,
+    &quot;accountId&quot;: &quot;73bc046b-33d4-4622-8884-ba7965ddd38d&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -135,6 +142,13 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PS-241.18034.69" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -160,6 +174,8 @@
       <workItem from="1718635870298" duration="459000" />
       <workItem from="1719514225764" duration="488000" />
       <workItem from="1719888036390" duration="37000" />
+      <workItem from="1719934695085" duration="75000" />
+      <workItem from="1720197204943" duration="7142000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
@@ -457,7 +473,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719514690442</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Fixed some bugs in various classes">
+      <option name="closed" value="true" />
+      <created>1719934755108</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1719934755108</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -494,7 +518,9 @@
     <MESSAGE value="Removed logger dependency &amp; standardized namespaces" />
     <MESSAGE value="Fixed a couple of bugs in the HDictBuilder and working on completing the HZincWriter" />
     <MESSAGE value="Fixed a couple of bugs in the HZincWriter" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a couple of bugs in the HZincWriter" />
+    <MESSAGE value="Fixed some bugs in various classes" />
+    <MESSAGE value="Updated the HZincReader to correctly parse dates, times and timezones correctly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated the HZincReader to correctly parse dates, times and timezones correctly." />
   </component>
   <component name="WfRunsListSearchHistory">{
   &quot;history&quot;: [

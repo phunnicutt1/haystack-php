@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cxalloy\Haystack;
 
 use DateTimeZone;
+use Exception;
 use RuntimeException;
 
 /**
@@ -11,178 +14,204 @@ use RuntimeException;
  *
  * @see <a href='http://project-haystack.org/doc/TimeZones'>Project Haystack</a>
  */
-final class HTimeZone
-{
-    /** Haystack timezone name */
-    public string $name;
+final class HTimeZone {
 
-    /** PHP representation of this timezone. */
-    public DateTimeZone $php;
+	/** Haystack timezone name */
+	public string $name;
 
-    /** Cache for Haystack name -> HTimeZone */
-    private static array $cache = [];
+	/** PHP representation of this timezone. */
+	public DateTimeZone $php;
 
-    /** Haystack name <-> PHP name mapping */
-    private static array $toPhp = [];
-    private static array $fromPhp = [];
+	/** Cache for Haystack name -> HTimeZone */
+	private static array $cache = [];
 
-    /** UTC timezone */
-    public static HTimeZone $UTC;
+	/** Haystack name <-> PHP name mapping */
+	private static array $toPhp   = [];
+	private static array $fromPhp = [];
 
-    /** Rel timezone */
-    public static HTimeZone $REL;
+	/** UTC timezone */
+	public static HTimeZone $UTC;
 
-    /** Default timezone for VM */
-    public static HTimeZone $DEFAULT;
+	/** Default timezone */
+	public static ?HTimeZone $DEFAULT = NULL;
 
-    /** Convenience for make(name, true) */
-    public static function make(string $name): HTimeZone
-    {
-        return self::makeChecked($name, true);
-    }
+	/** Private constructor */
+	private function __construct(string $name, ?DateTimeZone $php)
+	{
+		$this->name = $name;
+		$this->php  = $php;
+	}
 
-    /**
-     * Construct with Haystack timezone name, raise exception or
-     * return null on error based on check flag.
-     */
-    public static function makeChecked(string $name, bool $checked): ?HTimeZone
-    {
-        if (isset(self::$cache[$name])) {
-            return self::$cache[$name];
-        }
+	/**
+	 * Return Haystack timezone name
+	 *
+	 * @return string
+	 */
+	public function __toString() : string
+	{
+		return $this->name;
+	}
 
-        $phpId = self::$toPhp[$name] ?? null;
-        if ($phpId === null) {
-            if ($checked) {
-                throw new RuntimeException("Unknown tz: " . $name);
-            }
-            return null;
-        }
+	/**
+	 * Equals is based on name
+	 *
+	 * @param HTimeZone $that
+	 *
+	 * @return bool
+	 */
+	public function equals(HTimeZone $that) : bool
+	{
+		return $this->name === $that->name;
+	}
 
-        $php = new DateTimeZone($phpId);
-        $tz = new HTimeZone($name, $php);
-        self::$cache[$name] = $tz;
-        return $tz;
-    }
+	private static function fixGMT(string $phpId) : string
+	{
+		// PHP IDs can be in the form "GMT[+,-]h" as well as "GMT", and "GMT0".
+		// In that case, convert the ID to "Etc/GMT[+,-]h".
+		if ( ! str_contains($phpId, '+') && ! str_contains($phpId, '-'))
+		{
+			return "Etc/$phpId";
+		}
 
-    /** Convenience for make(php, true) */
-    public static function makeFromPhp(DateTimeZone $php): HTimeZone
-    {
-        return self::makeFromPhpChecked($php, true);
-    }
+		// Get the numeric value and inverse it
+		$num = -intval(substr($phpId, 3, 3));
 
-    /**
-     * Construct from PHP timezone. Throw exception or return
-     * null based on checked flag.
-     */
-    public static function makeFromPhpChecked(DateTimeZone $php, bool $checked): ?HTimeZone
-    {
-        $phpId = $php->getName();
+		// Ensure we have a valid value
+		if ((substr($phpId, 3, 1) === '-' && $num < 13) || (substr($phpId, 3, 1) === '+' && $num < 15))
+		{
+			return "Etc/GMT" . ($num > 0 ? '+' : '') . $num;
+		}
 
-        if (str_starts_with($phpId, "GMT") && str_ends_with($phpId, ":00")) {
-            $phpId = substr($phpId, 0, -3);
-            if (str_starts_with($phpId, "GMT-0")) {
-                $phpId = "GMT-" . substr($phpId, 5);
-            } elseif (str_starts_with($phpId, "GMT+0")) {
-                $phpId = "GMT+" . substr($phpId, 5);
-            }
-            $phpId = "Etc/" . $phpId;
-        }
+		// Nothing we could do, return what was passed
+		return $phpId;
+	}
 
-        $name = self::$fromPhp[$phpId] ?? null;
-        if ($name !== null) {
-            return self::make($name);
-        }
-        if ($checked) {
-            throw new RuntimeException("Invalid PHP timezone: " . $php->getName());
-        }
-        return null;
-    }
+	/**
+	 * Construct with Haystack timezone name, raise exception or return null on error based on check flag.
+	 *
+	 * @param string|DateTimeZone $arg1
+	 * @param bool                $checked
+	 *
+	 * @return HTimeZone|null
+	 */
+	public static function make(string|DateTimeZone $arg1, bool $checked = FALSE) : ?HTimeZone
+	{
+		if (is_string($arg1))
+		{
+			// Lookup in cache
+			if (isset(self::$cache[$arg1]))
+			{
+				return new HTimeZone($arg1, new DateTimeZone(self::$cache[$arg1]));
+			}
 
-    /** Private constructor */
-    private function __construct(string $name, DateTimeZone $php)
-    {
-        $this->name = $name;
-        $this->php = $php;
-    }
+			// Map haystack id to PHP full id
+			$phpId = self::$toPhp[$arg1] ?? NULL;
+			if ($phpId === NULL)
+			{
+				if ($checked)
+				{
+					throw new RuntimeException("Unknown tz: $arg1");
+				}
 
-    /** Return Haystack timezone name */
-    public function __toString(): string
-    {
-        return $this->name;
-    }
+				return NULL;
+			}
 
-    private static function initializeMappings(): void
-    {
-        $toPhp = [];
-        $fromPhp = [];
+			if ($arg1 === 'UTC')
+			{
+				return new HTimeZone('UTC', new DateTimeZone('UTC'));
+			}
 
-        $regions = [
-            "Africa" => true,
-            "America" => true,
-            "Antarctica" => true,
-            "Asia" => true,
-            "Atlantic" => true,
-            "Australia" => true,
-            "Etc" => true,
-            "Europe" => true,
-            "Indian" => true,
-            "Pacific" => true,
-        ];
+			// Resolve full id to HTimeZone and cache
+			if ($phpId !== NULL)
+			{
+				self::$cache[$arg1] = $phpId;
 
-        foreach (DateTimeZone::listIdentifiers() as $php) {
-            $slash = strpos($php, '/');
-            if ($slash === false) {
-                continue;
-            }
-            $region = substr($php, 0, $slash);
-            if (!isset($regions[$region])) {
-                continue;
-            }
+				return new HTimeZone($arg1, new DateTimeZone($phpId));
+			}
+		}
+		elseif ($arg1 instanceof DateTimeZone)
+		{
+			$tz_name = $arg1->getName();
+			if (str_starts_with($tz_name, "GMT"))
+			{
+				$tz_name = self::fixGMT($tz_name);
 
-            $slash = strrpos($php, '/');
-            $haystack = substr($php, $slash + 1);
+				return new HTimeZone($tz_name, $arg1);
+			}
 
-            $toPhp[$haystack] = $php;
-            $fromPhp[$php] = $haystack;
-        }
+			$name = self::$fromPhp[$tz_name] ?? NULL;
+			if ($name !== NULL)
+			{
+				return new HTimeZone($name, $arg1);
+			}
+			if ($checked)
+			{
+				throw new RuntimeException("Invalid PHP timezone: " . $tz_name);
+			}
 
-        // Special handling for Etc/Rel which PHP does not understand.
-        // It treats Etc/Rel as GMT. Note that Etc/GMT will map to phpId Etc/GMT
-        // whereas Etc/Rel will map to phpId GMT
-        $toPhp["Rel"] = "GMT";
-        $fromPhp["GMT"] = "Rel";
+			return NULL;
+		}
+		else
+		{
+			throw new Exception('Invalid argument type for make method');
+		}
 
-        self::$toPhp = $toPhp;
-        self::$fromPhp = $fromPhp;
-    }
+		return NULL;
+	}
 
-    public static function init(): void
-    {
-        self::initializeMappings();
+	public static function initialize() : void
+	{
+		$regions = [
+			'Africa'     => 'ok',
+			'America'    => 'ok',
+			'Antarctica' => 'ok',
+			'Asia'       => 'ok',
+			'Atlantic'   => 'ok',
+			'Australia'  => 'ok',
+			'Etc'        => 'ok',
+			'Europe'     => 'ok',
+			'Indian'     => 'ok',
+			'Pacific'    => 'ok',
+		];
 
-        self::$UTC = self::makeChecked("Etc/UTC", true);
-        self::$REL = self::makeChecked("Etc/Rel", true);
+		$ids = DateTimeZone::listIdentifiers();
+		foreach ($ids as $phpId)
+		{
+			// Skip ids not formatted as Region/City
+			$slash = strpos($phpId, '/');
+			if ($slash === FALSE)
+			{
+				continue;
+			}
+			$region = substr($phpId, 0, $slash);
+			if ( ! isset($regions[$region]))
+			{
+				continue;
+			}
 
-        $default = null;
-        $defaultName = getenv("haystack.tz");
-        if ($defaultName !== false) {
-            $default = self::makeChecked($defaultName, false);
-            if ($default === null) {
-                echo "WARN: invalid haystack.tz environment variable: " . $defaultName . PHP_EOL;
-            }
-        }
+			// Get city name as haystack id
+			$slash    = strrpos($phpId, '/');
+			$haystack = substr($phpId, $slash + 1);
 
-        if ($default === null) {
-            $default = self::makeFromPhpChecked(new DateTimeZone(date_default_timezone_get()), false);
-        }
+			// Store mapping b/w PHP <-> Haystack
+			self::$toPhp[$haystack] = $phpId;
+			self::$fromPhp[$phpId]  = $haystack;
+		}
 
-        if ($default === null) {
-            $default = self::$UTC;
-        }
+		self::$UTC = self::make('UTC', FALSE);
 
-        self::$DEFAULT = $default;
-    }
+		$def = NULL;
+		$def = self::make('America/New_York', FALSE);
+
+		if (self::$DEFAULT === NULL)
+		{
+			//self::$UTC = self::make('UTC', FALSE);
+			self::$DEFAULT = self::make('America/New_York', FALSE);
+			// $date = new \DateTime();
+			// $def = self::make(self::$fromPhp[self::fixGMT($date->format('T'))]);
+		}
+	}
 }
 
-HTimeZone::init();
+// Initialize the static properties
+HTimeZone::initialize();
