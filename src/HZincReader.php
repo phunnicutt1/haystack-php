@@ -7,6 +7,9 @@ namespace Cxalloy\Haystack;
 use Exception;
 use GuzzleHttp\Psr7\Stream;
 use RuntimeException;
+use DateTimeZone;
+use DateTime;
+use Cxalloy\Haystack\HTimeZone;
 
 class HZincReader {
 
@@ -528,14 +531,16 @@ class HZincReader {
 				}
 				else
 				{
-					$tz = HTimeZone::$UTC;
+					$utc_timezone = new DateTimeZone('UTC');
+					$tz = HTimeZone::make($utc_timezone);
 				}
 			}
 			else
 			{
 				if ($zUtc && ! (ord('A') <= ord($this->peek) && ord($this->peek) <= ord('Z')))
 				{
-					$tz = HTimeZone::$UTC;
+					$utc_timezone = new DateTimeZone('UTC');
+					$tz = HTimeZone::make($utc_timezone);
 				}
 				else
 				{
