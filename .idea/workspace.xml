@@ -11,20 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e6f4318-b128-4d2f-bf9f-db999a66453a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cody_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cody_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCol.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCol.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HCoord.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HCoord.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTime.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDateTimeRange.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDateTimeRange.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HDict.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HDict.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HGrid.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HGrid.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRef.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRef.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HRow.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HRow.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTime.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HTimeZone.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTimeZone.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HZincWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/HZincWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +168,7 @@
       <workItem from="1719888036390" duration="37000" />
       <workItem from="1719934695085" duration="75000" />
       <workItem from="1720197204943" duration="7788000" />
-      <workItem from="1720542632426" duration="339000" />
+      <workItem from="1720542632426" duration="665000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing translation errors from porting the code">
       <option name="closed" value="true" />
