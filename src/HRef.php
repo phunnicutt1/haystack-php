@@ -12,7 +12,7 @@ namespace Cxalloy\Haystack;
 class HRef extends HVal {
 
 	/** @var string String identifier for reference */
-	private string $val;
+	public string $val;
 
 	/** @var ?string Display name for reference or null */
 	private ?string $display;

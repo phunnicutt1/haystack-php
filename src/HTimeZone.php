@@ -26,11 +26,11 @@ final class HTimeZone {
 	private static array $cache = [];
 
 	/** Haystack name <-> PHP name mapping */
-	private static array $toPhp   = [];
-	private static array $fromPhp = [];
+	public static array $toPhp   = [];
+	public static array $fromPhp = [];
 
 	/** UTC timezone */
-	public static HTimeZone $UTC;
+	public static ?HTimeZone $UTC = NULL;
 
 	/** Default timezone */
 	public static ?HTimeZone $DEFAULT = NULL;

@@ -358,7 +358,7 @@ abstract class HDict extends HVal
 				$s .= " ";
 			}
 			$s .= $name;
-			if ($val !== HMarker::$VAL())
+			if ($val !== HMarker::$VAL)
 			{
 				$s .= ":" . $val->toZinc();
 			}

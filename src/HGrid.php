@@ -12,10 +12,10 @@ use \Exception;
  */
 class HGrid
 {
-    private HDict $dict;
+    public HDict $dict;
     public array  $cols;
-    private array $rows;
-    private array $colsByName;
+    public array $rows;
+    public array $colsByName;
 
     /**
      * HGrid constructor.

@@ -477,6 +477,26 @@
                   </llm>
                 </llm>
               </chat>
+              <chat>
+                <internalId value="3a7a8fab-6336-4b5b-afc9-8dcc74282e8d" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4o" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4o" />
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="ae1ad0e9-c75a-4f54-b8f8-2ced58efc29c" />
+                <llm>
+                  <llm>
+                    <model value="openai/gpt-4o" />
+                    <provider value="OpenAI" />
+                    <title value="GPT-4o" />
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>

@@ -31,26 +31,29 @@ class HDateTime extends HVal {
 	public ?int      $mils   = NULL;
 
 	/** Private constructor */
-	private function __construct(HDate $date, HTime $time, HTimeZone $tz, int $tzOffset)
+	public function __construct(HDate $date, HTime $time, HTimeZone $tz, int $tzOffset)
 	{
 		$this->date     = $date;
 		$this->time     = $time;
 		$this->tz       = $tz;
 		$this->tzOffset = $tzOffset;
+
+		$this->moment = $this->getMomentDate($this->date, $this->time, $this->tz);
+		$this->mils   = (int) $this->moment->getTimestamp() * 1000;
 	}
 
-	/** Get this date time as Java milliseconds since epoch */
+	/** Get this date time as milliseconds since epoch */
 	public function millis() : int
 	{
 		if ($this->mils === NULL || $this->mils <= 0)
 		{
-			$this->mils = (int) $this->getMomentDate($this->date, $this->time, $this->tz)->getTimestamp() * 1000;
+			$this->mils = (int) $this->moment->getTimestamp() * 1000;
 		}
 
 		return $this->mils;
 	}
 
-	private function getMomentDate(HDate $date, HTime $time, HTimeZone $tz) : DateTime
+	public function getMomentDate(HDate $date, HTime $time, HTimeZone $tz) : DateTime
 	{
 		$ds = sprintf(
 			'%04d-%02d-%02d %02d:%02d:%02d.%03d',
@@ -63,7 +66,7 @@ class HDateTime extends HVal {
 			$time->ms
 		);
 
-		return new DateTime($ds, new DateTimeZone($tz->name));
+		return new DateTime($ds, new DateTimeZone($tz->php->getName()));
 	}
 
 	/** Encode as "YYYY-MM-DD'T'hh:mm:ss.FFFz zzzz" */
@@ -150,7 +153,7 @@ class HDateTime extends HVal {
 		}
 	}
 
-	private static function makeFromComponents(int $year, int $month, int $day, int $hour, int $min, int $sec, HTimeZone $tz, int $tzOffset) : HDateTime
+	public static function makeFromComponents(int $year, int $month, int $day, int $hour, int $min, int $sec, HTimeZone $tz, int $tzOffset) : HDateTime
 	{
 		$date = HDate::make($year, $month, $day);
 		$time = HTime::make($hour, $min, $sec);
@@ -158,7 +161,7 @@ class HDateTime extends HVal {
 		return new self($date, $time, $tz, $tzOffset);
 	}
 
-	private static function makeFromMillis(int $millis, HTimeZone $tz) : HDateTime
+	public static function makeFromMillis(int $millis, HTimeZone $tz) : HDateTime
 	{
 		$dt       = (new DateTime('@' . ($millis / 1000)))->setTimezone(new DateTimeZone($tz->name));
 		$date     = HDate::make((int) $dt->format('Y'), (int) $dt->format('m'), (int) $dt->format('d'));
@@ -168,7 +171,7 @@ class HDateTime extends HVal {
 		return new self($date, $time, $tz, $tzOffset);
 	}
 
-	private static function makeFromString(string $str) : HDateTime
+	public static function makeFromString(string $str) : HDateTime
 	{
 		$val = (new HZincReader($str))->readScalar();
 		if ($val instanceof HDateTime)

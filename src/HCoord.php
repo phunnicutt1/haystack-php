@@ -11,164 +11,182 @@ use InvalidArgumentException;
  *
  * @see <a href='http://project-haystack.org/doc/TagModel#tagKinds'>Project Haystack</a>
  */
-class HCoord extends HVal
-{
-    /** Latitude in micro-degrees */
-    public readonly int $ulat;
+class HCoord extends HVal {
 
-    /** Longitude in micro-degrees */
-    public readonly int $ulng;
+	/** Latitude in micro-degrees */
+	public readonly int $ulat;
 
-    /** Private constructor */
-    private function __construct(int $ulat, int $ulng)
-    {
-        if ($ulat < -90000000 || $ulat > 90000000) {
-            throw new InvalidArgumentException("Invalid lat > +/- 90");
-        }
-        if ($ulng < -180000000 || $ulng > 180000000) {
-            throw new InvalidArgumentException("Invalid lng > +/- 180");
-        }
+	/** Longitude in micro-degrees */
+	public readonly int $ulng;
 
-        $this->ulat = $ulat;
-        $this->ulng = $ulng;
-    }
+	/** Private constructor */
+	private function __construct(int $ulat, int $ulng)
+	{
+		if ($ulat < -90000000 || $ulat > 90000000)
+		{
+			throw new InvalidArgumentException("Invalid lat > +/- 90");
+		}
+		if ($ulng < -180000000 || $ulng > 180000000)
+		{
+			throw new InvalidArgumentException("Invalid lng > +/- 180");
+		}
 
-    /**
-     * Latitude in decimal degrees
-     *
-     * @return float
-     */
-    public function lat(): float
-    {
-        return $this->ulat / 1000000.0;
-    }
+		$this->ulat = $ulat;
+		$this->ulng = $ulng;
+	}
 
-    /**
-     * Longitude in decimal degrees
-     *
-     * @return float
-     */
-    public function lng(): float
-    {
-        return $this->ulng / 1000000.0;
-    }
+	/**
+	 * Latitude in decimal degrees
+	 *
+	 * @return float
+	 */
+	public function lat() : float
+	{
+		return $this->ulat / 1000000.0;
+	}
 
-    private function uToStr(int $ud): string
-    {
-        $s = "";
-        if ($ud < 0) {
-            $s .= "-";
-            $ud = -$ud;
-        }
+	/**
+	 * Longitude in decimal degrees
+	 *
+	 * @return float
+	 */
+	public function lng() : float
+	{
+		return $this->ulng / 1000000.0;
+	}
 
-        if ($ud < 1000000.0) {
-            $s .= number_format($ud / 1000000.0, 6, '.', '');
-            // strip extra zeros
-            while (substr($s, -2, 1) !== '.' && substr($s, -1) === '0') {
-                $s = substr($s, 0, -1);
-            }
-            return $s;
-        }
+	private function uToStr(int $ud) : string
+	{
+		$s = "";
+		if ($ud < 0)
+		{
+			$s  .= "-";
+			$ud = -$ud;
+		}
 
-        $x = (string)$ud;
-        $dot = strlen($x) - 6;
-        $end = strlen($x);
+		if ($ud < 1000000.0)
+		{
+			$s .= number_format($ud / 1000000.0, 6, '.', '');
+			// strip extra zeros
+			while (substr($s, -2, 1) !== '.' && substr($s, -1) === '0')
+			{
+				$s = substr($s, 0, -1);
+			}
 
-        while ($end > $dot + 1 && $x[$end - 1] === '0') {
-            --$end;
-        }
+			return $s;
+		}
 
-        $s .= substr($x, 0, $dot) . '.' . substr($x, $dot, $end - $dot);
-        return $s;
-    }
+		$x   = (string) $ud;
+		$dot = strlen($x) - 6;
+		$end = strlen($x);
 
-    /**
-     * Represented as "C(lat,lng)"
-     *
-     * @return string
-     */
-    public function toZinc(): string
-    {
-        return "C(" . $this->getLatLng() . ")";
-    }
+		while ($end > $dot + 1 && $x[$end - 1] === '0')
+		{
+			--$end;
+		}
 
-    /**
-     * Encode as "c:lat,lng"
-     *
-     * @return string
-     */
-    public function toJSON(): string
-    {
-        return "c:" . $this->getLatLng();
-    }
+		$s .= substr($x, 0, $dot) . '.' . substr($x, $dot, $end - $dot);
 
-    private function getLatLng(): string
-    {
-        return $this->uToStr($this->ulat) . "," . $this->uToStr($this->ulng);
-    }
+		return $s;
+	}
 
-    /**
-     * Equals is based on lat, lng
-     *
-     * @param HCoord $that
-     * @return bool
-     */
-    public function equals(HCoord $that): bool
-    {
-        return $this->ulat === $that->ulat && $this->ulng === $that->ulng;
-    }
+	/**
+	 * Represented as "C(lat,lng)"
+	 *
+	 * @return string
+	 */
+	public function toZinc() : string
+	{
+		return "C(" . $this->getLatLng() . ")";
+	}
 
-    /**
-     * Parse from lat and long or string format "C(lat,lng)" or raise Error
-     *
-     * @param string|float $lat
-     * @param float|null $lng
-     * @return HCoord
-     */
-    public static function make($lat, ?float $lng = null): HCoord
-    {
-        if (is_string($lat)) {
-            if (!str_starts_with($lat, "C(") || !str_ends_with($lat, ")")) {
-                throw new InvalidArgumentException("Parse Exception: Invalid format");
-            }
+	/**
+	 * Encode as "c:lat,lng"
+	 *
+	 * @return string
+	 */
+	public function toJSON() : string
+	{
+		return "c:" . $this->getLatLng();
+	}
 
-            $comma = strpos($lat, ',');
-            if ($comma < 3) {
-                throw new InvalidArgumentException("Parse Exception: Invalid format");
-            }
+	private function getLatLng() : string
+	{
+		return $this->uToStr($this->ulat) . "," . $this->uToStr($this->ulng);
+	}
 
-            $plat = substr($lat, 2, $comma - 2);
-            $plng = substr($lat, $comma + 1, -1);
+	/**
+	 * Equals is based on lat, lng
+	 *
+	 * @param HCoord $that
+	 *
+	 * @return bool
+	 */
+	public function equals(HCoord $that) : bool
+	{
+		return $this->ulat === $that->ulat && $this->ulng === $that->ulng;
+	}
 
-            if (!is_numeric($plat) || !is_numeric($plng)) {
-                throw new InvalidArgumentException("Parse Exception: NaN");
-            }
+	/**
+	 * Parse from lat and long or string format "C(lat,lng)" or raise Error
+	 *
+	 * @param string|float $lat
+	 * @param float|null   $lng
+	 *
+	 * @return HCoord
+	 */
+	public static function make($lat, ?float $lng = NULL) : HCoord
+	{
+		if (is_string($lat))
+		{
+			if ( ! str_starts_with($lat, "C(") || ! str_ends_with($lat, ")"))
+			{
+				throw new InvalidArgumentException("Parse Exception: Invalid format");
+			}
 
-            return self::make((float)$plat, (float)$plng);
-        } else {
-            return new self((int)($lat * 1000000.0), (int)($lng * 1000000.0));
-        }
-    }
+			$comma = strpos($lat, ',');
+			if ($comma < 3)
+			{
+				throw new InvalidArgumentException("Parse Exception: Invalid format");
+			}
 
-    /**
-     * Return if given latitude is legal value between -90.0 and +90.0
-     *
-     * @param float $lat
-     * @return bool
-     */
-    public static function isLat(float $lat): bool
-    {
-        return -90.0 <= $lat && $lat <= 90.0;
-    }
+			$plat = substr($lat, 2, $comma - 2);
+			$plng = substr($lat, $comma + 1, -1);
 
-    /**
-     * Return if given is longitude is legal value between -180.0 and +180.0
-     *
-     * @param float $lng
-     * @return bool
-     */
-    public static function isLng(float $lng): bool
-    {
-        return -180.0 <= $lng && $lng <= 180.0;
-    }
+			if ( ! is_numeric($plat) || ! is_numeric($plng))
+			{
+				throw new InvalidArgumentException("Parse Exception: NaN");
+			}
+
+			return self::make((float) $plat, (float) $plng);
+		}
+		else
+		{
+			return new self((int) ($lat * 1000000.0), (int) ($lng * 1000000.0));
+		}
+	}
+
+	/**
+	 * Return if given latitude is legal value between -90.0 and +90.0
+	 *
+	 * @param float $lat
+	 *
+	 * @return bool
+	 */
+	public static function isLat(float $lat) : bool
+	{
+		return -90.0 <= $lat && $lat <= 90.0;
+	}
+
+	/**
+	 * Return if given is longitude is legal value between -180.0 and +180.0
+	 *
+	 * @param float $lng
+	 *
+	 * @return bool
+	 */
+	public static function isLng(float $lng) : bool
+	{
+		return -180.0 <= $lng && $lng <= 180.0;
+	}
 }

@@ -10,8 +10,8 @@ use Iterator;
  */
 class HRow extends HDict
 {
-    private HGrid $ugrid;
-    private array $cells;
+    public HGrid $ugrid;
+    public array $cells;
 
     public function __construct(HGrid $grid, array $cells)
     {

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cxalloy\Haystack;
 
 use InvalidArgumentException;
-use DateTime;
 
 /**
  * HTime models a time of day tag value.
@@ -27,64 +28,8 @@ class HTime extends HVal
     /** Fractional seconds in milliseconds 0-999 */
     public int $ms;
 
-    /** Construct with all fields */
-    public static function make(int $hour, int $min, int $sec, int $ms = 0): HTime
-    {
-        if ($hour < 0 || $hour > 23) {
-            throw new InvalidArgumentException("Invalid hour");
-        }
-        if ($min < 0 || $min > 59) {
-            throw new InvalidArgumentException("Invalid min");
-        }
-        if ($sec < 0 || $sec > 59) {
-            throw new InvalidArgumentException("Invalid sec");
-        }
-        if ($ms < 0 || $ms > 999) {
-            throw new InvalidArgumentException("Invalid ms");
-        }
-        return new HTime($hour, $min, $sec, $ms);
-    }
-
-    /** Convenience constructing with ms = 0 */
-    public static function makeWithSec(int $hour, int $min, int $sec): HTime
-    {
-        return self::make($hour, $min, $sec, 0);
-    }
-
-    /** Convenience constructing with sec = 0 and ms = 0 */
-    public static function makeWithMin(int $hour, int $min): HTime
-    {
-        return self::make($hour, $min, 0, 0);
-    }
-
-    /** Initialize from PHP DateTime instance */
-    public static function makeFromDateTime(DateTime $c): HTime
-    {
-        return new HTime(
-            (int)$c->format('G'),
-            (int)$c->format('i'),
-            (int)$c->format('s'),
-            (int)$c->format('v')
-        );
-    }
-
-    /** Parse from string format "hh:mm:ss.FF" or raise InvalidArgumentException */
-    public static function makeFromString(string $s): HTime
-    {
-        if (!preg_match('/^(\d{2}):(\d{2}):(\d{2})(\.\d{1,3})?$/', $s, $matches)) {
-            throw new InvalidArgumentException("Invalid time format: " . $s);
-        }
-
-        $hour = (int)$matches[1];
-        $min = (int)$matches[2];
-        $sec = (int)$matches[3];
-        $ms = isset($matches[4]) ? (int)str_pad(substr($matches[4], 1), 3, '0') : 0;
-
-        return self::make($hour, $min, $sec, $ms);
-    }
-
     /** Private constructor */
-    public function __construct(int $hour, int $min, int $sec, int $ms)
+    public function __construct(int $hour, int $min, int $sec = 0, int $ms = 0)
     {
         $this->hour = $hour;
         $this->min = $min;
@@ -92,78 +37,89 @@ class HTime extends HVal
         $this->ms = $ms;
     }
 
-    /** Hash is based on hour, min, sec, ms */
-    public function hashCode(): int
+    /**
+     * Construct with all fields, with DateTime object, or parse from string format "hh:mm:ss.FF"
+     *
+     * @param int|string|\DateTime $arg1
+     * @param int|null $min
+     * @param int|null $sec
+     * @param int|null $ms
+     * @return HTime
+     */
+    public static function make($arg1, ?int $min = null, ?int $sec = null, ?int $ms = null): HTime
     {
-        return ($this->hour << 24) ^ ($this->min << 20) ^ ($this->sec << 16) ^ $this->ms;
+        if (is_string($arg1)) {
+            $val = (new HZincReader($arg1))->readScalar();
+            if ($val instanceof HTime) {
+                return $val;
+            }
+            throw new InvalidArgumentException("Parse Error: $arg1");
+        } elseif ($arg1 instanceof \DateTime) {
+            return new HTime((int)$arg1->format('H'), (int)$arg1->format('i'), (int)$arg1->format('s'), (int)$arg1->format('v'));
+        } else {
+            return new HTime($arg1, $min ?? 0, $sec ?? 0, $ms ?? 0);
+        }
     }
 
-    /** Equals is based on hour, min, sec, ms */
-    public function equals(object $that): bool
+    /**
+     * Equals is based on hour, min, sec, ms
+     *
+     * @param HTime $that
+     * @return bool
+     */
+    public function equals(HVal | HTime $that): bool
     {
-        if (!($that instanceof HTime)) {
-            return false;
-        }
-        $x = $that;
-        return $this->hour === $x->hour && $this->min === $x->min && $this->sec === $x->sec && $this->ms === $x->ms;
+        return $that instanceof HTime && $this->hour === $that->hour &&
+            $this->min === $that->min && $this->sec === $that->sec && $this->ms === $that->ms;
     }
 
-    /** Return sort order as negative, 0, or positive */
-    public function compareTo(object $that): int
+    /**
+     * Return sort order as negative, 0, or positive
+     *
+     * @param HTime $that
+     * @return int
+     */
+    public function compareTo(HVal | HTime $that): int
     {
-        $x = $that;
-        if ($this->hour < $x->hour) {
-            return -1;
-        } elseif ($this->hour > $x->hour) {
-            return 1;
-        }
-        if ($this->min < $x->min) {
-            return -1;
-        } elseif ($this->min > $x->min) {
-            return 1;
-        }
-        if ($this->sec < $x->sec) {
-            return -1;
-        } elseif ($this->sec > $x->sec) {
-            return 1;
-        }
-        if ($this->ms < $x->ms) {
-            return -1;
-        } elseif ($this->ms > $x->ms) {
-            return 1;
-        }
+        if ($this->hour < $that->hour) return -1;
+        if ($this->hour > $that->hour) return 1;
+
+        if ($this->min < $that->min) return -1;
+        if ($this->min > $that->min) return 1;
+
+        if ($this->sec < $that->sec) return -1;
+        if ($this->sec > $that->sec) return 1;
+
+        if ($this->ms < $that->ms) return -1;
+        if ($this->ms > $that->ms) return 1;
+
         return 0;
     }
 
-    /** Encode as "h:hh:mm:ss.FFF" */
-    public function toJson(): string
-    {
-        $s = "h:";
-        $this->encode($s);
-        return $s;
-    }
-
-    /** Encode as "hh:mm:ss.FFF" */
+    /**
+     * Encode as "hh:mm:ss.FFF"
+     *
+     * @return string
+     */
     public function toZinc(): string
     {
-        $s = '';
-        $this->encode($s);
-        return $s;
-    }
-
-    /** Package private implementation shared with HDateTime */
-    public function encode(string &$s): void
-    {
-        $s .= sprintf('%02d:%02d:%02d', $this->hour, $this->min, $this->sec);
+        $s = sprintf('%02d:%02d:%02d', $this->hour, $this->min, $this->sec);
         if ($this->ms !== 0) {
             $s .= sprintf('.%03d', $this->ms);
         }
+        return $s;
     }
 
-    public static function init()
+    /**
+     * Encode as "h:hh:mm:ss.FFF"
+     *
+     * @return string
+     */
+    public function toJSON(): string
     {
-        self::$MIDNIGHT = new HTime(0, 0, 0, 0);
+        return 'h:' . $this->toZinc();
     }
 }
 
-HTime::init();
+// Initialize the static properties
+HTime::$MIDNIGHT = new HTime(0, 0, 0, 0);

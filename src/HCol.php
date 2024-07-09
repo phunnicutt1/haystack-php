@@ -11,7 +11,7 @@ namespace Cxalloy\Haystack;
  */
 class HCol {
 
-	private int    $index;
+	public int     $index;
 	private string $uname;
 	private HDict  $dict;
 
