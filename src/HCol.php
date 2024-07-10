@@ -11,9 +11,9 @@ namespace Cxalloy\Haystack;
  */
 class HCol {
 
-	public int     $index;
-	private string $uname;
-	private HDict  $dict;
+	public int    $index;
+	public string $uname;
+	public HDict $dict;
 
 	public function __construct(int $index, string $uname, HDict $dict)
 	{
