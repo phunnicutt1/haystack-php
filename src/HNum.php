@@ -2,7 +2,6 @@
 namespace Cxalloy\Haystack;
 
 use InvalidArgumentException;
-use NumberFormatter;
 
 
 class HNum extends HVal {
@@ -10,8 +9,8 @@ class HNum extends HVal {
 	public float   $val;
 	public ?string $unit;
 
-	private static ?HNum $ZERO                  = NULL;
-	private static ?HNum $POS_INF              = NULL;
+	private static ?HNum $ZERO    = NULL;
+	private static ?HNum $POS_INF = NULL;
 	private static ?HNum $NEG_INF = NULL;
 	private static ?HNum $NaN     = NULL;
 
@@ -60,6 +59,8 @@ class HNum extends HVal {
 
 		$this->val  = $val;
 		$this->unit = $unit;
+
+		return $this;
 	}
 
 	public static function isUnitName(?string $unit) : bool
@@ -194,7 +195,7 @@ class HNum extends HVal {
 			return self::ZERO();
 		}
 
-		return new self($val, $unit);
+		return new HNum($val, $unit);
 	}
 
 	public static function ZERO() : HNum
