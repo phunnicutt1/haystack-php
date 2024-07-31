@@ -59,8 +59,6 @@ class HNum extends HVal {
 
 		$this->val  = $val;
 		$this->unit = $unit;
-
-		return $this;
 	}
 
 	public static function isUnitName(?string $unit) : bool
